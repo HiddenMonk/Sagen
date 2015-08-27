@@ -32,7 +32,7 @@ namespace HAARP
             }
         }
 
-        private static void Prepare()
+        public static void Init()
         {
             if (_buffers != null) return;
             _buffers = new List<float[]>();
@@ -46,7 +46,7 @@ namespace HAARP
         {
             lock (syncObj)
             {
-                Prepare();
+                Init();
                 foreach (var buffer in _buffers)
                 {
                     if (_loans.Contains(buffer)) continue;
@@ -65,7 +65,7 @@ namespace HAARP
         {
             lock (syncObj)
             {
-                Prepare();
+                Init();
                 _loans.Remove(buffer);
             }
         }

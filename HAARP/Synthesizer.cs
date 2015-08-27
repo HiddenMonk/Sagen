@@ -8,6 +8,14 @@
 
         private int _sampleRate = DefaultSampleRate;
         private int _position = 0;
+        private readonly float[] _buffer;
+
+        public float BaselineFrequency { get; set; } = 100.0f;
+
+        public Synthesizer()
+        {
+            _buffer = BufferPool.Loan();
+        }
 
         public int SampleRate
         {
@@ -25,5 +33,7 @@
         }
 
         public float TimePosition => (float)_position / _sampleRate;
+
+
     }
 }

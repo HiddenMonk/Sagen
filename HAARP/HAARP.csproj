@@ -42,8 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioBuffer.cs" />
     <Compile Include="BufferPool.cs" />
+    <Compile Include="Generator.cs" />
     <Compile Include="HaarpEngine.cs" />
     <Compile Include="Synthesizer.cs" />
     <Compile Include="Voice.cs" />
