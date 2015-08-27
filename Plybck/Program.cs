@@ -13,16 +13,17 @@ namespace Plybck
 	{
 		public static ISoundEngine Engine = new ISoundEngine(SoundOutputDriver.AutoDetect, SoundEngineOptionFlag.MultiThreaded);
 
-		public static void Play(MemoryStream SoundStream, bool Hang = true)
+		public static void Play(MemoryStream SoundStream)
 		{
 			SoundStream.Seek(0, SeekOrigin.Begin);
 			ISoundSource Src = Engine.AddSoundSourceFromIOStream(SoundStream, "snd");
 			Console.WriteLine("Play length: {0} s", (float)Src.PlayLength / 1000);
 
 			Engine.Play2D(Src, false, false, false);
-			while (Hang && Engine.IsCurrentlyPlaying("snd"))
+			while (Engine.IsCurrentlyPlaying("snd"))
 				;
 			Engine.RemoveSoundSource("snd");
+			Src.Dispose();
 		}
 
 		public static MemoryStream Create(int SampleRate, double Freq, double Magnitude, uint LenMS, Func<double, double> Func)
@@ -48,7 +49,7 @@ namespace Plybck
 
 			MemoryStream Snd = Create(44100, 120, 1.0, 1000, (Cur) =>
 			{
-				return Math.Cos(Cur);
+				return Math.Sin(Cur);
 			});
 
 			FileStream FS = File.Create("test.wav");
