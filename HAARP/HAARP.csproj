@@ -43,8 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BufferPool.cs" />
-    <Compile Include="Generator.cs" />
+    <Compile Include="Generators\SineGenerator.cs" />
     <Compile Include="HaarpEngine.cs" />
+    <Compile Include="Generators\Generator.cs" />
     <Compile Include="Synthesizer.cs" />
     <Compile Include="Voice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
