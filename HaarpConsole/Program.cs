@@ -16,43 +16,36 @@ namespace HaarpConsole
         public static ISoundEngine Engine = new ISoundEngine(SoundOutputDriver.AutoDetect, SoundEngineOptionFlag.MultiThreaded);
 
         private const float VocalPower = 0.025f;
-        private const float ArticulatePower = 0.025f;
+        private const float OralPower = 0.025f;
 
-        private static readonly SineGenerator[] generators =
-        {
-            new SineGenerator(100, VocalPower * 2f, .2f),
-            new SineGenerator(200, VocalPower * 1.5f, .25f),
-            new SineGenerator(300, VocalPower, .75f),
-            new SineGenerator(400, VocalPower, .9f),
-            new SineGenerator(500, VocalPower, .8f),
-            new SineGenerator(600, VocalPower * .7f),
-            new SineGenerator(700, VocalPower * .6f),
-            new SineGenerator(800, VocalPower * .5f),
-            new SineGenerator(900, VocalPower * .4f),
-            new SineGenerator(1000, VocalPower * .5f),
-            new SineGenerator(1100, VocalPower * .4f),
-            new SineGenerator(1200, VocalPower * .3f),
-            new SineGenerator(1300, VocalPower * .2f),
-            new SineGenerator(1400, VocalPower * .1f),
-            
-            new SineGenerator(2600, ArticulatePower, .8f),
-            new SineGenerator(2700, ArticulatePower, .8f),
-            new SineGenerator(3600, ArticulatePower, .8f),
-            new SineGenerator(3700, ArticulatePower, .8f),
-        };
+        private static readonly float Fundamental = 100;
+        private static readonly int[] VocalHarmonics = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+        private static readonly int[] OralHarmonics = { 26, 27, 36, 37 };
+        private static readonly float VocalHarmonicSeparation = .1f;
+        private static readonly float OralHarmonicSeparation = .1f;
 
         static void Main(string[] args)
         {
             const int sampleRate = 44100;
-            const float seconds = 1.5f;
+            const float seconds = 5.0f;
+
+            var rng = new RNG();
+
+            var vocals = new SineGenerator[VocalHarmonics.Length];
+            for(int i = 0; i < vocals.Length; i++)
+                vocals[i] = new SineGenerator(Fundamental * VocalHarmonics[i], VocalPower, (float)rng.NextDouble(VocalHarmonicSeparation));
+
+            var oral = new SineGenerator[OralHarmonics.Length];
+            for(int i = 0; i < oral.Length; i++)
+                oral[i] = new SineGenerator(Fundamental * OralHarmonics[i], OralPower, (float)rng.NextDouble(OralHarmonicSeparation));
 
             var Samples = new float[(int)(sampleRate * seconds)];
             for (int i = 0; i < Samples.Length; i++)
             {
-                foreach (var gen in generators)
-                {
+                foreach (var gen in vocals)
                     gen.SampleAdd(Samples, i, sampleRate);
-                }
+                foreach (var gen in oral)
+                    gen.SampleAdd(Samples, i, sampleRate);
             }
 
             var Snd = Create(Samples);
