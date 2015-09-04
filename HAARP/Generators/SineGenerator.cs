@@ -10,18 +10,31 @@ namespace HAARP.Generators
         /// The frequency in Hertz.
         /// </summary>
         public float Frequency { get; set; } = 1000;
+
         /// <summary>
         /// The amplitude of the wave.
         /// </summary>
         public float Amplitude { get; set; } = 0.5f;
+
         /// <summary>
         /// The phase offset of the wave.
         /// </summary>
         public float Phase { get; set; } = 0.0f;
+
         /// <summary>
         /// The DC (vertical) offset of the wave.
         /// </summary>
         public float DCOffset { get; set; } = 0.0f;
+
+        /// <summary>
+        /// The spectral tilt of the wave.
+        /// </summary>
+        public float SpectralTilt { get; set; } = 0.0f;
+
+        /// <summary>
+        /// The nyquist frequency to use for spectral tilting.
+        /// </summary>
+        public float SpectralUpperBound { get; set; } = 22050.0f;
 
         public SineGenerator()
         {
@@ -36,6 +49,7 @@ namespace HAARP.Generators
             DCOffset = dcOffset;
         }
 
-        public override float Sample(float timeSeconds) => (float)Math.Sin(timeSeconds * FullPhase * Frequency + FullPhase * Phase) * Amplitude + DCOffset;
+        public override float Sample(float timeSeconds) => 
+            ((float)Math.Sin(timeSeconds * (FullPhase + FullPhase * Phase) * Frequency) * Amplitude).Tilt(Frequency, SpectralTilt, SpectralUpperBound) + DCOffset;
     }
 }
