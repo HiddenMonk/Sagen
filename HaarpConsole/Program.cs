@@ -2,7 +2,7 @@
 using System.IO;
 
 using HAARP;
-using HAARP.Generators;
+using HAARP.Samplers;
 
 using IrrKlang;
 
@@ -25,42 +25,20 @@ namespace HaarpConsole
 
         static void Main(string[] args)
         {
-            const int sampleRate = 44100;
-            const float seconds = 5.0f;
+            var synth = new Synthesizer(5);
+            synth.AddSampler(new SineSampler(60, 0.4f));
+            synth.AddSampler(new NoiseSampler(0, .35f) { Amplitude = 0.5f });
 
-            var rng = new RNG();
+            var sound = Create(synth.Generate(), synth.SampleRate);
 
-            var vocals = new SineGenerator[VocalHarmonics.Length];
-            for(int i = 0; i < vocals.Length; i++)
-                vocals[i] = new SineGenerator(Fundamental * VocalHarmonics[i] * Pitch, VocalPower)
-                {
-                    SpectralTilt = VocalSpectralTilt
-                };
-
-            var oral = new SineGenerator[OralHarmonics.Length];
-            for(int i = 0; i < oral.Length; i++)
-                oral[i] = new SineGenerator(Fundamental * OralHarmonics[i], OralPower, (float)rng.NextDouble(OralHarmonicSeparation))
-                {
-                    SpectralTilt = OralSpectralTilt,
-                    SpectralUpperBound = 10000
-                };
-
-            var Samples = new float[(int)(sampleRate * seconds)];
-            for (int i = 0; i < Samples.Length; i++)
+            // Write sound to file
+            using (var file = File.Create("test.wav"))
             {
-                foreach (var gen in vocals)
-                    gen.SampleAdd(Samples, i, sampleRate);
-                foreach (var gen in oral)
-                    gen.SampleAdd(Samples, i, sampleRate);
+                sound.CopyTo(file);
+                file.Flush();
             }
 
-            var Snd = Create(Samples);
-            var FS = File.Create("test.wav");
-
-            Snd.CopyTo(FS);
-            FS.Flush();
-            FS.Close();
-            Play(Snd);
+            Play(sound);
 
             Console.WriteLine("Done!");
             Console.ReadLine();
@@ -94,7 +72,7 @@ namespace HaarpConsole
             }));
         }
 
-        public static MemoryStream Create(float[] Samples, int SampleRate = 44100)
+        public static MemoryStream Create(float[] Samples, int SampleRate)
         {
             int SampleCount = Samples.Length;
             var Buff = new short[SampleCount];

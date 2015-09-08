@@ -1,10 +1,11 @@
 ﻿using System;
 
-namespace HAARP.Generators
+namespace HAARP.Samplers
 {
-    public class SineGenerator : Generator
+    internal class SineSampler : Sampler
     {
-        private const double FullPhase = Math.PI * 2.0f;
+        private double state;
+        private const double FullPhase = Math.PI * 2.0;
 
         /// <summary>
         /// The frequency in Hertz.
@@ -19,7 +20,7 @@ namespace HAARP.Generators
         /// <summary>
         /// The phase offset of the wave.
         /// </summary>
-        public float Phase { get; set; } = 0.0f;
+        public float Phase { get; } = 0.0f;
 
         /// <summary>
         /// The DC (vertical) offset of the wave.
@@ -36,20 +37,24 @@ namespace HAARP.Generators
         /// </summary>
         public float SpectralUpperBound { get; set; } = 22050.0f;
 
-        public SineGenerator()
+        public SineSampler()
         {
             
         }
 
-        public SineGenerator(float frequency, float amplitude, float phase = 0.0f, float dcOffset = 0.0f)
+        public SineSampler(float frequency, float amplitude, float phase = 0.0f, float dcOffset = 0.0f)
         {
             Frequency = frequency;
             Amplitude = amplitude;
             Phase = phase;
+            state = phase;
             DCOffset = dcOffset;
         }
 
-        public override float Sample(float timeSeconds) => 
-            ((float)Math.Sin(timeSeconds * (FullPhase + FullPhase * Phase) * Frequency) * Amplitude).Tilt(Frequency, SpectralTilt, SpectralUpperBound) + DCOffset;
+        public override void Update(Synthesizer synth, ref float sample)
+        {
+            state = (state + synth.TimeStep * Frequency) % 1.0f;
+            sample += ((float)Math.Sin(state * FullPhase) * Amplitude).Tilt(Frequency, SpectralTilt, SpectralUpperBound) + DCOffset;
+        }
     }
 }

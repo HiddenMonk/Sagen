@@ -15,6 +15,7 @@ namespace HAARP
         private const int Mask32 = 0x7FFFFFFF;
         private const long Mask64 = 0x7FFFFFFFFFFFFFFF;
         private const double MaxDouble = Int64.MaxValue;
+        private const float MaxFloat = Int32.MaxValue;
 
         #region Table
         private static readonly ulong[] Table =
@@ -273,20 +274,37 @@ namespace HAARP
         /// Returns a double-precision floating point number between 0 and 1, and advances the generation by 1.
         /// </summary>
         /// <returns></returns>
-
         public double NextDouble() => (NextRaw() & Mask64) / MaxDouble;
 
         /// <summary>
         /// Returns a double-precision floating point number between 0 and the specified maximum value, and advances the generation by 1.
         /// </summary>
         /// <returns></returns>
-        public double NextDouble(double max) => (((int)GetRaw(~Seed, Generation) & Mask32) + NextDouble()) % max;
+        public double NextDouble(double max) => ((GetRaw(~Seed + 1, Generation) & Mask64) + NextDouble()) % max;
 
         /// <summary>
         /// Returns a double-precision floating point number between the specified minimum and maximum values, and advances the generation by 1.
         /// </summary>
         /// <returns></returns>
-        public double NextDouble(double min, double max) => max - min != 0 ? (((int)GetRaw(~Seed, Generation) & Mask32) + NextDouble()) % (max - min) + min : 0;
+        public double NextDouble(double min, double max) => max - min != 0 ? ((GetRaw(~Seed + 1, Generation) & Mask64) + NextDouble()) % (max - min) + min : 0;
+
+        /// <summary>
+        /// Returns a single-precision floating point number between 0 and 1, and advances the generation by 1.
+        /// </summary>
+        /// <returns></returns>
+        public float NextSingle() => (NextRaw() & Mask32) / MaxFloat;
+
+        /// <summary>
+        /// Returns a single-precision floating point number between 0 and the specified maximum value, and advances the generation by 1.
+        /// </summary>
+        /// <returns></returns>
+        public float NextSingle(float max) => (((int)GetRaw(~Seed + 1, Generation) & Mask32) + NextSingle()) % max;
+
+        /// <summary>
+        /// Returns a single-precision floating point number between the specified minimum and maximum values, and advances the generation by 1.
+        /// </summary>
+        /// <returns></returns>
+        public float NextSingle(float min, float max) => max - min != 0 ? (((int)GetRaw(~Seed + 1, Generation) & Mask32) + NextSingle()) % (max - min) + min : 0;
 
         /// <summary>
         /// Returns a random boolean value and advances the generation by 1.
