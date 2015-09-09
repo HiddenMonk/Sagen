@@ -298,13 +298,13 @@ namespace HAARP
         /// Returns a single-precision floating point number between 0 and the specified maximum value, and advances the generation by 1.
         /// </summary>
         /// <returns></returns>
-        public float NextSingle(float max) => (((int)GetRaw(~Seed + 1, Generation) & Mask32) + NextSingle()) % max;
+        public float NextSingle(float max) => ((GetRaw(~Seed + 1, Generation) & Mask32) + ((NextRaw() & Mask32) / MaxFloat)) % max;
 
         /// <summary>
         /// Returns a single-precision floating point number between the specified minimum and maximum values, and advances the generation by 1.
         /// </summary>
         /// <returns></returns>
-        public float NextSingle(float min, float max) => max - min != 0 ? (((int)GetRaw(~Seed + 1, Generation) & Mask32) + NextSingle()) % (max - min) + min : 0;
+        public float NextSingle(float min, float max) => max != min ? ((GetRaw(~Seed + 1, Generation) & Mask32) + ((NextRaw() & Mask32) / MaxFloat)) % (max - min) + min : 0;
 
         /// <summary>
         /// Returns a random boolean value and advances the generation by 1.
