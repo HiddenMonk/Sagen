@@ -6,7 +6,6 @@ namespace HAARP.FunctionCurves
 {
     internal abstract class Curve
     {
-        private readonly Dictionary<int, HashSet<int>> index = new Dictionary<int, HashSet<int>>();
         private Keyframe[] keys;
         private bool empty;
         private Keyframe firstKey, lastKey;
