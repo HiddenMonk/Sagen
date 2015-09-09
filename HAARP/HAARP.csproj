@@ -46,6 +46,9 @@
     <Compile Include="BufferPool.cs" />
     <Compile Include="ButterworthFilter.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="FunctionCurves\CosineCurve.cs" />
+    <Compile Include="FunctionCurves\Curve.cs" />
+    <Compile Include="FunctionCurves\Keyframe.cs" />
     <Compile Include="Mathe.cs" />
     <Compile Include="Phrase.cs" />
     <Compile Include="Samplers\FadeSampler.cs" />

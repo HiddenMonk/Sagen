@@ -15,6 +15,12 @@ namespace HAARP.FunctionCurves
         {
             if (keyframes == null) throw new ArgumentNullException(nameof(keyframes));
             keys = keyframes.OrderBy(k => k.Time).ToArray();
+            empty = keys.Length == 0;
+            if (!empty)
+            {
+                firstKey = keys[0];
+                lastKey = keys[keys.Length - 1];
+            }
         }
 
         public Keyframe[] Keyframes
@@ -24,6 +30,12 @@ namespace HAARP.FunctionCurves
             {
                 if (value == null) throw new ArgumentNullException(nameof(value));
                 keys = value.OrderBy(k => k.Time).ToArray();
+                empty = keys.Length == 0;
+                if (!empty)
+                {
+                    firstKey = keys[0];
+                    lastKey = keys[keys.Length - 1];
+                }
             }
         }
 
