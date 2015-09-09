@@ -7,8 +7,8 @@ namespace HAARP.Samplers
         private readonly ButterworthFilter lowPassFilter;
         private readonly ButterworthFilter highPassFilter;
 
-        public float LowerBound { get; set; } = 1000.0f;
-        public float UpperBound { get; set; } = 2000.0f;
+        public float MinFrequency { get; set; } = 0.0f;
+        public float MaxFrequency { get; set; } = 2000.0f;
         public float Amplitude { get; set; } = 1.0f;
 
         private readonly RNG rng;
@@ -16,8 +16,8 @@ namespace HAARP.Samplers
         public NoiseSampler(long seed, float filterResonance = .3f)
         {
             rng = new RNG(seed);
-            lowPassFilter = new ButterworthFilter(UpperBound, 44100, ButterworthFilter.PassType.Lowpass, filterResonance);
-            highPassFilter = new ButterworthFilter(LowerBound, 44100, ButterworthFilter.PassType.Highpass, filterResonance);
+            lowPassFilter = new ButterworthFilter(MaxFrequency, 44100, PassFilterType.LowPass, filterResonance);
+            highPassFilter = new ButterworthFilter(MinFrequency, 44100, PassFilterType.HighPass, filterResonance);
         }
 
         public override void Update(Synthesizer synth, ref float sample)

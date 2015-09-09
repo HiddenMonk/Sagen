@@ -12,22 +12,11 @@ namespace HaarpConsole
     {
         public static ISoundEngine Engine = new ISoundEngine(SoundOutputDriver.AutoDetect, SoundEngineOptionFlag.MultiThreaded);
 
-        private const float VocalPower = 0.015f;
-        private const float OralPower = 0.005f;
-
-        private static readonly float Fundamental = 100;
-        private static readonly float Pitch = 1.0f;
-        private static readonly int[] VocalHarmonics = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
-        private static readonly int[] OralHarmonics = { 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 39, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50 };
-        private static readonly float OralHarmonicSeparation = .0001f;
-        private static readonly float VocalSpectralTilt = -0.5f;
-        private static readonly float OralSpectralTilt = 0.05f;
-
         static void Main(string[] args)
         {
             var synth = new Synthesizer(5);
-            synth.AddSampler(new SineSampler(60, 0.4f));
-            synth.AddSampler(new NoiseSampler(0, .35f) { Amplitude = 0.5f });
+            synth.AddSampler(new SineSampler(60, 0.1f));
+            synth.AddSampler(new NoiseSampler(0, .35f) { Amplitude = 0.5f, MinFrequency = 100, MaxFrequency = 5000 });
 
             var sound = Create(synth.Generate(), synth.SampleRate);
 

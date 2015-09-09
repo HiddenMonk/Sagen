@@ -46,11 +46,13 @@
     <Compile Include="ButterworthFilter.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Mathe.cs" />
+    <Compile Include="Samplers\InvertSampler.cs" />
     <Compile Include="Samplers\NoiseSampler.cs" />
     <Compile Include="Samplers\SineSampler.cs" />
     <Compile Include="HaarpEngine.cs" />
     <Compile Include="Samplers\Sampler.cs" />
     <Compile Include="RNG.cs" />
+    <Compile Include="SampleTransform.cs" />
     <Compile Include="Synthesizer.cs" />
     <Compile Include="Voice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
