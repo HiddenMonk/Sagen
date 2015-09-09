@@ -5,7 +5,12 @@
         public FadeType FadeType { get; set; } = FadeType.FadeIn;
         public float FadeLength { get; set; } = 1.0f;
 
-        public override void Update(Synthesizer synth, ref float sample)
+        public FadeSampler(Synthesizer synth) : base(synth)
+        {
+            
+        }
+
+        public override void Update(ref float sample)
         {
             switch (FadeType)
             {

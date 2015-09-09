@@ -13,15 +13,19 @@ namespace HAARP
         public const int DefaultSampleRate = 44100;
 
         private readonly HashSet<Sampler> samplers = new HashSet<Sampler>();
+        private readonly LinkedList<Sampler> samplerSequence = new LinkedList<Sampler>(); 
 
         private readonly int _sampleRate = DefaultSampleRate;
         private int _position = 0;
         private readonly float[] _buffer;
+        private readonly Voice _voice = Voice.Jimmy;
 
         public float Fundamental { get; set; } = 100.0f;
         public float TimePosition => (float)_position / _sampleRate;
         public float TimeStep { get; }
         public float Length => _buffer.Length / (float)_sampleRate;
+
+        public Voice Voice => _voice;
 
         public Synthesizer(float seconds)
         {
@@ -52,17 +56,21 @@ namespace HAARP
 
         public void AddSampler(Sampler sampler)
         {
-            if (sampler != null) samplers.Add(sampler);
+            if (sampler != null && samplers.Add(sampler))
+            {
+                samplerSequence.AddLast(sampler);
+            }
         }
 
         public float[] Generate()
         {
             int ln = _buffer.Length;
-            foreach (var sampler in samplers)
+            foreach (var sampler in samplerSequence)
             {
+                if (!sampler.Enabled) continue;
                 for (_position = 0; _position < ln; _position++)
                 {
-                    sampler.Update(this, ref _buffer[_position]);
+                    sampler.Update(ref _buffer[_position]);
                 }
             }
 

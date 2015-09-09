@@ -4,8 +4,7 @@ namespace HAARP.Samplers
 {
     internal class NoiseSampler : Sampler
     {
-        private readonly ButterworthFilter lowPassFilter;
-        private readonly ButterworthFilter highPassFilter;
+        private readonly BandPassFilter filter;
 
         public float MinFrequency { get; set; } = 0.0f;
         public float MaxFrequency { get; set; } = 2000.0f;
@@ -13,20 +12,18 @@ namespace HAARP.Samplers
 
         private readonly RNG rng;
 
-        public NoiseSampler(long seed, float minFrequency, float maxFrequency, float filterResonance = .3f)
+        public NoiseSampler(Synthesizer synth, long seed, float minFrequency, float maxFrequency, float filterResonance = .3f) : base(synth)
         {
             rng = new RNG(seed);
             MinFrequency = minFrequency;
             MaxFrequency = maxFrequency;
-            lowPassFilter = new ButterworthFilter(MaxFrequency, 44100, PassFilterType.LowPass, filterResonance);
-            highPassFilter = new ButterworthFilter(MinFrequency, 44100, PassFilterType.HighPass, filterResonance);
+            filter = new BandPassFilter(maxFrequency, minFrequency, 44100, filterResonance, filterResonance);
         }
 
-        public override void Update(Synthesizer synth, ref float sample)
+        public override void Update(ref float sample)
         {
-            lowPassFilter.Update(rng.NextSingle(-1f, 1f) * Amplitude);
-            highPassFilter.Update(lowPassFilter.Value);
-            sample += highPassFilter.Value;
+            filter.Update(rng.NextSingle(-1f, 1f) * Amplitude);
+            sample += filter.Value;
         }
     }
 }

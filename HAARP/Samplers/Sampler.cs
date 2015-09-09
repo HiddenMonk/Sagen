@@ -2,6 +2,14 @@
 {
     internal abstract class Sampler
     {
-        public abstract void Update(Synthesizer synth, ref float sample);
+        protected readonly Synthesizer synth;
+
+        public bool Enabled { get; set; } = true;
+        public abstract void Update(ref float sample);
+
+        public Sampler(Synthesizer synthesizer)
+        {
+            synth = synthesizer;
+        }
     }
 }

@@ -64,16 +64,10 @@ namespace HAARP
         }
 
         private float c, a1, a2, b1, b2;
-
-        /// <summary>
-        /// Array of input values, latest are in front
-        /// </summary>
-        private readonly float[] inputHistory = new float[2];
-
-        /// <summary>
-        /// Array of output values, latest are in front
-        /// </summary>
-        private readonly float[] outputHistory = new float[3];
+        
+        private readonly float[] inputs = new float[2];
+        
+        private readonly float[] outputs = new float[3];
 
         public ButterworthFilter(float frequency, int sampleRate, PassFilterType filterType, float resonance)
         {
@@ -113,17 +107,16 @@ namespace HAARP
                 _changed = false;
             }
 
-            var output = a1 * newInput + a2 * inputHistory[0] + a1 * inputHistory[1] - b1 * outputHistory[0] - b2 * outputHistory[1];
+            var output = a1 * newInput + a2 * inputs[0] + a1 * inputs[1] - b1 * outputs[0] - b2 * outputs[1];
 
-            inputHistory[1] = inputHistory[0];
-            inputHistory[0] = newInput;
-
-            outputHistory[2] = outputHistory[1];
-            outputHistory[1] = outputHistory[0];
-            outputHistory[0] = output;
+            inputs[1] = inputs[0];
+            inputs[0] = newInput;
+            outputs[2] = outputs[1];
+            outputs[1] = outputs[0];
+            outputs[0] = output;
         }
 
-        public float Value => outputHistory[0];
+        public float Value => outputs[0];
     }
 
     public enum PassFilterType
