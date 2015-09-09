@@ -11,14 +11,14 @@ namespace HAARP
 
         public static double CosineInterpolate(double a, double b, double delta)
         {
-            delta = (1 - Math.Cos(delta * Math.PI)) / 2;
-            return (a * (1 - delta) + b * delta);
+            delta = (1.0f - Math.Cos(delta * Math.PI)) / 2.0f;
+            return a * (1.0f - delta) + b * delta;
         }
 
         public static float CosineInterpolate(float a, float b, float delta)
         {
-            delta = (1 - (float)Math.Cos(delta * PIf)) / 2;
-            return (a * (1 - delta) + b * delta);
+            delta = (1.0f - (float)Math.Cos(delta * PIf)) / 2.0f;
+            return a * (1.0f - delta) + b * delta;
         }
     }
 }
