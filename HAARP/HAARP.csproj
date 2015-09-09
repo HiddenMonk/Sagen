@@ -46,6 +46,8 @@
     <Compile Include="ButterworthFilter.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Mathe.cs" />
+    <Compile Include="Phrase.cs" />
+    <Compile Include="Samplers\FadeSampler.cs" />
     <Compile Include="Samplers\InvertSampler.cs" />
     <Compile Include="Samplers\NoiseSampler.cs" />
     <Compile Include="Samplers\SineSampler.cs" />

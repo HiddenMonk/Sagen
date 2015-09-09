@@ -21,6 +21,7 @@ namespace HAARP
         public float Fundamental { get; set; } = 100.0f;
         public float TimePosition => (float)_position / _sampleRate;
         public float TimeStep { get; }
+        public float Length => _buffer.Length / (float)_sampleRate;
 
         public Synthesizer(float seconds)
         {

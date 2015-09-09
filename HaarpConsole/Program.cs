@@ -14,9 +14,19 @@ namespace HaarpConsole
 
         static void Main(string[] args)
         {
-            var synth = new Synthesizer(5);
-            synth.AddSampler(new SineSampler(60, 0.1f));
-            synth.AddSampler(new NoiseSampler(0, .35f) { Amplitude = 0.5f, MinFrequency = 100, MaxFrequency = 5000 });
+            var synth = new Synthesizer(3);
+            // Background
+            synth.AddSampler(new NoiseSampler(0, 200, 1200, 1.0f) { Amplitude = 0.075f });
+            synth.AddSampler(new NoiseSampler(0, 1900, 5500, .35f) { Amplitude = 0.01f });
+
+            // Bands
+            synth.AddSampler(new NoiseSampler(0, 6700, 7200, .1f) { Amplitude = 0.003f });
+            synth.AddSampler(new NoiseSampler(0, 4600, 5400, .18f) { Amplitude = 0.050f });
+            synth.AddSampler(new NoiseSampler(0, 3700, 4100, .2f) { Amplitude = 0.050f });
+            synth.AddSampler(new NoiseSampler(0, 2100, 2500, .2f) { Amplitude = 0.1f });
+
+            synth.AddSampler(new FadeSampler { FadeType = FadeType.FadeIn, FadeLength = 0.25f });
+            synth.AddSampler(new FadeSampler { FadeType = FadeType.FadeOut, FadeLength = 0.2f });
 
             var sound = Create(synth.Generate(), synth.SampleRate);
 
