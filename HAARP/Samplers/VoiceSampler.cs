@@ -1,4 +1,6 @@
-﻿namespace HAARP.Samplers
+﻿using HAARP.FunctionCurves;
+
+namespace HAARP.Samplers
 {
     internal class VoiceSampler : Sampler
     {
@@ -6,6 +8,7 @@
         private float noiseSample; // Used for consonants
 
         private readonly BandPassFilter[] bands;
+        private readonly Curve curve;
         private readonly int numBands;
 
         public VoiceSampler(Synthesizer synth, long seed) : base(synth)
@@ -22,11 +25,25 @@
                 new BandPassFilter(2100, 2500, synth.SampleRate, .2f, .2f) { Volume = 0.1f }
             };
             numBands = bands.Length;
+
+            curve = new CosineCurve(new[]
+            {
+                new Keyframe(0.0f, 0.0f),
+                new Keyframe(.17f, 1.0f),
+                new Keyframe(.4f, .8f),
+                new Keyframe(1.4f, .85f),
+                new Keyframe(1.6f, .7f),
+                new Keyframe(2.3f, .9f),
+                new Keyframe(2.7f, .7f),
+                new Keyframe(2.8f, 0.9f),
+                new Keyframe(3.0f, 0.0f)
+            });
         }
 
         public override void Update(ref float sample)
         {
             noiseSample = rng.NextSingle(-1, 1);
+            noiseSample *= curve[synth.TimePosition];
             for (int i = 0; i < numBands; i++)
             {
                 bands[i].Update(noiseSample);
