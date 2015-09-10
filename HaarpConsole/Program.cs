@@ -20,9 +20,6 @@ namespace HaarpConsole
 
             synth.AddSampler(new VoiceSampler(synth, 0));
 
-            synth.AddSampler(new FadeSampler(synth) { FadeType = FadeType.FadeIn, FadeLength = 0.25f });
-            synth.AddSampler(new FadeSampler(synth) { FadeType = FadeType.FadeOut, FadeLength = 0.2f });
-
             var sound = Create(synth.Generate(), synth.SampleRate);
 
             // Write sound to file
