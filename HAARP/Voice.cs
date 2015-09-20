@@ -44,6 +44,12 @@
         /// Values below one create a lisp effect. Values above one create a really annoying effect.
         /// </summary>
         public float FricativeBandStrength { get; set; } = 1.0f;
+
+        /// <summary>
+        /// The spectral tilt of the glottal pulse train (vibrations of the vocal folds).
+        /// Values below one will diminish higher harmonics. Values above one will amplify them.
+        /// </summary>
+        public float SpectralTilt { get; set; } = 0.95f;
     }
 
     public enum VoiceGender

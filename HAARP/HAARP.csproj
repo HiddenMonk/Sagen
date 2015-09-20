@@ -50,6 +50,7 @@
     <Compile Include="FunctionCurves\Curve.cs" />
     <Compile Include="FunctionCurves\Keyframe.cs" />
     <Compile Include="FunctionCurves\LinearCurve.cs" />
+    <Compile Include="VocalHarmonics.cs" />
     <Compile Include="Mathe.cs" />
     <Compile Include="Phrase.cs" />
     <Compile Include="Samplers\FadeSampler.cs" />
