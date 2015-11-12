@@ -1,7 +1,7 @@
 ﻿namespace HAARP
 {
-    public partial class Voice
+    public partial class VoiceParams
     {
-        public static Voice Jimmy => new Voice();
+        public static VoiceParams Jimmy => new VoiceParams();
     }
 }
