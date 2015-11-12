@@ -2,6 +2,6 @@
 {
     public class TTS
     {
-         public static VoiceQuality Quality = VoiceQuality.High;
+         public static VoiceQuality Quality = VoiceQuality.VeryHigh;
     }
 }
