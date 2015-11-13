@@ -77,6 +77,12 @@
     <EmbeddedResource Include="Data\Jimmy_44100.raw" />
     <EmbeddedResource Include="Data\Jimmy_8000.raw" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Stan_48000.raw" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Bob_48000.raw" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

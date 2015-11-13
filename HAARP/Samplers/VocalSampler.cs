@@ -45,7 +45,7 @@ namespace HAARP.Samplers
             };
 
 			numBands = bands.Length;
-			_voice = VoiceData.Get(Voice.Jimmy);
+			_voice = VoiceData.Get(Voice.Bob);
 		}
 
 		public override void Update(ref float sample)
