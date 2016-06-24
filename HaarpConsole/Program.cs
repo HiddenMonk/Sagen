@@ -14,16 +14,16 @@ namespace HaarpConsole
 
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Generating...");
-
-			var synth = new Synthesizer(2);
+			var synth = new Synthesizer(3);
 
 			synth.AddSampler(new VocalSampler(synth, 0));
+
+			Console.WriteLine("Generating...");
 
 			var sound = Create(synth.Generate(), synth.SampleRate);
 
 			// Write sound to file
-			using (var file = File.Create("test.wav"))
+			using (var file = File.Create("sample.wav"))
 			{
 				sound.CopyTo(file);
 				file.Flush();
@@ -66,16 +66,16 @@ namespace HaarpConsole
 		public static MemoryStream Create(float[] Samples, int SampleRate)
 		{
 			int SampleCount = Samples.Length;
-			var Buff = new short[SampleCount];
-			var Ret = new byte[Buff.Length * sizeof(short)];
+			var samples = new short[SampleCount];
+			var buffer = new byte[samples.Length * sizeof(short)];
 
-			for (int i = 0; i < Buff.Length; i++)
+			for (int i = 0; i < samples.Length; i++)
 			{
-				Buff[i] = (short)(Samples[i] * short.MaxValue);
+				samples[i] = (short)(Samples[i] * short.MaxValue);
 			}
 
-			Buffer.BlockCopy(Buff, 0, Ret, 0, Ret.Length);
-			return new MemoryStream(Wav.PrependHeader(Ret, SampleRate));
+			Buffer.BlockCopy(samples, 0, buffer, 0, buffer.Length);
+			return new MemoryStream(Wav.PrependHeader(buffer, SampleRate));
 		}
 	}
 }

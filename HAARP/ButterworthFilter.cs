@@ -2,6 +2,7 @@
 
 namespace HAARP
 {
+	// This algorithm is an adaptation of the one found here: http://www.musicdsp.org/archive.php?classid=3#38
 	public class ButterworthFilter
 	{
 		private float _resonance;
@@ -63,11 +64,10 @@ namespace HAARP
 			}
 		}
 
-		private float c, a1, a2, b1, b2;
+		private float c, cc, a1, a2, b1, b2;
 
-		private readonly float[] inputs = new float[2];
-
-		private readonly float[] outputs = new float[3];
+		private float i0, i1;
+		private float o0, o1;
 
 		public ButterworthFilter(float frequency, int sampleRate, PassFilterType filterType, float resonance)
 		{
@@ -84,17 +84,19 @@ namespace HAARP
 			{
 				case PassFilterType.LowPass:
 					c = 1.0f / (float)Math.Tan(Math.PI * _frequency / _sampleRate);
-					a1 = 1.0f / (1.0f + _resonance * c + c * c);
+					cc = c * c;
+					a1 = 1.0f / (1.0f + _resonance * c + cc);
 					a2 = 2f * a1;
-					b1 = 2.0f * (1.0f - c * c) * a1;
-					b2 = (1.0f - _resonance * c + c * c) * a1;
+					b1 = 2.0f * (1.0f - cc) * a1;
+					b2 = (1.0f - _resonance * c + cc) * a1;
 					break;
 				case PassFilterType.HighPass:
 					c = (float)Math.Tan(Math.PI * _frequency / _sampleRate);
-					a1 = 1.0f / (1.0f + _resonance * c + c * c);
+					cc = c * c;
+					a1 = 1.0f / (1.0f + _resonance * c + cc);
 					a2 = -2f * a1;
-					b1 = 2.0f * (c * c - 1.0f) * a1;
-					b2 = (1.0f - _resonance * c + c * c) * a1;
+					b1 = 2.0f * (cc - 1.0f) * a1;
+					b2 = (1.0f - _resonance * c + cc) * a1;
 					break;
 			}
 		}
@@ -107,16 +109,15 @@ namespace HAARP
 				_changed = false;
 			}
 
-			var output = a1 * newInput + a2 * inputs[0] + a1 * inputs[1] - b1 * outputs[0] - b2 * outputs[1];
+			var output = a1 * newInput + a2 * i0 + a1 * i1 - b1 * o0 - b2 * o1;
 
-			inputs[1] = inputs[0];
-			inputs[0] = newInput;
-			outputs[2] = outputs[1];
-			outputs[1] = outputs[0];
-			outputs[0] = output;
+			i1 = i0;
+			i0 = newInput;
+			o1 = o0;
+			o0 = output;
 		}
 
-		public float Value => outputs[0];
+		public float Value => o0;
 	}
 
 	public enum PassFilterType

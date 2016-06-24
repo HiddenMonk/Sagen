@@ -73,6 +73,7 @@ namespace HAARP
 #endif
 						return;
 					}
+
 					using (var reader = new BinaryReader(stream, Encoding.Default, true))
 					{
 						buffer = new float[stream.Length / 4];

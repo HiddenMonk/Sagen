@@ -30,12 +30,6 @@ namespace HAARP
 			TimeStep = 1.0f / _sampleRate;
 		}
 
-		private static void ConfigureTransform(float sl, float su, float dl, float du, out float offset, out float mult)
-		{
-			mult = (su - sl) / (du - dl);
-			offset = dl - sl;
-		}
-
 		public int SampleRate => _sampleRate;
 
 		public VoiceQuality Quality => _quality;

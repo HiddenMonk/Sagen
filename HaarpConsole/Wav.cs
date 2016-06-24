@@ -38,7 +38,7 @@ namespace HaarpConsole
         static byte[] PackageInt(int Src, int Len = 2)
         {
             if ((Len != 2) && (Len != 4))
-                throw new ArgumentException("Length must be either 2 or 4", "Len");
+                throw new ArgumentException("Length must be either 2 or 4", nameof(Len));
             var RetVal = new byte[Len];
             RetVal[0] = (byte)(Src & 0xFF);
             RetVal[1] = (byte)((Src >> 8) & 0xFF);

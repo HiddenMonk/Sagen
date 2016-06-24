@@ -2,6 +2,7 @@
 
 namespace HAARP
 {
+	// This is really just two butterworth filters combined.
 	internal class BandPassFilter
 	{
 		private float _resonanceLow, _resonanceHigh;
@@ -69,16 +70,16 @@ namespace HAARP
 			}
 		}
 
-		private float hc, ha1, ha2, hb1, hb2;
-		private float lc, la1, la2, lb1, lb2;
+		private float hc, hc2, ha1, ha2, hb1, hb2;
+		private float lc, lc2, la1, la2, lb1, lb2;
 		private float output;
 
-		private readonly float[] inputsLow = new float[2];
-		private readonly float[] outputsLow = new float[3];
-		private readonly float[] inputsHigh = new float[2];
-		private readonly float[] outputsHigh = new float[3];
+		private float il0, il1;
+		private float ol0, ol1;
+		private float ih0, ih1;
+		private float oh0, oh1;
 
-		public float Value => outputsHigh[0];
+		public float Value => oh0;
 
 		public BandPassFilter(
 			float lowFrequency,
@@ -100,21 +101,23 @@ namespace HAARP
 		private void RecalculateLow()
 		{
 			lc = (float)Math.Tan(Math.PI * _freqLow / _sampleRate);
-			la1 = 1.0f / (1.0f + _resonanceLow * lc + lc * lc);
+			lc2 = lc * lc;
+			la1 = 1.0f / (1.0f + _resonanceLow * lc + lc2);
 			la2 = -2f * la1;
-			lb1 = 2.0f * (lc * lc - 1.0f) * la1;
-			lb2 = (1.0f - _resonanceLow * lc + lc * lc) * la1;
+			lb1 = 2.0f * (lc2 - 1.0f) * la1;
+			lb2 = (1.0f - _resonanceLow * lc + lc2) * la1;
 			_changedLow = false;
 		}
 
 		// Upper bound is a low-pass filter
 		private void RecalculateHigh()
 		{
-			hc = 1.0f / (float)Math.Tan(Math.PI * _freqHigh / _sampleRate);
-			ha1 = 1.0f / (1.0f + _resonanceHigh * hc + hc * hc);
+			hc = (float)(1.0 / Math.Tan(Math.PI * _freqHigh / _sampleRate));
+			hc2 = hc * hc;
+			ha1 = 1.0f / (1.0f + _resonanceHigh * hc + hc2);
 			ha2 = 2f * ha1;
-			hb1 = 2.0f * (1.0f - hc * hc) * ha1;
-			hb2 = (1.0f - _resonanceHigh * hc + hc * hc) * ha1;
+			hb1 = 2.0f * (1.0f - hc2) * ha1;
+			hb2 = (1.0f - _resonanceHigh * hc + hc2) * ha1;
 			_changedHigh = false;
 		}
 
@@ -125,21 +128,21 @@ namespace HAARP
 			if (_changedHigh) RecalculateHigh();
 			if (_changedLow) RecalculateLow();
 
-			output = la1 * input + la2 * inputsLow[0] + la1 * inputsLow[1] - lb1 * outputsLow[0] - lb2 * outputsLow[1];
+			// Upper bound calculation
+			output = la1 * input + la2 * il0 + la1 * il1 - lb1 * ol0 - lb2 * ol1;
 
-			inputsLow[1] = inputsLow[0];
-			inputsLow[0] = input;
-			outputsLow[2] = outputsLow[1];
-			outputsLow[1] = outputsLow[0];
-			outputsLow[0] = output;
+			il1 = il0;
+			il0 = input;
+			ol1 = ol0;
+			ol0 = output;
 
-			output = ha1 * outputsLow[0] + ha2 * inputsHigh[0] + ha1 * inputsHigh[1] - hb1 * outputsHigh[0] - hb2 * outputsHigh[1];
+			// Lower bound calculation
+			output = ha1 * ol0 + ha2 * ih0 + ha1 * ih1 - hb1 * oh0 - hb2 * oh1;
 
-			inputsHigh[1] = inputsHigh[0];
-			inputsHigh[0] = outputsLow[0];
-			outputsHigh[2] = outputsHigh[1];
-			outputsHigh[1] = outputsHigh[0];
-			outputsHigh[0] = output;
+			ih1 = ih0;
+			ih0 = ol0;
+			oh1 = oh0;
+			oh0 = output;
 		}
 	}
 }

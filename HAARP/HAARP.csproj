@@ -42,6 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArticulationPlace.cs" />
+    <Compile Include="ArticulationType.cs" />
+    <Compile Include="Phoneme.cs" />
     <Compile Include="BandPassFilter.cs" />
     <Compile Include="BufferPool.cs" />
     <Compile Include="ButterworthFilter.cs" />
@@ -59,7 +62,6 @@
     <Compile Include="Samplers\Sampler.cs" />
     <Compile Include="RNG.cs" />
     <Compile Include="Samplers\VocalSampler.cs" />
-    <Compile Include="SampleTransform.cs" />
     <Compile Include="Synthesizer.cs" />
     <Compile Include="Voice.cs" />
     <Compile Include="VoiceParams.cs" />
@@ -82,6 +84,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\Bob_48000.raw" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Louis_48000.raw" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

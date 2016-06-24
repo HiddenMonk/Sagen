@@ -1,7 +1,7 @@
 ﻿namespace HAARP
 {
 	/// <summary>
-	/// Configures the phonetic characteristics of a TTS voice.
+	/// Configures the phonetic characteristics of a voice.
 	/// </summary>
 	public partial class VoiceParams
 	{
@@ -35,7 +35,7 @@
 		public float DentalForce { get; set; } = 1.0f;
 
 		/// <summary>
-		/// Controls the strength of plosives. Set to zero for lipless mode. Higher values sound like a spitting animal.
+		/// Controls the strength of plosives. Set to zero for lipless mode. Set to above one for spitting animal.
 		/// </summary>
 		public float PlosiveForce { get; set; } = 1.0f;
 
