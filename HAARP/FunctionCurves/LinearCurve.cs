@@ -8,7 +8,7 @@
 
         protected override float Interpolate(Keyframe left, Keyframe right, float delta)
         {
-            return Mathe.Lerp(left.Value, right.Value, delta);
+            return Util.Lerp(left.Value, right.Value, delta);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace HAARP
 {
-    internal static class Mathe
+    internal static class Util
     {
         public static float PIf = (float)Math.PI;
 
@@ -21,7 +21,7 @@ namespace HAARP
             return a * (1.0f - delta) + b * delta;
         }
 
-        public static float FactorToDecibels(float factor) => (float)Math.Log10(factor) * 10;
+        public static float FactorToDecibels(float factor) => (float)Math.Log10(factor) * 10.0f;
 
         public static float DecibelsToFactor(float dB) => (float)Math.Pow(10.0, dB / 10);
     }

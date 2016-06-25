@@ -53,7 +53,7 @@
     <Compile Include="FunctionCurves\Curve.cs" />
     <Compile Include="FunctionCurves\Keyframe.cs" />
     <Compile Include="FunctionCurves\LinearCurve.cs" />
-    <Compile Include="Mathe.cs" />
+    <Compile Include="Util.cs" />
     <Compile Include="Phrase.cs" />
     <Compile Include="Samplers\FadeSampler.cs" />
     <Compile Include="Samplers\NoiseSampler.cs" />
