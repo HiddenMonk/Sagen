@@ -35,7 +35,7 @@
 		/// </summary>
 		public readonly ArticulationType ArticulationType;
 
-		public Phoneme(bool voiced, float height, float backness, float roundedness, 
+		public Phoneme(float height, float backness, float roundedness, bool voiced = true,
 			ArticulationPlace artPlace = ArticulationPlace.None, ArticulationType artType = ArticulationType.Fricative)
 		{
 			IsVoiced = voiced;
