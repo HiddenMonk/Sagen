@@ -35,12 +35,11 @@
 				 
 				// shhhhhhhhh
                 new BandPassFilter(200, 1200, synth.SampleRate, 1.0f, 1.0f) { Volume = 0.075f }, 
-                new BandPassFilter(1900, 5500, synth.SampleRate, .35f, .35f) { Volume = 0.01f }, 
-
-                new BandPassFilter(6700, 7200, synth.SampleRate, .1f, .1f) { Volume = 0.0060f }, 
-                new BandPassFilter(4600, 5400, synth.SampleRate, .18f, .18f) { Volume = 0.060f }, 
-                new BandPassFilter(3700, 4100, synth.SampleRate, .2f, .2f) { Volume = 0.050f }, 
-                new BandPassFilter(2100, 2500, synth.SampleRate, .2f, .2f) { Volume = 0.1f }
+                new BandPassFilter(1900, 5500, synth.SampleRate, .35f, .35f) { Volume = 0.01f },
+				new BandPassFilter(2100, 2500, synth.SampleRate, .2f, .2f) { Volume = 0.1f },
+				new BandPassFilter(3700, 4100, synth.SampleRate, .2f, .2f) { Volume = 0.050f },
+				new BandPassFilter(4600, 5400, synth.SampleRate, .18f, .18f) { Volume = 0.060f },
+				//new BandPassFilter(6700, 7200, synth.SampleRate, .1f, .1f) { Volume = 0.0060f }, 
             };
 
 			numBands = bands.Length;

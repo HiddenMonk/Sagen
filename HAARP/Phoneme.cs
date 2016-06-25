@@ -1,38 +1,49 @@
 ﻿namespace HAARP
 {
-	public class Phoneme
+	internal partial class Phoneme
 	{
 		/// <summary>
 		/// Determines if the phoneme is voiced.
 		/// </summary>
-		public bool IsVoiced;
+		public readonly bool IsVoiced;
 
 		/// <summary>
 		/// The height (tongue height).
 		/// The first formant, F1, inversely corresponds to this vocal quality.
 		/// </summary>
-		public float Height;
+		public readonly float Height;
 
 		/// <summary>
 		/// The backness (position of the tongue relative to the back of the mouth).
 		/// The second formant, F2, corresponds directly to this vocal quality.
 		/// </summary>
-		public float Backness;
+		public readonly float Backness;
 
 		/// <summary>
 		/// The roundedness (of the lips).
 		/// The third formant, F3, typically represents roundedness.
 		/// </summary>
-		public float Roundedness;
+		public readonly float Roundedness;
 
 		/// <summary>
 		/// The place of articulation.
 		/// </summary>
-		public ArticulationPlace ArticulationPlace;
+		public readonly ArticulationPlace ArticulationPlace;
 
 		/// <summary>
 		/// The type of articulation.
 		/// </summary>
-		public ArticulationType ArticulationType;
+		public readonly ArticulationType ArticulationType;
+
+		public Phoneme(bool voiced, float height, float backness, float roundedness, 
+			ArticulationPlace artPlace = ArticulationPlace.None, ArticulationType artType = ArticulationType.Fricative)
+		{
+			IsVoiced = voiced;
+			Height = height;
+			Backness = backness;
+			Roundedness = roundedness;
+			ArticulationPlace = artPlace;
+			ArticulationType = artType;
+		}
 	}
 }

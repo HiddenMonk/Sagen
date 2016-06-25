@@ -46,7 +46,6 @@
     <Compile Include="ArticulationType.cs" />
     <Compile Include="Phoneme.cs" />
     <Compile Include="BandPassFilter.cs" />
-    <Compile Include="BufferPool.cs" />
     <Compile Include="ButterworthFilter.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FunctionCurves\CosineCurve.cs" />
