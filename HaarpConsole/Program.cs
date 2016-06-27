@@ -14,8 +14,14 @@ namespace HaarpConsole
 
 		static void Main(string[] args)
 		{
-			var synth = new Synthesizer(3);
+			var synth = new Synthesizer(4);
 
+			const float amp = .03f;
+			const float tilt = -3.50f;
+
+			// Generate 100 harmonics
+			for (int i = 0; i < 100; i++)
+				synth.AddSampler(new SineSampler(synth, 150 * i + 3.75f * i, amp, .14f * i, tilt));
 			synth.AddSampler(new VocalSampler(synth, 0));
 
 			Console.WriteLine("Generating...");

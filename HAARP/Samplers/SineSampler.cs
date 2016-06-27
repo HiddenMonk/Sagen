@@ -42,13 +42,14 @@ namespace HAARP.Samplers
             
         }
 
-        public SineSampler(Synthesizer synth, float frequency, float amplitude, float phase = 0.0f, float dcOffset = 0.0f) : base(synth)
+        public SineSampler(Synthesizer synth, float frequency, float amplitude, float phase = 0.0f, float tilt = 0.0f, float dcOffset = 0.0f) : base(synth)
         {
             Frequency = frequency;
             Amplitude = amplitude;
             Phase = phase;
             state = phase;
             DCOffset = dcOffset;
+	        SpectralTilt = tilt;
         }
 
         public override void Update(ref float sample)

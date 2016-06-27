@@ -65,5 +65,11 @@ namespace HAARP
 			_presets.Add('\u0251', new Phoneme(OPEN, BACK, UNROUNDED)); // 'o' in 'hot' (US English)
 			_presets.Add('\u0252', new Phoneme(OPEN, BACK, ROUNDED)); // 'o' in 'not' (UK English)
 		}
+
+		public static Phoneme GetPreset(char ipa)
+		{
+			Phoneme p;
+			return _presets.TryGetValue(ipa, out p) ? p : null;
+		}
 	}
 }

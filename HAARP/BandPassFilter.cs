@@ -79,7 +79,7 @@ namespace HAARP
 		private float ih0, ih1;
 		private float oh0, oh1;
 
-		public float Value => oh0;
+		public float Value => oh0 * _volume;
 
 		public BandPassFilter(
 			float lowFrequency,
@@ -123,8 +123,6 @@ namespace HAARP
 
 		public void Update(float input)
 		{
-			input *= _volume;
-
 			if (_changedHigh) RecalculateHigh();
 			if (_changedLow) RecalculateLow();
 

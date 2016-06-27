@@ -7,15 +7,21 @@ using System.Text;
 
 namespace HAARP
 {
-	internal class VoiceData
+	internal unsafe class VoiceData
 	{
 		private static readonly Dictionary<string, VoiceData> voices = new Dictionary<string, VoiceData>();
 
-		private readonly float[] _samples48000;
-		private readonly float[] _samples44100;
-		private readonly float[] _samples22050;
-		private readonly float[] _samples11025;
-		private readonly float[] _samples8000;
+		private readonly int _numSamples48k;
+		private readonly int _numSamples41k;
+		private readonly int _numSamples22k;
+		private readonly int _numSamples11k;
+		private readonly int _numSamples8k;
+
+		private readonly float* _samples48000;
+		private readonly float* _samples44100;
+		private readonly float* _samples22050;
+		private readonly float* _samples11025;
+		private readonly float* _samples8000;
 
 		static VoiceData()
 		{
@@ -27,11 +33,11 @@ namespace HAARP
 
 		private VoiceData(string voiceName)
 		{
-			Utils.FillBuffer(ref _samples48000, voiceName, VoiceQuality.VeryHigh);
-			Utils.FillBuffer(ref _samples44100, voiceName, VoiceQuality.High);
-			Utils.FillBuffer(ref _samples22050, voiceName, VoiceQuality.Medium);
-			Utils.FillBuffer(ref _samples11025, voiceName, VoiceQuality.Low);
-			Utils.FillBuffer(ref _samples8000, voiceName, VoiceQuality.Awful);
+			VoiceDataUtils.SetBufferPointer(ref _samples48000, ref _numSamples48k, voiceName, VoiceQuality.VeryHigh);
+			VoiceDataUtils.SetBufferPointer(ref _samples44100, ref _numSamples41k, voiceName, VoiceQuality.High);
+			VoiceDataUtils.SetBufferPointer(ref _samples22050, ref _numSamples22k, voiceName, VoiceQuality.Medium);
+			VoiceDataUtils.SetBufferPointer(ref _samples11025, ref _numSamples11k, voiceName, VoiceQuality.Low);
+			VoiceDataUtils.SetBufferPointer(ref _samples8000, ref _numSamples8k, voiceName, VoiceQuality.Awful);
 #if DEBUG
 			Console.WriteLine($"Voice loaded: {voiceName}");
 #endif
@@ -44,28 +50,28 @@ namespace HAARP
 			switch (quality)
 			{
 				case VoiceQuality.VeryHigh:
-					return _samples48000[sampleNum % _samples48000.Length];
+					return _samples48000[sampleNum % _numSamples48k];
 				case VoiceQuality.High:
-					return _samples44100[sampleNum % _samples44100.Length];
+					return _samples44100[sampleNum % _numSamples41k];
 				case VoiceQuality.Medium:
-					return _samples22050[sampleNum % _samples22050.Length];
+					return _samples22050[sampleNum % _numSamples22k];
 				case VoiceQuality.Low:
-					return _samples11025[sampleNum % _samples11025.Length];
+					return _samples11025[sampleNum % _numSamples11k];
 				case VoiceQuality.Awful:
-					return _samples8000[sampleNum % _samples8000.Length];
+					return _samples8000[sampleNum % _numSamples8k];
 				default:
 					return 0f;
 			}
 		}
 
-		private static class Utils
+		private static class VoiceDataUtils
 		{
 			private static readonly Assembly a = Assembly.GetExecutingAssembly();
-
-			public static void FillBuffer(ref float[] buffer, string voiceName, VoiceQuality quality)
+			
+			public static void SetBufferPointer(ref float* buffer, ref int sampleCount, string voiceName, VoiceQuality quality)
 			{
-				using (var stream = a.GetManifestResourceStream($"HAARP.Data.{voiceName}_{Convert.ToInt32(quality, CultureInfo.InvariantCulture)}.raw"))
-				{
+				using (var stream = a.GetManifestResourceStream($"HAARP.Data.{voiceName}_{Convert.ToInt32(quality, CultureInfo.InvariantCulture)}.raw") as UnmanagedMemoryStream)
+				{	
 					if (stream == null)
 					{
 #if DEBUG
@@ -74,15 +80,8 @@ namespace HAARP
 						return;
 					}
 
-					using (var reader = new BinaryReader(stream, Encoding.Default, true))
-					{
-						buffer = new float[stream.Length / 4];
-						int i = 0;
-						while (stream.Position < stream.Length)
-						{
-							buffer[i++] = reader.ReadSingle();
-						}
-					}
+					buffer = (float*)stream.PositionPointer;
+					sampleCount = (int)stream.Length / sizeof(float);
 #if DEBUG
 					Console.WriteLine($"Data Loaded: {voiceName}, {quality} ({stream.Length}B)");
 #endif

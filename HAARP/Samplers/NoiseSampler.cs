@@ -1,20 +1,33 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 
 namespace HAARP.Samplers
 {
-    internal class NoiseSampler : Sampler
+    internal unsafe class NoiseSampler : Sampler
     {
+	    internal static readonly float* NoiseDataPointer;
+	    internal static readonly int NoiseDataLength;
+
+	    static NoiseSampler()
+	    {
+		    using (
+			    var stream =
+				    Assembly.GetExecutingAssembly().GetManifestResourceStream("HAARP.Data.noise.raw") as UnmanagedMemoryStream)
+		    {
+			    NoiseDataPointer = (float*)stream.PositionPointer;
+			    NoiseDataLength = (int)stream.Length / sizeof(float);
+		    }
+	    }
+
         private readonly BandPassFilter filter;
 
         public float MinFrequency { get; set; } = 0.0f;
         public float MaxFrequency { get; set; } = 2000.0f;
         public float Amplitude { get; set; } = 1.0f;
 
-        private readonly RNG rng;
-
-        public NoiseSampler(Synthesizer synth, long seed, float minFrequency, float maxFrequency, float filterResonance = .3f) : base(synth)
+        public NoiseSampler(Synthesizer synth, float minFrequency, float maxFrequency, float filterResonance = .3f) : base(synth)
         {
-            rng = new RNG(seed);
             MinFrequency = minFrequency;
             MaxFrequency = maxFrequency;
             filter = new BandPassFilter(maxFrequency, minFrequency, 44100, filterResonance, filterResonance);
@@ -22,7 +35,7 @@ namespace HAARP.Samplers
 
         public override void Update(ref float sample)
         {
-            filter.Update(rng.NextSingle(-1f, 1f) * Amplitude);
+            filter.Update((NoiseDataPointer[synth.Position % NoiseDataLength]) * Amplitude);
             sample += filter.Value;
         }
     }

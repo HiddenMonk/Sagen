@@ -52,6 +52,7 @@
     <Compile Include="FunctionCurves\Curve.cs" />
     <Compile Include="FunctionCurves\Keyframe.cs" />
     <Compile Include="FunctionCurves\LinearCurve.cs" />
+    <Compile Include="Phoneme.Presets.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Phrase.cs" />
     <Compile Include="Samplers\FadeSampler.cs" />
@@ -86,6 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\Louis_48000.raw" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\noise.raw" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

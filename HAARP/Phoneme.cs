@@ -45,5 +45,12 @@
 			ArticulationPlace = artPlace;
 			ArticulationType = artType;
 		}
+
+		public Phoneme(ArticulationPlace artPlace, ArticulationType artType, bool voiced = false)
+		{
+			IsVoiced = voiced;
+			ArticulationPlace = artPlace;
+			ArticulationType = artType;
+		}
 	}
 }

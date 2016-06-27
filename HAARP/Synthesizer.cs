@@ -6,7 +6,7 @@ namespace HAARP
 {
 	internal class Synthesizer
 	{
-		public const int MaxSamplers = 72;
+		public const int MaxSamplers = 128;
 
 		private readonly HashSet<Sampler> samplers = new HashSet<Sampler>();
 		private readonly LinkedList<Sampler> samplerSequence = new LinkedList<Sampler>();
