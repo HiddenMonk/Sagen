@@ -3,6 +3,7 @@
 	public enum VoiceSampleFormat
 	{
 		/// <summary>
+		/// 32-bit floating-point numbers normalized to [-1, 1].
 		/// </summary>
 		Float32,
 		/// <summary>
