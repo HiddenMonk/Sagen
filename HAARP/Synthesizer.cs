@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using HAARP.Samplers;
 
@@ -51,14 +52,13 @@ namespace HAARP
 		public float[] Generate()
 		{
 			int ln = _buffer.Length;
-			foreach (var sampler in samplerSequence)
-			{
-				if (!sampler.Enabled) continue;
-				for (_position = 0; _position < ln; _position++)
+
+			for (_position = 0; _position < ln; _position++)
+				foreach (var sampler in samplerSequence)
 				{
+					if (!sampler.Enabled) continue;
 					sampler.Update(ref _buffer[_position]);
 				}
-			}
 
 			return _buffer;
 		}

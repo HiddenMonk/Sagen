@@ -6,7 +6,7 @@
 	public enum Voice
 	{
 		/// <summary>
-		/// Jimmy is a young man, no older than 21. He is quite fond of the color white.
+		/// Jimmy is a young man, no older than 21. He is quite fond of the color plaid.
 		/// </summary>
 		Jimmy,
 		/// <summary>
@@ -14,7 +14,7 @@
 		/// </summary>
 		Stan,
 		/// <summary>
-		/// A humble, throaty man, Bob has seen many innocent cucumbers perish during his life as a plumber.
+		/// A humble, throaty man, Bob has witnessed several innocent zucchinis perish during his job as a plumber.
 		/// </summary>
 		Bob,
 		/// <summary>
