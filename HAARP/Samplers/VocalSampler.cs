@@ -9,14 +9,15 @@ namespace HAARP.Samplers
 
 		private readonly VoiceData _voice;
 		private readonly BandPassFilter[] bands;
+		private readonly ButterworthFilter lowPass, highPass;
 		private readonly int numBands;
 
 		private const float LowResonance = .2f;
 		private const float HighResonance = 0.09f;
 
 		private const float LEVEL_F1 = .0175f;
-		private const float LEVEL_F2 = .0115f;
-		private const float LEVEL_F3 = .0105f;
+		private const float LEVEL_F2 = .01125f;
+		private const float LEVEL_F3 = .0125f;
 		private const float LEVEL_F4 = .005f;
 
 		public VocalSampler(Synthesizer synth, long seed) : base(synth)
@@ -24,9 +25,9 @@ namespace HAARP.Samplers
 			bands = new[]
 			{
 				// ʌ
-				//new BandPassFilter(2600, 2700, synth.SampleRate, HighResonance, HighResonance) {Volume = .005f},
-				//new BandPassFilter(1170, 1170, synth.SampleRate, HighResonance, HighResonance) {Volume = .01f},
-				//new BandPassFilter(600, 600, synth.SampleRate, LowResonance, LowResonance) {Volume = .01f},
+				//new BandPassFilter(2600, 2700, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F3},
+				//new BandPassFilter(1170, 1170, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F2},
+				//new BandPassFilter(600, 600, synth.SampleRate, LowResonance, LowResonance) {Volume = LEVEL_F1},
 
 				// ɛ
 				new BandPassFilter(3500, 8000, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F4}, 
@@ -45,12 +46,11 @@ namespace HAARP.Samplers
 				//new BandPassFilter(3100, 3200, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F3},
 				//new BandPassFilter(1650, 1650, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F2},
 				//new BandPassFilter(860, 860, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F1},
-				new BandPassFilter(500, 6500, synth.SampleRate, HighResonance, HighResonance) {Volume = .0075f}, 
 				 
 				// RRRRRRR
-				//new BandPassFilter(3100, 3100, synth.SampleRate, HighResonance, HighResonance) {Volume = .0025f},
-				//new BandPassFilter(1500, 1500, synth.SampleRate, HighResonance, HighResonance) {Volume = .0125f},
-				//new BandPassFilter(350, 350, synth.SampleRate, LowResonance, LowResonance) {Volume = .0125f},
+				//new BandPassFilter(3000, 3000, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F3},
+				//new BandPassFilter(1400, 1400, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F2},
+				//new BandPassFilter(350, 350, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F1},
 
 				// i
 				//new BandPassFilter(3000, 3000, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F3},
@@ -66,19 +66,22 @@ namespace HAARP.Samplers
 				//new BandPassFilter(6700, 7200, synth.SampleRate, .1f, .1f) { Volume = 0.0060f }, 
             };
 
+			lowPass = new ButterworthFilter(500, synth.SampleRate, PassFilterType.LowPass, .1f);
+			highPass = new ButterworthFilter(6000, synth.SampleRate, PassFilterType.HighPass, .4f);
+
 			numBands = bands.Length;
 			_voice = VoiceData.Get(Voice.Jimmy);
 		}
 
 		public override void Update(ref float sample)
 		{
-			synth.Fundamental -= 25f * synth.TimeStep;
+			synth.Fundamental -= 20.0f * synth.TimeStep;
 			sampleOut = 0f;
 
 			// ha ha ha ha ha ha
 			float m = ((float)Math.Sin(synth.TimePosition * Math.PI * 8.0f) + 1.0f) / 2.0f;
 			sampleIn = sample * m
-				+ NoiseSampler.NoiseDataPointer[synth.Position % NoiseSampler.NoiseDataLength] * synth.Voice.FricativeForce * (0.15f + 0.95f * (float)Math.Pow(1.0f - m, 2));
+				+ NoiseSampler.NoiseDataPointer[synth.Position % NoiseSampler.NoiseDataLength] * synth.Voice.FricativeForce * (0.15f + 0.55f * (float)Math.Pow(1.0f - m, 2));
 
 			// Update filters
 			for (int i = 0; i < numBands; i++)
@@ -86,6 +89,11 @@ namespace HAARP.Samplers
 				bands[i].Update(sampleIn);
 				sampleOut += bands[i].Value;
 			}
+
+			lowPass.Update(sampleIn);
+			highPass.Update(sampleIn);
+			sampleOut += lowPass.Value * .075f;
+			sampleOut += highPass.Value * .015f;
 
 			sample = sampleOut;
 		}

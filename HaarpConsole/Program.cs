@@ -14,7 +14,7 @@ namespace HaarpConsole
 
 		static void Main(string[] args)
 		{
-			var synth = new Synthesizer(4) { Fundamental = 150f };
+			var synth = new Synthesizer(4) { Fundamental = 155f };
 
 			const float amp = .015f;
 			const float tilt = -3.00f;
