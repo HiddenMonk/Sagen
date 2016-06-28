@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace HAARP
 {
@@ -14,9 +15,10 @@ namespace HAARP
             return (data >> (times % 64)) | (data << (64 - (times % 64)));
         }
 
-        public static float Tilt(this float sample, float frequency, float spectralTilt, float nyquist = 22050)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Tilt(this float sample, float frequency, float spectralTilt, float nyquist = 22050.0f)
         {
-            return sample * (float)Math.Pow(2, (frequency / nyquist * 2 - 1) * spectralTilt);
+            return sample * (float)Math.Pow(2, (frequency / nyquist * 2f - 1f) * spectralTilt);
         }
     }
 }

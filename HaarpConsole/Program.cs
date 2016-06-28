@@ -14,7 +14,7 @@ namespace HaarpConsole
 
 		static void Main(string[] args)
 		{
-			var synth = new Synthesizer(4) { Fundamental = 155f };
+			var synth = new Synthesizer { Fundamental = 155f };
 
 			const float amp = .015f;
 			const float tilt = -3.00f;
@@ -26,7 +26,9 @@ namespace HaarpConsole
 
 			Console.WriteLine("Generating...");
 
-			var sound = Create(synth.Generate(), synth.SampleRate);
+			var sampleStream = new MemoryStream(10000);
+			synth.Generate(4.0f, sampleStream, VoiceSampleFormat.Signed16);
+			var sound = CreateWavStream(sampleStream, synth.SampleRate);
 
 			// Write sound to file
 			using (var file = File.Create("sample.wav"))
@@ -36,14 +38,14 @@ namespace HaarpConsole
 			}
 
 			Play(sound);
-
+			
 			Console.WriteLine("Done!");
 			Console.ReadLine();
 		}
 
 		private class StopEventReceiver : ISoundStopEventReceiver
 		{
-			public Action<ISound, StopEventCause> StopAction;
+			public readonly Action<ISound, StopEventCause> StopAction;
 
 			public StopEventReceiver(Action<ISound, StopEventCause> action)
 			{
@@ -52,15 +54,14 @@ namespace HaarpConsole
 
 			public void OnSoundStopped(ISound sound, StopEventCause reason, object userData)
 			{
-
 				StopAction?.Invoke(sound, reason);
 			}
 		}
 
-		public static void Play(MemoryStream SoundStream)
+		public static void Play(MemoryStream wavAudioStream)
 		{
-			SoundStream.Seek(0, SeekOrigin.Begin);
-			var src = Engine.AddSoundSourceFromIOStream(SoundStream, "snd");
+			wavAudioStream.Seek(0, SeekOrigin.Begin);
+			var src = Engine.AddSoundSourceFromIOStream(wavAudioStream, "snd");
 			Console.WriteLine("Play length: {0}s", (float)src.PlayLength / 1000);
 			var snd = Engine.Play2D(src, false, false, false);
 			snd.setSoundStopEventReceiver(new StopEventReceiver((sound, cause) =>
@@ -69,19 +70,10 @@ namespace HaarpConsole
 			}));
 		}
 
-		public static MemoryStream Create(float[] Samples, int SampleRate)
+		public static MemoryStream CreateWavStream(MemoryStream sampleStream, int sampleRate)
 		{
-			int SampleCount = Samples.Length;
-			var samples = new short[SampleCount];
-			var buffer = new byte[samples.Length * sizeof(short)];
-
-			for (int i = 0; i < samples.Length; i++)
-			{
-				samples[i] = (short)(Samples[i] * short.MaxValue);
-			}
-
-			Buffer.BlockCopy(samples, 0, buffer, 0, buffer.Length);
-			return new MemoryStream(Wav.PrependHeader(buffer, SampleRate));
+			sampleStream.Flush();
+			return new MemoryStream(Wav.PrependHeader(sampleStream.ToArray(), sampleRate));
 		}
 	}
 }

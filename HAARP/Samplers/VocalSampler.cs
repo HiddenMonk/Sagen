@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 
 namespace HAARP.Samplers
 {
@@ -18,46 +17,51 @@ namespace HAARP.Samplers
 		private const float LEVEL_F1 = .0175f;
 		private const float LEVEL_F2 = .01125f;
 		private const float LEVEL_F3 = .0125f;
-		private const float LEVEL_F4 = .005f;
+		private const float LEVEL_F4 = .0075f;
 
 		public VocalSampler(Synthesizer synth, long seed) : base(synth)
 		{
 			bands = new[]
 			{
-				// ʌ
+				// open-mid back unrounded vowel
 				//new BandPassFilter(2600, 2700, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F3},
 				//new BandPassFilter(1170, 1170, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F2},
 				//new BandPassFilter(600, 600, synth.SampleRate, LowResonance, LowResonance) {Volume = LEVEL_F1},
 
-				// ɛ
-				new BandPassFilter(3500, 8000, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F4}, 
-				new BandPassFilter(2600, 2850, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F3},
-				new BandPassFilter(1900, 2150, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F2},
-				new BandPassFilter(650, 800, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F1},
+				// open-mid front unrounded vowel
+				//new BandPassFilter(3500, 3600, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F4}, 
+				//new BandPassFilter(2500, 2700, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F3},
+				//new BandPassFilter(1900, 2150, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F2},
+				//new BandPassFilter(650, 800, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F1},
 
-				// ü
-				//new BandPassFilter(100, 24000, synth.SampleRate, HighResonance, HighResonance) {Volume = .0125f}, 
-				//new BandPassFilter(3200, 3300, synth.SampleRate, HighResonance, HighResonance) {Volume = .0125f},
-				//new BandPassFilter(2100, 2200, synth.SampleRate, HighResonance, HighResonance) {Volume = .0125f},
-				//new BandPassFilter(1800, 1900, synth.SampleRate, HighResonance, HighResonance) {Volume = .0125f},
-				//new BandPassFilter(200, 300, synth.SampleRate, LowResonance, LowResonance) {Volume = .0125f},
+				// close front rounded vowel
+				//new BandPassFilter(3200, 3300, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F4},
+				//new BandPassFilter(2100, 2200, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F3},
+				//new BandPassFilter(1800, 1900, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F2},
+				//new BandPassFilter(200, 300, synth.SampleRate, LowResonance, LowResonance) {Volume = LEVEL_F1},
 				
 				// near-open front unrounded vowel
 				//new BandPassFilter(3100, 3200, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F3},
 				//new BandPassFilter(1650, 1650, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F2},
 				//new BandPassFilter(860, 860, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F1},
 				 
-				// RRRRRRR
+				// postalveolar approximant
 				//new BandPassFilter(3000, 3000, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F3},
 				//new BandPassFilter(1400, 1400, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F2},
 				//new BandPassFilter(350, 350, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F1},
 
-				// i
+				// close-mid front unrounded vowel
+				new BandPassFilter(3600, 3700, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F4},
+				new BandPassFilter(2500, 2600, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F3},
+				new BandPassFilter(2200, 2300, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F2},
+				new BandPassFilter(450, 500, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F1},
+
+				// close front unrounded vowel
 				//new BandPassFilter(3000, 3000, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F3},
 				//new BandPassFilter(2250, 2250, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F2},
 				//new BandPassFilter(250, 250, synth.SampleRate, HighResonance, HighResonance) {Volume = LEVEL_F1},
 
-				// shhhhhhhhh
+				// voiceless palatal-alveolar sibilant fricative
                 //new BandPassFilter(200, 1200, synth.SampleRate, 1.0f, 1.0f) { Volume = 0.075f }, 
                 //new BandPassFilter(1900, 5500, synth.SampleRate, .35f, .35f) { Volume = 0.01f },
 				//new BandPassFilter(2100, 2500, synth.SampleRate, .2f, .2f) { Volume = 0.1f },

@@ -53,10 +53,10 @@
     <Compile Include="FunctionCurves\Keyframe.cs" />
     <Compile Include="FunctionCurves\LinearCurve.cs" />
     <Compile Include="Phoneme.Presets.cs" />
+    <Compile Include="VoiceSampleFormat.cs" />
     <Compile Include="Samplers\HarmonicSampler.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Phrase.cs" />
-    <Compile Include="Samplers\FadeSampler.cs" />
     <Compile Include="Samplers\NoiseSampler.cs" />
     <Compile Include="Samplers\SineSampler.cs" />
     <Compile Include="TTS.cs" />
@@ -70,15 +70,6 @@
     <Compile Include="Voice.Presets.cs" />
     <Compile Include="VoiceData.cs" />
     <Compile Include="VoiceQuality.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Data\Jimmy_48000.raw" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Data\Jimmy_11025.raw" />
-    <EmbeddedResource Include="Data\Jimmy_22050.raw" />
-    <EmbeddedResource Include="Data\Jimmy_44100.raw" />
-    <EmbeddedResource Include="Data\Jimmy_8000.raw" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\noise.raw" />
