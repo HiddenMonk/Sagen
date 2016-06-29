@@ -55,7 +55,7 @@ namespace HAARP
 				int sampleCount = (int)(SampleRate * lengthSeconds);
 
 				if (includeWavHeader)
-					Wav.GenerateWavHeader(this, writer.BaseStream, sampleCount, format);
+					Wav.GenerateWavHeader(this, output, sampleCount, format);
 
 				for (_position = 0; _position < sampleCount; _position++)
 				{
