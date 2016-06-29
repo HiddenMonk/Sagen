@@ -53,7 +53,7 @@
     <Compile Include="FunctionCurves\Keyframe.cs" />
     <Compile Include="FunctionCurves\LinearCurve.cs" />
     <Compile Include="Phoneme.Presets.cs" />
-    <Compile Include="VoiceSampleFormat.cs" />
+    <Compile Include="SampleFormat.cs" />
     <Compile Include="Samplers\HarmonicSampler.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Phrase.cs" />
@@ -70,6 +70,7 @@
     <Compile Include="Voice.Presets.cs" />
     <Compile Include="VoiceData.cs" />
     <Compile Include="VoiceQuality.cs" />
+    <Compile Include="Wav.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\noise.raw" />

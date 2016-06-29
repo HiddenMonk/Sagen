@@ -48,11 +48,15 @@ namespace HAARP
 			}
 		}
 
-		public void Generate(float lengthSeconds, Stream output, VoiceSampleFormat format)
+		public void Generate(float lengthSeconds, Stream output, SampleFormat format, bool includeWavHeader = true)
 		{
 			using (var writer = new BinaryWriter(output, Encoding.Default, true))
 			{
 				int sampleCount = (int)(SampleRate * lengthSeconds);
+
+				if (includeWavHeader)
+					Wav.GenerateWavHeader(this, writer.BaseStream, sampleCount, format);
+
 				for (_position = 0; _position < sampleCount; _position++)
 				{
 					float currentSample = 0f;
@@ -63,13 +67,13 @@ namespace HAARP
 					}
 					switch (format)
 					{
-						case VoiceSampleFormat.Float32:
+						case SampleFormat.Float32:
 							writer.Write(currentSample);
 							break;
-						case VoiceSampleFormat.Signed16:
+						case SampleFormat.Signed16:
 							writer.Write((short)(currentSample * short.MaxValue));
 							break;
-						case VoiceSampleFormat.Unsigned8:
+						case SampleFormat.Unsigned8:
 							writer.Write((byte)((currentSample + 1.0f) / 2.0f * 255));
 							break;
 					}

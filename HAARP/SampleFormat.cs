@@ -1,6 +1,6 @@
 ﻿namespace HAARP
 {
-	public enum VoiceSampleFormat
+	public enum SampleFormat
 	{
 		/// <summary>
 		/// 32-bit floating-point numbers normalized to [-1, 1].

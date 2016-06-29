@@ -26,14 +26,13 @@ namespace HaarpConsole
 
 			Console.WriteLine("Generating...");
 
-			var sampleStream = new MemoryStream(10000);
-			synth.Generate(4.0f, sampleStream, VoiceSampleFormat.Signed16);
-			var sound = CreateWavStream(sampleStream, synth.SampleRate);
+			var sound = new MemoryStream(10000);
+			synth.Generate(4.0f, sound, HAARP.SampleFormat.Signed16);
 
 			// Write sound to file
 			using (var file = File.Create("sample.wav"))
 			{
-				sound.CopyTo(file);
+				sound.WriteTo(file);
 				file.Flush();
 			}
 
@@ -68,12 +67,6 @@ namespace HaarpConsole
 			{
 				src.Dispose();
 			}));
-		}
-
-		public static MemoryStream CreateWavStream(MemoryStream sampleStream, int sampleRate)
-		{
-			sampleStream.Flush();
-			return new MemoryStream(Wav.PrependHeader(sampleStream.ToArray(), sampleRate));
 		}
 	}
 }
