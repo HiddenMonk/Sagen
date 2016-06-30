@@ -9,7 +9,7 @@ namespace HAARP.Samplers
 	{
 		private double state;
 		private static readonly int _dataLength;
-		private static readonly float* _ptrSamples;
+		private static readonly double* _ptrSamples;
 
 		static HarmonicSampler()
 		{
@@ -17,8 +17,8 @@ namespace HAARP.Samplers
 				var stream =
 					Assembly.GetExecutingAssembly().GetManifestResourceStream("HAARP.Data.vocal.raw") as UnmanagedMemoryStream)
 			{
-				_ptrSamples = (float*)stream.PositionPointer;
-				_dataLength = (int)stream.Length / sizeof(float);
+				_ptrSamples = (double*)stream.PositionPointer;
+				_dataLength = (int)stream.Length / sizeof(double);
 			}
 		}
 

@@ -27,10 +27,10 @@ namespace HaarpConsole
 			Console.WriteLine("Generating...");
 
 			var sound = new MemoryStream(10000);
-			synth.Generate(4.0f, sound, HAARP.SampleFormat.Float64);
+			synth.Generate(4.0f, sound, HAARP.SampleFormat.Signed16);
 
 			// Write sound to file
-			using (var file = File.Create("sample.wav"))
+			using (var file = File.Create("SpeechOutput.wav"))
 			{
 				sound.WriteTo(file);
 				file.Flush();

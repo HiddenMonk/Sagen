@@ -77,7 +77,7 @@ namespace HAARP
 							writer.Write((short)(currentSample * short.MaxValue));
 							break;
 						case SampleFormat.Unsigned8:
-							writer.Write((byte)((currentSample + 1.0f) / 2.0f * 255));
+							writer.Write((byte)((currentSample + 1.0f) / 2.0f * byte.MaxValue));
 							break;
 					}
 				}

@@ -29,7 +29,7 @@ namespace HAARP
 				header.Write(0); // Replace later
 				header.Write(ID_WAVE);
 
-				// FMT chunk
+				// "fmt " chunk
 				header.Write(CHUNK_FMT);
 				header.Write(FMT_CHUNK_SIZE);
 				header.Write(sampleFormat == SampleFormat.Float32 || sampleFormat == SampleFormat.Float64 ? WAV_FORMAT_IEEE_FLOAT : WAV_FORMAT_PCM);
@@ -63,15 +63,15 @@ namespace HAARP
 
 				header.Write(EXT_SIZE); // cbSize, required for non-PCM formats
 
+				// "fact" chunk (required for non-PCM formats)
 				if (sampleFormat == SampleFormat.Float32 || sampleFormat == SampleFormat.Float64)
 				{
-					// FACT chunk
 					header.Write(CHUNK_FACT);
 					header.Write(FACT_CHUNK_SIZE);
 					header.Write(sampleCount);
 				}
 
-				// DATA chunk
+				// "data" chunk
 				header.Write(CHUNK_DATA);
 				int dataSize = blockSize * sampleCount;
 				header.Write(dataSize);
