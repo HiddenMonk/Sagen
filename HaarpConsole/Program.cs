@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 using HAARP;
@@ -24,10 +25,14 @@ namespace HaarpConsole
 				synth.AddSampler(new HarmonicSampler(synth, i, amp, .14f * i, tilt));
 			synth.AddSampler(new VocalSampler(synth, 0));
 
-			Console.WriteLine("Generating...");
-
 			var sound = new MemoryStream(10000);
+			var sw = new Stopwatch();
+
+			Console.WriteLine("Generating...");
+			sw.Start();
 			synth.Generate(4.0f, sound, HAARP.SampleFormat.Signed16);
+			sw.Stop();
+			Console.WriteLine($"Finished in {sw.Elapsed}");
 
 			// Write sound to file
 			using (var file = File.Create("SpeechOutput.wav"))
@@ -37,8 +42,7 @@ namespace HaarpConsole
 			}
 
 			Play(sound);
-			
-			Console.WriteLine("Done!");
+
 			Console.ReadLine();
 		}
 
