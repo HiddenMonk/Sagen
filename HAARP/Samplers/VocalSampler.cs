@@ -4,20 +4,20 @@ namespace HAARP.Samplers
 {
 	internal unsafe class VocalSampler : Sampler
 	{
-		private float sampleIn, sampleOut;
+		private double sampleIn, sampleOut;
 
 		private readonly VoiceData _voice;
 		private readonly BandPassFilter[] bands;
 		private readonly ButterworthFilter lowPass, highPass;
 		private readonly int numBands;
 
-		private const float LowResonance = .2f;
-		private const float HighResonance = 0.09f;
+		private const double LowResonance = .2f;
+		private const double HighResonance = 0.09f;
 
-		private const float LEVEL_F1 = .01850f;
-		private const float LEVEL_F2 = .01125f;
-		private const float LEVEL_F3 = .01250f;
-		private const float LEVEL_F4 = .00750f;
+		private const double LEVEL_F1 = .01850f;
+		private const double LEVEL_F2 = .01125f;
+		private const double LEVEL_F3 = .01250f;
+		private const double LEVEL_F4 = .00750f;
 
 		public VocalSampler(Synthesizer synth, long seed) : base(synth)
 		{
@@ -77,15 +77,15 @@ namespace HAARP.Samplers
 			_voice = VoiceData.Get(Voice.Jimmy);
 		}
 
-		public override void Update(ref float sample)
+		public override void Update(ref double sample)
 		{
 			synth.Fundamental -= 20.0f * synth.TimeStep;
 			sampleOut = 0f;
 
 			// ha ha ha ha ha ha
-			float m = ((float)Math.Sin(synth.TimePosition * Math.PI * 8.0f) + 1.0f) / 2.0f;
+			double m = (Math.Sin(synth.TimePosition * Math.PI * 8.0f) + 1.0f) / 2.0f;
 			sampleIn = sample * m
-				+ NoiseSampler.NoiseDataPointer[synth.Position % NoiseSampler.NoiseDataLength] * synth.Voice.FricativeForce * (0.2f + 0.55f * (float)Math.Pow(1.0f - m, 2));
+				+ NoiseSampler.NoiseDataPointer[synth.Position % NoiseSampler.NoiseDataLength] * synth.Voice.FricativeForce * (0.2f + 0.55f * Math.Pow(1.0f - m, 2));
 
 			// Update filters
 			for (int i = 0; i < numBands; i++)

@@ -5,8 +5,8 @@ namespace HAARP
 	// This algorithm is an adaptation of the one found here: http://www.musicdsp.org/archive.php?classid=3#38
 	public class ButterworthFilter
 	{
-		private float _resonance;
-		private float _frequency;
+		private double _resonance;
+		private double _frequency;
 		private int _sampleRate;
 		private PassFilterType _filterType;
 		private bool _changed = false;
@@ -14,7 +14,7 @@ namespace HAARP
 		/// <summary>
 		/// The resonance amount. Range: [0.1, sqrt(2)]
 		/// </summary>
-		public float Resonance
+		public double Resonance
 		{
 			get { return _resonance; }
 			set
@@ -27,7 +27,7 @@ namespace HAARP
 		/// <summary>
 		/// The cutoff frequency.
 		/// </summary>
-		public float Frequency
+		public double Frequency
 		{
 			get { return _frequency; }
 
@@ -64,12 +64,12 @@ namespace HAARP
 			}
 		}
 
-		private float c, cc, a1, a2, b1, b2;
+		private double c, cc, a1, a2, b1, b2;
 
-		private float i0, i1;
-		private float o0, o1;
+		private double i0, i1;
+		private double o0, o1;
 
-		public ButterworthFilter(float frequency, int sampleRate, PassFilterType filterType, float resonance)
+		public ButterworthFilter(double frequency, int sampleRate, PassFilterType filterType, double resonance)
 		{
 			_resonance = resonance;
 			_frequency = frequency;
@@ -83,7 +83,7 @@ namespace HAARP
 			switch (_filterType)
 			{
 				case PassFilterType.LowPass:
-					c = 1.0f / (float)Math.Tan(Math.PI * _frequency / _sampleRate);
+					c = 1.0f / Math.Tan(Math.PI * _frequency / _sampleRate);
 					cc = c * c;
 					a1 = 1.0f / (1.0f + _resonance * c + cc);
 					a2 = 2f * a1;
@@ -91,7 +91,7 @@ namespace HAARP
 					b2 = (1.0f - _resonance * c + cc) * a1;
 					break;
 				case PassFilterType.HighPass:
-					c = (float)Math.Tan(Math.PI * _frequency / _sampleRate);
+					c = Math.Tan(Math.PI * _frequency / _sampleRate);
 					cc = c * c;
 					a1 = 1.0f / (1.0f + _resonance * c + cc);
 					a2 = -2f * a1;
@@ -101,7 +101,7 @@ namespace HAARP
 			}
 		}
 
-		public void Update(float newInput)
+		public void Update(double newInput)
 		{
 			if (_changed)
 			{
@@ -117,7 +117,7 @@ namespace HAARP
 			o0 = output;
 		}
 
-		public float Value => o0;
+		public double Value => o0;
 	}
 
 	public enum PassFilterType

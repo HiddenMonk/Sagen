@@ -5,7 +5,7 @@
         protected readonly Synthesizer synth;
 
         public bool Enabled { get; set; } = true;
-        public abstract void Update(ref float sample);
+        public abstract void Update(ref double sample);
 
         public Sampler(Synthesizer synthesizer)
         {

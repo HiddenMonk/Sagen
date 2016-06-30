@@ -35,34 +35,34 @@ namespace HAARP.Samplers
 		/// <summary>
 		/// The amplitude of the wave.
 		/// </summary>
-		public float Amplitude { get; set; } = 0.5f;
+		public double Amplitude { get; set; } = 0.5;
 
 		/// <summary>
 		/// The phase offset of the wave.
 		/// </summary>
-		public float Phase { get; } = 0.0f;
+		public double Phase { get; } = 0.0;
 
 		/// <summary>
 		/// The DC (vertical) offset of the wave.
 		/// </summary>
-		public float DCOffset { get; set; } = 0.0f;
+		public double DCOffset { get; set; } = 0.0;
 
 		/// <summary>
 		/// The spectral tilt of the wave.
 		/// </summary>
-		public float SpectralTilt { get; set; } = 0.0f;
+		public double SpectralTilt { get; set; } = 0.0;
 
 		/// <summary>
 		/// The nyquist frequency to use for spectral tilting.
 		/// </summary>
-		public float SpectralUpperBound { get; set; } = 22050.0f;
+		public double SpectralUpperBound { get; set; } = 22050.0;
 
 		public HarmonicSampler(Synthesizer synth) : base(synth)
 		{
 
 		}
 
-		public HarmonicSampler(Synthesizer synth, int harmonic, float amplitude, float phase = 0.0f, float tilt = 0.0f, float dcOffset = 0.0f) : base(synth)
+		public HarmonicSampler(Synthesizer synth, int harmonic, double amplitude, double phase = 0.0f, double tilt = 0.0f, double dcOffset = 0.0f) : base(synth)
 		{
 			Amplitude = amplitude;
 			Harmonic = harmonic;
@@ -73,9 +73,9 @@ namespace HAARP.Samplers
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public override void Update(ref float sample)
+		public override void Update(ref double sample)
 		{
-			float f = synth.Fundamental * (Harmonic + 1) + HarmonicOffsetFactor * Harmonic;
+			double f = synth.Fundamental * (Harmonic + 1) + HarmonicOffsetFactor * Harmonic;
 			state = (state + synth.TimeStep * f) % 1.0f;
 			sample += (_ptrSamples[(int)(state * (_dataLength - 1))] * Amplitude).Tilt(f, SpectralTilt, SpectralUpperBound) + DCOffset;
 		}

@@ -3,6 +3,10 @@
 	public enum SampleFormat
 	{
 		/// <summary>
+		/// 64-bit floating-point numbers normalized to [-1, 1].
+		/// </summary>
+		Float64,
+		/// <summary>
 		/// 32-bit floating-point numbers normalized to [-1, 1].
 		/// </summary>
 		Float32,

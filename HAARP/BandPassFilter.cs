@@ -5,20 +5,20 @@ namespace HAARP
 	// This is really just two butterworth filters combined.
 	internal class BandPassFilter
 	{
-		private float _resonanceLow, _resonanceHigh;
-		private float _freqLow, _freqHigh;
-		private float _volume = 1.0f;
+		private double _resonanceLow, _resonanceHigh;
+		private double _freqLow, _freqHigh;
+		private double _volume = 1.0f;
 		private int _sampleRate;
 		private bool _changedLow = false;
 		private bool _changedHigh = false;
 
-		public float Volume
+		public double Volume
 		{
 			get { return _volume; }
 			set { _volume = value; }
 		}
 
-		public float ResonanceLow
+		public double ResonanceLow
 		{
 			get { return _resonanceLow; }
 			set
@@ -28,7 +28,7 @@ namespace HAARP
 			}
 		}
 
-		public float ResonanceHigh
+		public double ResonanceHigh
 		{
 			get { return _resonanceHigh; }
 			set
@@ -50,7 +50,7 @@ namespace HAARP
 			}
 		}
 
-		public float UpperBound
+		public double UpperBound
 		{
 			get { return _freqHigh; }
 			set
@@ -60,7 +60,7 @@ namespace HAARP
 			}
 		}
 
-		public float LowerBound
+		public double LowerBound
 		{
 			get { return _freqLow; }
 			set
@@ -70,23 +70,23 @@ namespace HAARP
 			}
 		}
 
-		private float hc, hc2, ha1, ha2, hb1, hb2;
-		private float lc, lc2, la1, la2, lb1, lb2;
-		private float output;
+		private double hc, hc2, ha1, ha2, hb1, hb2;
+		private double lc, lc2, la1, la2, lb1, lb2;
+		private double output;
 
-		private float il0, il1;
-		private float ol0, ol1;
-		private float ih0, ih1;
-		private float oh0, oh1;
+		private double il0, il1;
+		private double ol0, ol1;
+		private double ih0, ih1;
+		private double oh0, oh1;
 
-		public float Value => oh0 * _volume;
+		public double Value => oh0 * _volume;
 
 		public BandPassFilter(
-			float lowFrequency,
-			float highFrequency,
+			double lowFrequency,
+			double highFrequency,
 			int sampleRate,
-			float resonanceLow,
-			float resonanceHigh)
+			double resonanceLow,
+			double resonanceHigh)
 		{
 			_freqLow = lowFrequency;
 			_freqHigh = highFrequency;
@@ -100,7 +100,7 @@ namespace HAARP
 		// Lower bound is a high-pass filter
 		private void RecalculateLow()
 		{
-			lc = (float)Math.Tan(Math.PI * _freqLow / _sampleRate);
+			lc = Math.Tan(Math.PI * _freqLow / _sampleRate);
 			lc2 = lc * lc;
 			la1 = 1.0f / (1.0f + _resonanceLow * lc + lc2);
 			la2 = -2f * la1;
@@ -112,7 +112,7 @@ namespace HAARP
 		// Upper bound is a low-pass filter
 		private void RecalculateHigh()
 		{
-			hc = (float)(1.0 / Math.Tan(Math.PI * _freqHigh / _sampleRate));
+			hc = 1.0 / Math.Tan(Math.PI * _freqHigh / _sampleRate);
 			hc2 = hc * hc;
 			ha1 = 1.0f / (1.0f + _resonanceHigh * hc + hc2);
 			ha2 = 2f * ha1;
@@ -121,7 +121,7 @@ namespace HAARP
 			_changedHigh = false;
 		}
 
-		public void Update(float input)
+		public void Update(double input)
 		{
 			if (_changedHigh) RecalculateHigh();
 			if (_changedLow) RecalculateLow();

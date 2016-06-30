@@ -16,7 +16,7 @@ namespace HAARP
         }
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Tilt(this float sample, float frequency, float spectralTilt, float nyquist = 22050.0f)
+        public static double Tilt(this double sample, double frequency, double spectralTilt, double nyquist = 22050.0f)
         {
             return sample * (float)Math.Pow(2, (frequency / nyquist * 2f - 1f) * spectralTilt);
         }

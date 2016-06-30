@@ -33,7 +33,7 @@ namespace HAARP.Samplers
             filter = new BandPassFilter(maxFrequency, minFrequency, 44100, filterResonance, filterResonance);
         }
 
-        public override void Update(ref float sample)
+        public override void Update(ref double sample)
         {
             filter.Update((NoiseDataPointer[synth.Position % NoiseDataLength]) * Amplitude);
             sample += filter.Value;

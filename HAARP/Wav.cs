@@ -32,13 +32,18 @@ namespace HAARP
 				// FMT chunk
 				header.Write(CHUNK_FMT);
 				header.Write(FMT_CHUNK_SIZE);
-				header.Write(sampleFormat == SampleFormat.Float32 ? WAV_FORMAT_IEEE_FLOAT : WAV_FORMAT_PCM);
+				header.Write(sampleFormat == SampleFormat.Float32 || sampleFormat == SampleFormat.Float64 ? WAV_FORMAT_IEEE_FLOAT : WAV_FORMAT_PCM);
 				header.Write(NUM_CHANNELS);
 				header.Write(synth.SampleRate);
 				// Data rate (bytes per second), block size, and bits per sample
 				int blockSize = 0;
 				switch (sampleFormat)
 				{
+					case SampleFormat.Float64:
+						header.Write(synth.SampleRate * sizeof(double) * NUM_CHANNELS);
+						header.Write((short)(blockSize = sizeof(double) * NUM_CHANNELS));
+						header.Write((short)(sizeof(double) * 8));
+						break;
 					case SampleFormat.Float32:
 						header.Write(synth.SampleRate * sizeof(float) * NUM_CHANNELS);
 						header.Write((short)(blockSize = sizeof(float) * NUM_CHANNELS));
@@ -58,7 +63,7 @@ namespace HAARP
 
 				header.Write(EXT_SIZE); // cbSize, required for non-PCM formats
 
-				if (sampleFormat == SampleFormat.Float32)
+				if (sampleFormat == SampleFormat.Float32 || sampleFormat == SampleFormat.Float64)
 				{
 					// FACT chunk
 					header.Write(CHUNK_FACT);

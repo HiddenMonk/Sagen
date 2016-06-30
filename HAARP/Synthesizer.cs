@@ -19,9 +19,9 @@ namespace HAARP
 		private int _position = 0;
 		private readonly VoiceParams _voice = VoiceParams.Jimmy;
 
-		public float Fundamental { get; set; } = 100.0f;
-		public float TimePosition => (float)_position / _sampleRate;
-		public float TimeStep { get; }
+		public double Fundamental { get; set; } = 100.0f;
+		public double TimePosition => (double)_position / _sampleRate;
+		public double TimeStep { get; }
 
 		public VoiceParams Voice => _voice;
 
@@ -48,7 +48,7 @@ namespace HAARP
 			}
 		}
 
-		public void Generate(float lengthSeconds, Stream output, SampleFormat format, bool includeWavHeader = true)
+		public void Generate(double lengthSeconds, Stream output, SampleFormat format, bool includeWavHeader = true)
 		{
 			using (var writer = new BinaryWriter(output, Encoding.Default, true))
 			{
@@ -59,7 +59,7 @@ namespace HAARP
 
 				for (_position = 0; _position < sampleCount; _position++)
 				{
-					float currentSample = 0f;
+					double currentSample = 0f;
 					foreach (var sampler in samplerSequence)
 					{
 						if (!sampler.Enabled) continue;
@@ -67,8 +67,11 @@ namespace HAARP
 					}
 					switch (format)
 					{
-						case SampleFormat.Float32:
+						case SampleFormat.Float64:
 							writer.Write(currentSample);
+							break;
+						case SampleFormat.Float32:
+							writer.Write((float)currentSample);
 							break;
 						case SampleFormat.Signed16:
 							writer.Write((short)(currentSample * short.MaxValue));
