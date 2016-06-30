@@ -27,35 +27,24 @@ namespace HAARP.Samplers
         /// </summary>
         public double DCOffset { get; set; } = 0.0f;
 
-        /// <summary>
-        /// The spectral tilt of the wave.
-        /// </summary>
-        public double SpectralTilt { get; set; } = 0.0f;
-
-        /// <summary>
-        /// The nyquist frequency to use for spectral tilting.
-        /// </summary>
-        public double SpectralUpperBound { get; set; } = 22050.0;
-
         public SineSampler(Synthesizer synth) : base(synth)
         {
             
         }
 
-        public SineSampler(Synthesizer synth, double frequency, double amplitude, double phase = 0.0f, double tilt = 0.0f, double dcOffset = 0.0f) : base(synth)
+        public SineSampler(Synthesizer synth, double frequency, double amplitude, double phase = 0.0f, double dcOffset = 0.0f) : base(synth)
         {
             Frequency = frequency;
             Amplitude = amplitude;
             Phase = phase;
             state = phase;
             DCOffset = dcOffset;
-	        SpectralTilt = tilt;
         }
 
         public override void Update(ref double sample)
         {
             state = (state + synth.TimeStep * Frequency) % 1.0f;
-            sample += (Math.Sin(state * FullPhase) * Amplitude).Tilt(Frequency, SpectralTilt, SpectralUpperBound) + DCOffset;
+            sample += (Math.Sin(state * FullPhase) * Amplitude) + DCOffset;
         }
     }
 }
