@@ -62,6 +62,11 @@
 		LabializedVelar,
 
 		/// <summary>
+		/// Uvular articulation is created by interaction between the back of the tongue and the uvula.
+		/// </summary>
+		Uvular,
+
+		/// <summary>
 		/// Glottal articulation is created by the glottis.
 		/// </summary>
 		Glottal

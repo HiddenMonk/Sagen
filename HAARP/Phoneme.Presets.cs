@@ -32,8 +32,8 @@ namespace HAARP
 			// Close vowels
 			Vowel("i", "i", CLOSE, FRONT, UNROUNDED); // 'ie' in 'wie' (German)
 			Vowel("y", "y", CLOSE, FRONT, ROUNDED); // 'ü' in 'über' (German)
-			Vowel("ɨ", @"I\", CLOSE, CENTRAL, UNROUNDED);
-			Vowel("ʉ", @"U\", CLOSE, CENTRAL, ROUNDED);
+			Vowel("ɨ", "I*", CLOSE, CENTRAL, UNROUNDED);
+			Vowel("ʉ", "U*", CLOSE, CENTRAL, ROUNDED);
 			Vowel("ɯ", "M", CLOSE, BACK, UNROUNDED);
 			Vowel("u", "u", CLOSE, BACK, ROUNDED); // 'u' in 'Fuß' (German)
 
@@ -43,13 +43,13 @@ namespace HAARP
 			// Close-mid vowels
 			Vowel("e", "e", CLOSE_MID, FRONT, UNROUNDED); // 'ee' in 'Seele' (German)
 			Vowel("ø", "2", CLOSE_MID, FRONT, ROUNDED); // 'ö' in 'schön' (German)
-			Vowel("ɘ", @"@\", CLOSE_MID, CENTRAL, UNROUNDED); // 'e' in 'bitte' (German)
+			Vowel("ɘ", "@*", CLOSE_MID, CENTRAL, UNROUNDED); // 'e' in 'bitte' (German)
 			Vowel("ɵ", "8", CLOSE_MID, CENTRAL, ROUNDED); // 'oo' in 'foot' (UK English)
 			Vowel("ɤ", "7", CLOSE_MID, BACK, UNROUNDED);
 			Vowel("o", "o", CLOSE_MID, BACK, ROUNDED); // 'o' in 'oder' (German)
 
 			// Mid vowels
-			Vowel("e̞",@"e_o", MID, FRONT, UNROUNDED);
+			Vowel("e̞", "e_o", MID, FRONT, UNROUNDED);
 			Vowel("ə", "@", MID, CENTRAL, UNROUNDED); // 'u' in 'under' (US English)
 			Vowel("o̞", "2_o", MID, BACK, ROUNDED);
 
@@ -57,7 +57,7 @@ namespace HAARP
 			Vowel("ɛ", "E", OPEN_MID, FRONT, UNROUNDED); // 'e' in 'ten' (US English)
 			Vowel("œ", "9", OPEN_MID, FRONT, ROUNDED); // 'ö' in 'löschen' (German)
 			Vowel("ɜ", "3", OPEN_MID, CENTRAL, UNROUNDED); // 'ir' in 'bird' (UK English)
-			Vowel("ɞ", @"3\", OPEN_MID, CENTRAL, ROUNDED); // 'um' in 'Parfum' (German)
+			Vowel("ɞ", "3*", OPEN_MID, CENTRAL, ROUNDED); // 'um' in 'Parfum' (German)
 			Vowel("ʌ", "V", OPEN_MID, BACK, UNROUNDED);
 			Vowel("ɔ", "O", OPEN_MID, BACK, ROUNDED); // 'o' in 'voll' (German)
 
@@ -93,7 +93,9 @@ namespace HAARP
 			Consonant("z", "z", ArticulationPlace.Alveolar, ArticulationManner.Fricative, true);
 			Consonant("ʃ", "S", ArticulationPlace.PalatoAlveolar, ArticulationManner.Fricative, false);
 			Consonant("ʒ", "Z", ArticulationPlace.PalatoAlveolar, ArticulationManner.Fricative, true);
+			Consonant("ç", "C", ArticulationPlace.Palatal, ArticulationManner.Fricative, false);
 			Consonant("x", "x", ArticulationPlace.Velar, ArticulationManner.Fricative, false);
+			Consonant("ʁ", "R", ArticulationPlace.Uvular, ArticulationManner.Fricative, true);
 			Consonant("h", "h", ArticulationPlace.Glottal, ArticulationManner.Fricative, false);
 			
 			// Affricates
@@ -101,7 +103,7 @@ namespace HAARP
 			Consonant("dʒ", "dZ", ArticulationPlace.PalatoAlveolar, ArticulationManner.Affricate, true); // 'j' in 'jump' (US English)
 
 			// Approximants
-			Consonant("ɹ", @"r\", ArticulationPlace.Alveolar, ArticulationManner.Approximant, true);
+			Consonant("ɹ", "r*", ArticulationPlace.Alveolar, ArticulationManner.Approximant, true);
 			Consonant("j", "j", ArticulationPlace.Palatal, ArticulationManner.Approximant, true);
 			Consonant("w", "w", ArticulationPlace.LabializedVelar, ArticulationManner.Approximant, true);
 
