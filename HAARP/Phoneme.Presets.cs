@@ -4,7 +4,8 @@ namespace HAARP
 {
 	internal partial class Phoneme
 	{
-		private static readonly Dictionary<char, Phoneme> _presets = new Dictionary<char, Phoneme>();
+		private static readonly Dictionary<string, Phoneme> _presetsIPA = new Dictionary<string, Phoneme>();
+		private static readonly Dictionary<string, Phoneme> _presetsXSAMPA = new Dictionary<string, Phoneme>();
 
 		// Height
 		private const float CLOSE = 1.0f;
@@ -29,47 +30,80 @@ namespace HAARP
 		static Phoneme()
 		{	
 			// Close vowels
-			_presets.Add('i', new Phoneme(CLOSE, FRONT, UNROUNDED)); // 'ie' in 'wie' (German)
-			_presets.Add('y', new Phoneme(CLOSE, FRONT, ROUNDED)); // 'ü' in 'über' (German)
-			_presets.Add('\u0268', new Phoneme(CLOSE, CENTRAL, UNROUNDED));
-			_presets.Add('\u0289', new Phoneme(CLOSE, CENTRAL, ROUNDED));
-			_presets.Add('\u026f', new Phoneme(CLOSE, BACK, UNROUNDED));
-			_presets.Add('u', new Phoneme(CLOSE, BACK, ROUNDED)); // 'u' in 'Fuß' (German)
+			AddVowel(@"i", @"i", CLOSE, FRONT, UNROUNDED); // 'ie' in 'wie' (German)
+			AddVowel(@"y", @"y", CLOSE, FRONT, ROUNDED); // 'ü' in 'über' (German)
+			AddVowel(@"ɨ", @"I\", CLOSE, CENTRAL, UNROUNDED);
+			AddVowel(@"ʉ", @"U\", CLOSE, CENTRAL, ROUNDED);
+			AddVowel(@"ɯ", @"M", CLOSE, BACK, UNROUNDED);
+			AddVowel(@"u", @"u", CLOSE, BACK, ROUNDED); // 'u' in 'Fuß' (German)
+
+			// Near-close vowels
+			AddVowel(@"ʊ", @"U", NEAR_CLOSE, NEAR_BACK, ROUNDED);
 
 			// Close-mid vowels
-			_presets.Add('e', new Phoneme(CLOSE_MID, FRONT, UNROUNDED)); // 'ee' in 'Seele' (German)
-			_presets.Add('\u00f8', new Phoneme(CLOSE_MID, BACK, ROUNDED)); // 'ö' in 'schön' (German)
-			_presets.Add('\u0258', new Phoneme(CLOSE_MID, CENTRAL, UNROUNDED)); // 'e' in 'bitte' (German)
-			_presets.Add('\u0275', new Phoneme(CLOSE_MID, CENTRAL, ROUNDED)); // 'oo' in 'foot' (UK English)
-			_presets.Add('\u0264', new Phoneme(CLOSE_MID, BACK, UNROUNDED));
-			_presets.Add('o', new Phoneme(CLOSE_MID, BACK, ROUNDED)); // 'o' in 'oder' (German)
+			AddVowel(@"e", @"e", CLOSE_MID, FRONT, UNROUNDED); // 'ee' in 'Seele' (German)
+			AddVowel(@"ø", @"2", CLOSE_MID, FRONT, ROUNDED); // 'ö' in 'schön' (German)
+			AddVowel(@"ɘ", @"@\", CLOSE_MID, CENTRAL, UNROUNDED); // 'e' in 'bitte' (German)
+			AddVowel(@"ɵ", @"8", CLOSE_MID, CENTRAL, ROUNDED); // 'oo' in 'foot' (UK English)
+			AddVowel(@"ɤ", @"7", CLOSE_MID, BACK, UNROUNDED);
+			AddVowel(@"o", @"o", CLOSE_MID, BACK, ROUNDED); // 'o' in 'oder' (German)
 
 			// Mid vowels
-			_presets.Add('\u0259', new Phoneme(MID, CENTRAL, UNROUNDED)); // 'u' in 'under' (US English)
+			AddVowel(@"e̞", @"e_o", MID, FRONT, UNROUNDED);
+			AddVowel(@"ə", @"@", MID, CENTRAL, UNROUNDED); // 'u' in 'under' (US English)
+			AddVowel(@"o̞", @"2_o", MID, BACK, ROUNDED);
 
 			// Open-mid vowels
-			_presets.Add('\u025b', new Phoneme(OPEN_MID, FRONT, UNROUNDED)); // 'e' in 'ten' (US English)
-			_presets.Add('\u0153', new Phoneme(OPEN_MID, FRONT, ROUNDED)); // 'ö' in 'löschen' (German)
-			_presets.Add('\u025c', new Phoneme(OPEN_MID, CENTRAL, UNROUNDED)); // 'ir' in 'bird' (UK English)
-			_presets.Add('\u025e', new Phoneme(OPEN_MID, CENTRAL, ROUNDED)); // 'um' in 'Parfum' (German)
-			_presets.Add('\u028c', new Phoneme(OPEN_MID, BACK, UNROUNDED));
-			_presets.Add('\u0254', new Phoneme(OPEN_MID, BACK, ROUNDED)); // 'o' in 'voll' (German)
+			AddVowel(@"ɛ", @"E", OPEN_MID, FRONT, UNROUNDED); // 'e' in 'ten' (US English)
+			AddVowel(@"œ", @"9", OPEN_MID, FRONT, ROUNDED); // 'ö' in 'löschen' (German)
+			AddVowel(@"ɜ", @"3", OPEN_MID, CENTRAL, UNROUNDED); // 'ir' in 'bird' (UK English)
+			AddVowel(@"ɞ", @"3\", OPEN_MID, CENTRAL, ROUNDED); // 'um' in 'Parfum' (German)
+			AddVowel(@"ʌ", @"V", OPEN_MID, BACK, UNROUNDED);
+			AddVowel(@"ɔ", @"O", OPEN_MID, BACK, ROUNDED); // 'o' in 'voll' (German)
 
 			// Near-open vowels
-			_presets.Add('\u00e6', new Phoneme(NEAR_OPEN, FRONT, UNROUNDED)); // 'a' in 'cat' (US English)
-			_presets.Add('\u0250', new Phoneme(NEAR_OPEN, CENTRAL, UNROUNDED)); // 'er' in 'oder' (German)
+			AddVowel(@"æ", @"{", NEAR_OPEN, FRONT, UNROUNDED); // 'a' in 'cat' (US English)
+			AddVowel(@"ɐ", @"6", NEAR_OPEN, CENTRAL, UNROUNDED); // 'er' in 'oder' (German)
 
 			// Open vowels
-			_presets.Add('a', new Phoneme(OPEN, FRONT, UNROUNDED)); // 'a' in 'aber' (German)
-			_presets.Add('\u0276', new Phoneme(OPEN, FRONT, ROUNDED));
-			_presets.Add('\u0251', new Phoneme(OPEN, BACK, UNROUNDED)); // 'o' in 'hot' (US English)
-			_presets.Add('\u0252', new Phoneme(OPEN, BACK, ROUNDED)); // 'o' in 'not' (UK English)
+			AddVowel(@"a", @"a", OPEN, FRONT, UNROUNDED); // 'a' in 'aber' (German)
+			AddVowel(@"ɶ", @"&", OPEN, FRONT, ROUNDED);
+			AddVowel(@"ɑ", @"A", OPEN, BACK, UNROUNDED); // 'o' in 'hot' (US English)
+			AddVowel(@"ɒ", @"Q", OPEN, BACK, ROUNDED); // 'o' in 'not' (UK English)
+
+			// Fricatives
+			AddConsonant(@"θ", @"T", ArticulationPlace.Dental, ArticulationType.Fricative, false);
+			AddConsonant(@"ð", @"D", ArticulationPlace.Dental, ArticulationType.Fricative, true);
+			AddConsonant(@"s", @"s", ArticulationPlace.Alveolar, ArticulationType.Fricative, false);
+			AddConsonant(@"z", @"z", ArticulationPlace.Alveolar, ArticulationType.Fricative, true);
+			AddConsonant(@"ʃ", @"S", ArticulationPlace.PalatalAlveolar, ArticulationType.Fricative, false);
+			
 		}
 
-		public static Phoneme GetPreset(char ipa)
+		private static void AddVowel(string ipa, string xsampa, float openness, float backness, float roundedness)
+		{
+			var vowel = new Phoneme(openness, backness, roundedness);
+			_presetsIPA[ipa] = vowel;
+			_presetsXSAMPA[xsampa] = vowel;
+		}
+
+		private static void AddConsonant(string ipa, string xsampa, ArticulationPlace place, ArticulationType type, bool voiced)
+		{
+			var consonant = new Phoneme(place, type, voiced);
+			_presetsIPA[ipa] = consonant;
+			_presetsXSAMPA[xsampa] = consonant;
+		}
+
+		public static Phoneme GetPresetIPA(string ipa)
 		{
 			Phoneme p;
-			return _presets.TryGetValue(ipa, out p) ? p : null;
+			return _presetsIPA.TryGetValue(ipa, out p) ? p : null;
+		}
+
+		public static Phoneme GetPresetXSAMPA(string xsampa)
+		{
+			Phoneme p;
+			return _presetsXSAMPA.TryGetValue(xsampa, out p) ? p : null;
 		}
 	}
 }

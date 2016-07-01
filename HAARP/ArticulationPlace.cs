@@ -8,6 +8,7 @@
 		Dental,
 		Alveolar,
 		Postalveolar,
+		PalatalAlveolar,
 		Palatal,
 		Velar,
 		Glottal

@@ -7,6 +7,6 @@
 		Affricate,
 		Fricative,
 		Approximant,
-		Lateral
+		LateralApproximant
 	}
 }
