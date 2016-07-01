@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArticulationPlace.cs" />
-    <Compile Include="ArticulationType.cs" />
+    <Compile Include="ArticulationManner.cs" />
     <Compile Include="Phoneme.cs" />
     <Compile Include="BandPassFilter.cs" />
     <Compile Include="ButterworthFilter.cs" />
@@ -53,6 +53,7 @@
     <Compile Include="FunctionCurves\Keyframe.cs" />
     <Compile Include="FunctionCurves\LinearCurve.cs" />
     <Compile Include="Phoneme.Presets.cs" />
+    <Compile Include="Pronunciation\Lexicon.cs" />
     <Compile Include="SampleFormat.cs" />
     <Compile Include="Samplers\HarmonicSampler.cs" />
     <Compile Include="Util.cs" />

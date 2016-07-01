@@ -103,10 +103,11 @@ namespace HAARP
 			// Approximants
 			Consonant("ɹ", @"r\", ArticulationPlace.Alveolar, ArticulationManner.Approximant, true);
 			Consonant("j", "j", ArticulationPlace.Palatal, ArticulationManner.Approximant, true);
-			Consonant("w", "w", ArticulationPlace.LabioVelar, ArticulationManner.Approximant, true);
+			Consonant("w", "w", ArticulationPlace.LabializedVelar, ArticulationManner.Approximant, true);
 
 			// Lateral approximants
-			Consonant("l", "l", ArticulationPlace.Alveolar, ArticulationManner.LateralApproximant, true);
+			Consonant("l", "l", ArticulationPlace.Alveolar, ArticulationManner.Approximant, true, true);
+			Consonant("ɫ", "5", ArticulationPlace.VelarizedAlveolar, ArticulationManner.Approximant, true, true); // 'l' in 'feel' (US English)
 		}
 
 		private static void Vowel(string ipa, string xsampa, float openness, float backness, float roundedness)
@@ -116,7 +117,7 @@ namespace HAARP
 			_presetsXSAMPA[xsampa] = vowel;
 		}
 
-		private static void Consonant(string ipa, string xsampa, ArticulationPlace place, ArticulationManner type, bool voiced)
+		private static void Consonant(string ipa, string xsampa, ArticulationPlace place, ArticulationManner type, bool voiced, bool lateral = false)
 		{
 			var consonant = new Phoneme(place, type, voiced);
 			_presetsIPA[ipa] = consonant;
