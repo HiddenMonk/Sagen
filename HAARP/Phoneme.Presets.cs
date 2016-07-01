@@ -106,7 +106,7 @@ namespace HAARP
 			Consonant("w", "w", ArticulationPlace.LabioVelar, ArticulationManner.Approximant, true);
 
 			// Lateral approximants
-			Consonant("l", );
+			Consonant("l", "l", ArticulationPlace.Alveolar, ArticulationManner.LateralApproximant, true);
 		}
 
 		private static void Vowel(string ipa, string xsampa, float openness, float backness, float roundedness)
