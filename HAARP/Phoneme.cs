@@ -35,13 +35,8 @@
 		/// </summary>
 		public readonly ArticulationManner ArticulationType;
 
-		/// <summary>
-		/// Determines whether the phoneme is lateralized.
-		/// </summary>
-		public readonly bool Lateral = false;
-
 		public Phoneme(float height, float backness, float roundedness, bool voiced = true,
-			ArticulationPlace artPlace = ArticulationPlace.None, ArticulationManner artType = ArticulationManner.Vowel, bool lateral = false)
+			ArticulationPlace artPlace = ArticulationPlace.None, ArticulationManner artType = ArticulationManner.Vowel)
 		{
 			IsVoiced = voiced;
 			Height = height;
@@ -49,7 +44,6 @@
 			Roundedness = roundedness;
 			ArticulationPlace = artPlace;
 			ArticulationType = artType;
-			Lateral = lateral;
 		}
 
 		public Phoneme(float height, float backness, float roundedness)
@@ -62,12 +56,11 @@
 			Roundedness = roundedness;
 		}
 
-		public Phoneme(ArticulationPlace artPlace, ArticulationManner artType, bool voiced = false, bool lateral = false)
+		public Phoneme(ArticulationPlace artPlace, ArticulationManner artType, bool voiced = false)
 		{
 			IsVoiced = voiced;
 			ArticulationPlace = artPlace;
 			ArticulationType = artType;
-			Lateral = lateral;
 		}
 	}
 }

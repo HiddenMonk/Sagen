@@ -26,6 +26,10 @@
 		/// </summary>
 		Approximant,
 		/// <summary>
+		/// Lateral approximants are approximants with lateralization, meaning that airflow is directed past the sides of the tongue rather than over it.
+		/// </summary>
+		LateralApproximant,
+		/// <summary>
 		/// Vowels are voiced sounds produced by unobstructed, unarticulated airflow flowing through the vocal tract.
 		/// </summary>
 		Vowel
