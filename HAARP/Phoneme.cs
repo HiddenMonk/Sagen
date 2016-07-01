@@ -33,10 +33,10 @@
 		/// <summary>
 		/// The type of articulation.
 		/// </summary>
-		public readonly ArticulationType ArticulationType;
+		public readonly ArticulationManner ArticulationType;
 
 		public Phoneme(float height, float backness, float roundedness, bool voiced = true,
-			ArticulationPlace artPlace = ArticulationPlace.None, ArticulationType artType = ArticulationType.Fricative)
+			ArticulationPlace artPlace = ArticulationPlace.None, ArticulationManner artType = ArticulationManner.Fricative)
 		{
 			IsVoiced = voiced;
 			Height = height;
@@ -46,7 +46,7 @@
 			ArticulationType = artType;
 		}
 
-		public Phoneme(ArticulationPlace artPlace, ArticulationType artType, bool voiced = false)
+		public Phoneme(ArticulationPlace artPlace, ArticulationManner artType, bool voiced = false)
 		{
 			IsVoiced = voiced;
 			ArticulationPlace = artPlace;

@@ -30,64 +30,93 @@ namespace HAARP
 		static Phoneme()
 		{	
 			// Close vowels
-			AddVowel(@"i", @"i", CLOSE, FRONT, UNROUNDED); // 'ie' in 'wie' (German)
-			AddVowel(@"y", @"y", CLOSE, FRONT, ROUNDED); // 'ü' in 'über' (German)
-			AddVowel(@"ɨ", @"I\", CLOSE, CENTRAL, UNROUNDED);
-			AddVowel(@"ʉ", @"U\", CLOSE, CENTRAL, ROUNDED);
-			AddVowel(@"ɯ", @"M", CLOSE, BACK, UNROUNDED);
-			AddVowel(@"u", @"u", CLOSE, BACK, ROUNDED); // 'u' in 'Fuß' (German)
+			Vowel("i", "i", CLOSE, FRONT, UNROUNDED); // 'ie' in 'wie' (German)
+			Vowel("y", "y", CLOSE, FRONT, ROUNDED); // 'ü' in 'über' (German)
+			Vowel("ɨ", @"I\", CLOSE, CENTRAL, UNROUNDED);
+			Vowel("ʉ", @"U\", CLOSE, CENTRAL, ROUNDED);
+			Vowel("ɯ", "M", CLOSE, BACK, UNROUNDED);
+			Vowel("u", "u", CLOSE, BACK, ROUNDED); // 'u' in 'Fuß' (German)
 
 			// Near-close vowels
-			AddVowel(@"ʊ", @"U", NEAR_CLOSE, NEAR_BACK, ROUNDED);
+			Vowel("ʊ", "U", NEAR_CLOSE, NEAR_BACK, ROUNDED);
 
 			// Close-mid vowels
-			AddVowel(@"e", @"e", CLOSE_MID, FRONT, UNROUNDED); // 'ee' in 'Seele' (German)
-			AddVowel(@"ø", @"2", CLOSE_MID, FRONT, ROUNDED); // 'ö' in 'schön' (German)
-			AddVowel(@"ɘ", @"@\", CLOSE_MID, CENTRAL, UNROUNDED); // 'e' in 'bitte' (German)
-			AddVowel(@"ɵ", @"8", CLOSE_MID, CENTRAL, ROUNDED); // 'oo' in 'foot' (UK English)
-			AddVowel(@"ɤ", @"7", CLOSE_MID, BACK, UNROUNDED);
-			AddVowel(@"o", @"o", CLOSE_MID, BACK, ROUNDED); // 'o' in 'oder' (German)
+			Vowel("e", "e", CLOSE_MID, FRONT, UNROUNDED); // 'ee' in 'Seele' (German)
+			Vowel("ø", "2", CLOSE_MID, FRONT, ROUNDED); // 'ö' in 'schön' (German)
+			Vowel("ɘ", @"@\", CLOSE_MID, CENTRAL, UNROUNDED); // 'e' in 'bitte' (German)
+			Vowel("ɵ", "8", CLOSE_MID, CENTRAL, ROUNDED); // 'oo' in 'foot' (UK English)
+			Vowel("ɤ", "7", CLOSE_MID, BACK, UNROUNDED);
+			Vowel("o", "o", CLOSE_MID, BACK, ROUNDED); // 'o' in 'oder' (German)
 
 			// Mid vowels
-			AddVowel(@"e̞", @"e_o", MID, FRONT, UNROUNDED);
-			AddVowel(@"ə", @"@", MID, CENTRAL, UNROUNDED); // 'u' in 'under' (US English)
-			AddVowel(@"o̞", @"2_o", MID, BACK, ROUNDED);
+			Vowel("e̞",@"e_o", MID, FRONT, UNROUNDED);
+			Vowel("ə", "@", MID, CENTRAL, UNROUNDED); // 'u' in 'under' (US English)
+			Vowel("o̞", "2_o", MID, BACK, ROUNDED);
 
 			// Open-mid vowels
-			AddVowel(@"ɛ", @"E", OPEN_MID, FRONT, UNROUNDED); // 'e' in 'ten' (US English)
-			AddVowel(@"œ", @"9", OPEN_MID, FRONT, ROUNDED); // 'ö' in 'löschen' (German)
-			AddVowel(@"ɜ", @"3", OPEN_MID, CENTRAL, UNROUNDED); // 'ir' in 'bird' (UK English)
-			AddVowel(@"ɞ", @"3\", OPEN_MID, CENTRAL, ROUNDED); // 'um' in 'Parfum' (German)
-			AddVowel(@"ʌ", @"V", OPEN_MID, BACK, UNROUNDED);
-			AddVowel(@"ɔ", @"O", OPEN_MID, BACK, ROUNDED); // 'o' in 'voll' (German)
+			Vowel("ɛ", "E", OPEN_MID, FRONT, UNROUNDED); // 'e' in 'ten' (US English)
+			Vowel("œ", "9", OPEN_MID, FRONT, ROUNDED); // 'ö' in 'löschen' (German)
+			Vowel("ɜ", "3", OPEN_MID, CENTRAL, UNROUNDED); // 'ir' in 'bird' (UK English)
+			Vowel("ɞ", @"3\", OPEN_MID, CENTRAL, ROUNDED); // 'um' in 'Parfum' (German)
+			Vowel("ʌ", "V", OPEN_MID, BACK, UNROUNDED);
+			Vowel("ɔ", "O", OPEN_MID, BACK, ROUNDED); // 'o' in 'voll' (German)
 
 			// Near-open vowels
-			AddVowel(@"æ", @"{", NEAR_OPEN, FRONT, UNROUNDED); // 'a' in 'cat' (US English)
-			AddVowel(@"ɐ", @"6", NEAR_OPEN, CENTRAL, UNROUNDED); // 'er' in 'oder' (German)
+			Vowel("æ", "{", NEAR_OPEN, FRONT, UNROUNDED); // 'a' in 'cat' (US English)
+			Vowel("ɐ", "6", NEAR_OPEN, CENTRAL, UNROUNDED); // 'er' in 'oder' (German)
 
 			// Open vowels
-			AddVowel(@"a", @"a", OPEN, FRONT, UNROUNDED); // 'a' in 'aber' (German)
-			AddVowel(@"ɶ", @"&", OPEN, FRONT, ROUNDED);
-			AddVowel(@"ɑ", @"A", OPEN, BACK, UNROUNDED); // 'o' in 'hot' (US English)
-			AddVowel(@"ɒ", @"Q", OPEN, BACK, ROUNDED); // 'o' in 'not' (UK English)
+			Vowel("a", "a", OPEN, FRONT, UNROUNDED); // 'a' in 'aber' (German)
+			Vowel("ɶ", "&", OPEN, FRONT, ROUNDED);
+			Vowel("ɑ", "A", OPEN, BACK, UNROUNDED); // 'o' in 'hot' (US English)
+			Vowel("ɒ", "Q", OPEN, BACK, ROUNDED); // 'o' in 'not' (UK English)
+
+			// Nasals
+			Consonant("m", "m", ArticulationPlace.Bilabial, ArticulationManner.Nasal, true);
+			Consonant("n", "n", ArticulationPlace.Alveolar, ArticulationManner.Nasal, true);
+			Consonant("ŋ", "N", ArticulationPlace.Velar, ArticulationManner.Nasal, true);
+
+			// Stops
+			Consonant("p", "p", ArticulationPlace.Bilabial, ArticulationManner.Stop, false);
+			Consonant("b", "b", ArticulationPlace.Bilabial, ArticulationManner.Stop, true);
+			Consonant("t", "t", ArticulationPlace.Alveolar, ArticulationManner.Stop, false);
+			Consonant("d", "d", ArticulationPlace.Alveolar, ArticulationManner.Stop, true);
+			Consonant("k", "k", ArticulationPlace.Velar, ArticulationManner.Stop, false);
+			Consonant("g", "g", ArticulationPlace.Velar, ArticulationManner.Stop, true);
 
 			// Fricatives
-			AddConsonant(@"θ", @"T", ArticulationPlace.Dental, ArticulationType.Fricative, false);
-			AddConsonant(@"ð", @"D", ArticulationPlace.Dental, ArticulationType.Fricative, true);
-			AddConsonant(@"s", @"s", ArticulationPlace.Alveolar, ArticulationType.Fricative, false);
-			AddConsonant(@"z", @"z", ArticulationPlace.Alveolar, ArticulationType.Fricative, true);
-			AddConsonant(@"ʃ", @"S", ArticulationPlace.PalatalAlveolar, ArticulationType.Fricative, false);
+			Consonant("f", "f", ArticulationPlace.Labiodental, ArticulationManner.Fricative, false);
+			Consonant("v", "v", ArticulationPlace.Labiodental, ArticulationManner.Fricative, true);
+			Consonant("θ", "T", ArticulationPlace.Dental, ArticulationManner.Fricative, false);
+			Consonant("ð", "D", ArticulationPlace.Dental, ArticulationManner.Fricative, true);
+			Consonant("s", "s", ArticulationPlace.Alveolar, ArticulationManner.Fricative, false);
+			Consonant("z", "z", ArticulationPlace.Alveolar, ArticulationManner.Fricative, true);
+			Consonant("ʃ", "S", ArticulationPlace.PalatoAlveolar, ArticulationManner.Fricative, false);
+			Consonant("ʒ", "Z", ArticulationPlace.PalatoAlveolar, ArticulationManner.Fricative, true);
+			Consonant("x", "x", ArticulationPlace.Velar, ArticulationManner.Fricative, false);
+			Consonant("h", "h", ArticulationPlace.Glottal, ArticulationManner.Fricative, false);
 			
+			// Affricates
+			Consonant("tʃ", "tS", ArticulationPlace.PalatoAlveolar, ArticulationManner.Affricate, false); // 'ch' in 'chocolate' (US English)
+			Consonant("dʒ", "dZ", ArticulationPlace.PalatoAlveolar, ArticulationManner.Affricate, true); // 'j' in 'jump' (US English)
+
+			// Approximants
+			Consonant("ɹ", @"r\", ArticulationPlace.Alveolar, ArticulationManner.Approximant, true);
+			Consonant("j", "j", ArticulationPlace.Palatal, ArticulationManner.Approximant, true);
+			Consonant("w", "w", ArticulationPlace.LabioVelar, ArticulationManner.Approximant, true);
+
+			// Lateral approximants
+			Consonant("l", );
 		}
 
-		private static void AddVowel(string ipa, string xsampa, float openness, float backness, float roundedness)
+		private static void Vowel(string ipa, string xsampa, float openness, float backness, float roundedness)
 		{
 			var vowel = new Phoneme(openness, backness, roundedness);
 			_presetsIPA[ipa] = vowel;
 			_presetsXSAMPA[xsampa] = vowel;
 		}
 
-		private static void AddConsonant(string ipa, string xsampa, ArticulationPlace place, ArticulationType type, bool voiced)
+		private static void Consonant(string ipa, string xsampa, ArticulationPlace place, ArticulationManner type, bool voiced)
 		{
 			var consonant = new Phoneme(place, type, voiced);
 			_presetsIPA[ipa] = consonant;

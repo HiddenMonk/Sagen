@@ -1,6 +1,6 @@
 ﻿namespace HAARP
 {
-	public enum ArticulationType
+	public enum ArticulationManner : byte
 	{
 		Nasal,
 		Stop,

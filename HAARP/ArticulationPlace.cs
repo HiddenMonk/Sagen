@@ -1,6 +1,6 @@
 ﻿namespace HAARP
 {
-	public enum ArticulationPlace
+	public enum ArticulationPlace : byte
 	{
 		None,
 		Bilabial,
@@ -8,9 +8,10 @@
 		Dental,
 		Alveolar,
 		Postalveolar,
-		PalatalAlveolar,
+		PalatoAlveolar,
 		Palatal,
 		Velar,
+		LabioVelar,
 		Glottal
 	}
 }
