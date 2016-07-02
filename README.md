@@ -1,6 +1,6 @@
-# HAARP
+# Sagen
 
-HAARP* is my attempt at making a text-to-speech engine aimed at .NET developers who don't have thousands of dollars at their disposal to license a commercial speech synthesis solution.
+Sagen is my attempt at making a text-to-speech engine aimed at .NET developers who don't have thousands of dollars at their disposal to license a commercial speech synthesis solution.
 
 Aside from often being prohibitively expensive, commercial TTS technologies are frequently restrictive in their available customization options for voices, voice parameters, and context-sensitive vocal qualities like intonation, stress, and timbre which are necessary to convey emotion and intent. Concatenative synthesizers and other similar "realistic" synthesizers based on databases of recorded samples leave a large memory footprint, are of relatively poor performance, and require each voice to be installed separately.
 
@@ -16,8 +16,6 @@ Here is a short list of major features that will be supported:
 * Singing
 
 It is currently a heavy work-in-progress, and I welcome your input and/or contributions.
-
-_*The title is merely a placeholder until I think of something better._
 
 ## Licensing
 
