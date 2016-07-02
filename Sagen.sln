@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sagen", "Sagen\Sagen.csproj", "{C3770497-DA08-4D9F-B6C0-5DBC0A0DA57C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SagenConsole", "SagenConsole\SagenConsole.csproj", "{A7AD629E-BA62-41D0-BC6F-4D829C7FB4FB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2D59EAAE-EE22-4CD9-B16A-565CFA94618E}"
+	ProjectSection(SolutionItems) = preProject
+		Rebracer.xml = Rebracer.xml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaveGen", "WaveGen\WaveGen.csproj", "{6A1D8927-D79E-4C1D-9F4D-3D7C9FBCE8E7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C3770497-DA08-4D9F-B6C0-5DBC0A0DA57C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3770497-DA08-4D9F-B6C0-5DBC0A0DA57C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3770497-DA08-4D9F-B6C0-5DBC0A0DA57C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3770497-DA08-4D9F-B6C0-5DBC0A0DA57C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7AD629E-BA62-41D0-BC6F-4D829C7FB4FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7AD629E-BA62-41D0-BC6F-4D829C7FB4FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7AD629E-BA62-41D0-BC6F-4D829C7FB4FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7AD629E-BA62-41D0-BC6F-4D829C7FB4FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A1D8927-D79E-4C1D-9F4D-3D7C9FBCE8E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A1D8927-D79E-4C1D-9F4D-3D7C9FBCE8E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A1D8927-D79E-4C1D-9F4D-3D7C9FBCE8E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A1D8927-D79E-4C1D-9F4D-3D7C9FBCE8E7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
