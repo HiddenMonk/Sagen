@@ -1,10 +1,18 @@
 # Sagen
 
-**Sagen** _(German for "to say")_ is my attempt at making a text-to-speech engine aimed at .NET developers who don't have thousands of dollars at their disposal to license a commercial speech synthesis solution.
+**Sagen** _(German for "to say")_ is my attempt at making a text-to-speech engine aimed at .NET developers who don't have thousands of dollars at their disposal to license a commercial speech synthesis solution. It is in many ways an experiment and continual learning experience, and I am in no way an expert on speech science, phonetics, or vocal acoustics. I'm just someone crazy enough to try something like this.
 
-Aside from often being prohibitively expensive, commercial TTS technologies are frequently restrictive in their available customization options for voices, voice parameters, and context-sensitive vocal qualities like intonation, stress, and timbre which are necessary to convey emotion and intent. Concatenative synthesizers and other similar "realistic" synthesizers based on databases of recorded samples leave a large memory footprint, are of relatively poor performance, and require each voice to be installed separately.
+## Rationale
 
-My goal with this project is to offer the most customization options, flexibility, and performance in a formant synthesizer of decent quality. For free.
+Some might ask me, "Why bother?" After all, there are tons of TTS engines out there already.
+
+Short answer: I'm just not happy with what's out there.
+
+Aside from often being prohibitively expensive, commercial TTS technologies are frequently restrictive in their available customization options for voices, voice parameters, and context-sensitive vocal qualities like intonation, stress, and timbre which are necessary to convey emotion and intent. Concatenative synthesizers and other similar "realistic" TTS technologies based on databases of recorded samples also leave a large memory footprint, are relatively slow, and require each voice to be installed separately. While all TTS libraries have advantages and disadvantages, I felt like another alternative was needed.
+
+My goal with this project is not _necessarily_ to produce "something better", but to instead offer the most possible configurability, flexibility, and performance in a formant synthesizer of decent quality. _For free._
+
+## What's planned
 
 Here is a short list of major features that will be supported:
 * Text-to-speech based on [formant synthesis](https://en.wikipedia.org/wiki/Speech_synthesis#Formant_synthesis) and physically-based vocal filtering
