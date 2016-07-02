@@ -21,6 +21,7 @@ Here is a short list of major features that will be supported:
 * Multiple options for sample format and rate
 * Support for both [IPA](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet) and [X-SAMPA](https://en.wikipedia.org/wiki/X-SAMPA) pronunciation dictionaries
 * Multiple language support (English and German are currently prioritized)
+* [Heteronym](https://en.wikipedia.org/wiki/Heteronym_(linguistics)) resolution
 * Singing
 
 It is currently a heavy work-in-progress, and I welcome your input and/or contributions.
