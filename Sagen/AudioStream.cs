@@ -11,7 +11,6 @@ namespace Sagen
 
 		private bool _disposed, _fullyQueued;
 		private int _queueSize = 0;
-		private readonly object apiLockObj = new object();
 
 		private readonly IntPtr waveOutDevicePtr;
 		private static readonly IntPtr WAVE_MAPPER = new IntPtr(-1);
@@ -39,6 +38,8 @@ namespace Sagen
 		{
 			MMRESULT result;
 			var fmt = CreateFormatSpec(format, synth.SampleRate);
+
+			// Create output device
 			if ((result = waveOutOpen(ref waveOutDevicePtr, WAVE_MAPPER, ref fmt, WaveOutProc, IntPtr.Zero, WaveOutOpenFlags.CALLBACK_FUNCTION)) != MMRESULT.MMSYSERR_NOERROR)
 				throw new ExternalException($"Function 'waveOutOpen' returned error code {result}");
 
@@ -53,10 +54,16 @@ namespace Sagen
 
 		public void QueueDataBlock(Stream stream)
 		{
+			// Reset the stream position and keep track of the previous position.
+			// The former position tells how much data we need to copy.
 			stream.Flush();
 			int l = (int)stream.Position;
-			var ptrData = Marshal.AllocHGlobal(l);
 			stream.Position = 0;
+
+			// Allocate unmanaged memory to store samples from stream
+			var ptrData = Marshal.AllocHGlobal(l);
+
+			// Populate a WAVEHDR with samples
 			WAVEHDR hdr;
 			using (var ums = new UnmanagedMemoryStream((byte*)ptrData.ToPointer(), l, l, FileAccess.Write))
 			{
@@ -69,14 +76,19 @@ namespace Sagen
 					Data = new IntPtr(ums.PositionPointer)
 				};
 			}
+
+			// Copy WAVEHDR instance to unmanaged space
 			var ptrHdr = Marshal.AllocHGlobal(sizeof(WAVEHDR));
 			Marshal.StructureToPtr(hdr, ptrHdr, false);
+
+			// Prepare the header and queue it
 			MMRESULT result;
 			if ((result = waveOutPrepareHeader(waveOutDevicePtr, ptrHdr, sizeof(WAVEHDR))) != MMRESULT.MMSYSERR_NOERROR)
 				throw new ExternalException($"Function 'waveOutPrepareHeader' returned error code {result}");
 			if ((result = waveOutWrite(waveOutDevicePtr, ptrHdr, sizeof(WAVEHDR))) != MMRESULT.MMSYSERR_NOERROR)
 				throw new ExternalException($"Function 'waveOutWrite' returned error code {result}");
 
+			// Increment queue size
 			_queueSize++;
 		}
 
@@ -87,14 +99,20 @@ namespace Sagen
 			{
 				case WaveOutMessage.WOM_DONE:
 					{
+						// Remove data block from device so it can be freed
 						var hdr = (WAVEHDR)Marshal.PtrToStructure(dwParam1, typeof(WAVEHDR));
 						if ((result = waveOutUnprepareHeader(hWaveOut, dwParam1, sizeof(WAVEHDR))) != MMRESULT.MMSYSERR_NOERROR)
 							throw new ExternalException($"Function 'waveOutUnprepareHeader' returned error code {result}");
+
+						// Free memory used by WAVEHDR and samples
 						Marshal.FreeHGlobal(hdr.Data);
 						Marshal.FreeHGlobal(dwParam1);
+
+						// Decrease queue size and check if audio is no longer being streamed
 						_queueSize--;
 						if (_fullyQueued && _queueSize <= 0)
 						{
+							Dispose();
 							_activeStreams.Remove(this);
 						}
 						break;
@@ -106,12 +124,12 @@ namespace Sagen
 		{
 			return new WAVEFORMATEX
 			{
-				wFormatTag = WAVE_FORMAT_PCM,
-				nChannels = 1,
-				nSamplesPerSec = (uint)sampleRate,
-				wBitsPerSample = (short)format,
-				nAvgBytesPerSec = (uint)(((int)format / 8) * sampleRate),
-				nBlockAlign = (short)((int)format / 8),
+				FormatTag = WAVE_FORMAT_PCM,
+				Channels = 1,
+				SamplesPerSec = (uint)sampleRate,
+				BitsPerSample = (short)format,
+				AvgBytesPerSec = (uint)(((int)format / 8) * sampleRate),
+				BlockAlign = (short)((int)format / 8),
 				cbSize = 0
 			};
 		}
@@ -142,12 +160,12 @@ namespace Sagen
 		[StructLayout(LayoutKind.Sequential)]
 		private struct WAVEFORMATEX
 		{
-			public short wFormatTag;
-			public short nChannels;
-			public uint nSamplesPerSec;
-			public uint nAvgBytesPerSec;
-			public short nBlockAlign;
-			public short wBitsPerSample;
+			public short FormatTag;
+			public short Channels;
+			public uint SamplesPerSec;
+			public uint AvgBytesPerSec;
+			public short BlockAlign;
+			public short BitsPerSample;
 			public short cbSize;
 		}
 
@@ -179,7 +197,7 @@ namespace Sagen
 			WAVERR_UNPREPARED = 34
 		}
 
-		private enum WaveOutMessage
+		private enum WaveOutMessage : uint
 		{
 			WOM_OPEN = 0x3bc,
 			WOM_DONE = 0x3bd,
@@ -201,12 +219,15 @@ namespace Sagen
 
 		~AudioStream()
 		{
-			if (!_disposed) Dispose();
+			Dispose();
 		}
 
 		public void Dispose()
 		{
-			waveOutClose(waveOutDevicePtr);
+			if (_disposed) return;
+			MMRESULT result;
+			if ((result = waveOutClose(waveOutDevicePtr)) != MMRESULT.MMSYSERR_NOERROR)
+				throw new ExternalException($"Function 'waveOutClose' returned error code {result}");
 			_disposed = true;
 		}
 	}
