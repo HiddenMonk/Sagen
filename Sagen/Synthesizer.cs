@@ -88,7 +88,7 @@ namespace Sagen
 		public void Play(double lengthSeconds)
 		{
 			var format = SampleFormat.Signed16;
-			int blockSize = (int)(SampleRate * 0.1) * sizeof(short);
+			int blockSize = (int)(SampleRate * 0.16) * sizeof(short);
 			int sampleCount = (int)(SampleRate * lengthSeconds);
 			var player = new AudioStream(format, this);
 			using (var stream = new MemoryStream(blockSize))
@@ -104,7 +104,7 @@ namespace Sagen
 					}
 
 					writer.Write((short)(currentSample * short.MaxValue));
-					if (stream.Position == blockSize)
+					if (stream.Position >= blockSize)
 					{
 						player.QueueDataBlock(stream);
 					}

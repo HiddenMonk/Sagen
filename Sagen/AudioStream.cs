@@ -13,27 +13,28 @@ namespace Sagen
 		private bool _disposed, _fullyQueued;
 		private int _queueSize = 0;
 		private readonly ManualResetEventSlim _resetEvent = new ManualResetEventSlim(false);
-
 		private readonly IntPtr waveOutDevicePtr;
+
+		private const string LibraryName = "winmm.dll";
 		private static readonly IntPtr WAVE_MAPPER = new IntPtr(-1);
 		private const short WAVE_FORMAT_PCM = 0x0001;
 
 		private delegate void WaveOutProcCallback(IntPtr hWaveOut, WaveOutMessage message, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2);
 
-		[DllImport("winmm.dll", SetLastError = true, CharSet = CharSet.Auto)]
+		[DllImport(LibraryName, SetLastError = true, CharSet = CharSet.Auto)]
 		private static extern MMRESULT waveOutOpen(ref IntPtr hWaveOut, IntPtr uDeviceID, ref WAVEFORMATEX lpFormat,
 			[MarshalAs(UnmanagedType.FunctionPtr)] WaveOutProcCallback dwOutProcCallback, IntPtr dwInstance, WaveOutOpenFlags dwFlags);
 
-		[DllImport("winmm.dll", SetLastError = true, CharSet = CharSet.Auto)]
+		[DllImport(LibraryName, SetLastError = true, CharSet = CharSet.Auto)]
 		private static extern MMRESULT waveOutClose(IntPtr hwo);
 
-		[DllImport("winmm.dll", SetLastError = true, CharSet = CharSet.Auto)]
+		[DllImport(LibraryName, SetLastError = true, CharSet = CharSet.Auto)]
 		private static extern MMRESULT waveOutPrepareHeader(IntPtr hWaveOut, IntPtr pwh, int uSize);
 
-		[DllImport("winmm.dll", SetLastError = true, CharSet = CharSet.Auto)]
+		[DllImport(LibraryName, SetLastError = true, CharSet = CharSet.Auto)]
 		private static extern MMRESULT waveOutUnprepareHeader(IntPtr hwo, IntPtr pwh, int cbwh);
 
-		[DllImport("winmm.dll", SetLastError = true, CharSet = CharSet.Auto)]
+		[DllImport(LibraryName, SetLastError = true, CharSet = CharSet.Auto)]
 		private static extern MMRESULT waveOutWrite(IntPtr hwo, IntPtr pwh, int cbwh);
 
 		public AudioStream(SampleFormat format, Synthesizer synth)
@@ -68,15 +69,16 @@ namespace Sagen
 			// The former position tells how much data we need to copy.
 			stream.Flush();
 			int l = (int)stream.Position;
-			stream.Position = 0;
 
 			// Allocate unmanaged memory to store samples from stream
 			var ptrData = Marshal.AllocHGlobal(l);
 
 			// Populate a WAVEHDR with samples
 			WAVEHDR hdr;
-			using (var ums = new UnmanagedMemoryStream((byte*)ptrData.ToPointer(), l, l, FileAccess.Write))
+			using (var ums = new UnmanagedMemoryStream((byte*)ptrData.ToPointer(), l, l, FileAccess.ReadWrite))
 			{
+				stream.SetLength(l);
+				stream.Position = 0;
 				stream.CopyTo(ums, l);
 				stream.Position = 0;
 				ums.Position = 0;
