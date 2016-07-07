@@ -1,4 +1,4 @@
-﻿namespace Sagen
+﻿namespace Sagen.Pronunciation
 {
 	/// <summary>
 	/// The manner of articulation determines how the articulators behave when producing sound.

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sagen
+namespace Sagen.Pronunciation
 {
 	internal partial class Phoneme
 	{
@@ -104,6 +104,7 @@ namespace Sagen
 
 			// Approximants
 			Consonant("ɹ", "r*", ArticulationPlace.Alveolar, ArticulationManner.Approximant, true);
+			Consonant("ɹ̠", "r-", ArticulationPlace.Postalveolar, ArticulationManner.Approximant, true);
 			Consonant("j", "j", ArticulationPlace.Palatal, ArticulationManner.Approximant, true);
 			Consonant("w", "w", ArticulationPlace.LabializedVelar, ArticulationManner.Approximant, true);
 

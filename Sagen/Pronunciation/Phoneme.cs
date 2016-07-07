@@ -1,4 +1,4 @@
-﻿namespace Sagen
+﻿namespace Sagen.Pronunciation
 {
 	internal partial class Phoneme
 	{

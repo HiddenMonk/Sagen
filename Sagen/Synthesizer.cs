@@ -83,5 +83,34 @@ namespace Sagen
 				writer.Flush();
 			}
 		}
+
+		public void Play(double lengthSeconds)
+		{
+			var format = SampleFormat.Signed16;
+			int blockSize = (int)(SampleRate * 0.1) * sizeof(short);
+			int sampleCount = (int)(SampleRate * lengthSeconds);
+			using (var player = new AudioStream(format, this))
+			using (var stream = new MemoryStream(blockSize))
+			using (var writer = new BinaryWriter(stream))
+			{
+				for (_position = 0; _position < sampleCount; _position++)
+				{
+					double currentSample = 0f;
+					foreach (var sampler in samplerSequence)
+					{
+						if (!sampler.Enabled) continue;
+						sampler.Update(ref currentSample);
+					}
+
+					writer.Write((short)(currentSample * short.MaxValue));
+					if (stream.Position == blockSize)
+					{
+						player.QueueDataBlock(stream);
+					}
+				}
+				if (stream.Position > 0)
+					player.QueueDataBlock(stream);
+			}
+		}
 	}
 }

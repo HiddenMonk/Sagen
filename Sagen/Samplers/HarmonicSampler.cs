@@ -17,7 +17,7 @@ namespace Sagen.Samplers
 		{
 			using (
 				var stream =
-					Assembly.GetExecutingAssembly().GetManifestResourceStream("HAARP.Data.vocal.raw") as UnmanagedMemoryStream)
+					Assembly.GetExecutingAssembly().GetManifestResourceStream("Sagen.Data.vocal.raw") as UnmanagedMemoryStream)
 			{
 				_ptrSamples = (double*)stream.PositionPointer;
 				_dataLength = (int)stream.Length / sizeof(double);

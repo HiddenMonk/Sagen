@@ -1,4 +1,4 @@
-﻿namespace Sagen
+﻿namespace Sagen.Pronunciation
 {
 	/// <summary>
 	/// The place of articulation determines the active articulator, as well as its positioning within the vocal tract.

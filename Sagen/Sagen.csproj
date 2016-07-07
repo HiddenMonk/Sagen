@@ -42,9 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArticulationPlace.cs" />
-    <Compile Include="ArticulationManner.cs" />
-    <Compile Include="Phoneme.cs" />
+    <Compile Include="AudioStream.cs" />
+    <Compile Include="Pronunciation\ArticulationPlace.cs" />
+    <Compile Include="Pronunciation\ArticulationManner.cs" />
+    <Compile Include="Pronunciation\Phoneme.cs" />
     <Compile Include="BandPassFilter.cs" />
     <Compile Include="ButterworthFilter.cs" />
     <Compile Include="Extensions.cs" />
@@ -52,8 +53,11 @@
     <Compile Include="FunctionCurves\Curve.cs" />
     <Compile Include="FunctionCurves\Keyframe.cs" />
     <Compile Include="FunctionCurves\LinearCurve.cs" />
-    <Compile Include="Phoneme.Presets.cs" />
+    <Compile Include="Pronunciation\Phoneme.Presets.cs" />
     <Compile Include="Pronunciation\Lexicon.cs" />
+    <Compile Include="Pronunciation\SagenLanguageAttribute.cs" />
+    <Compile Include="Pronunciation\SagenLanguagePack.cs" />
+    <Compile Include="Pronunciation\VoiceKey.cs" />
     <Compile Include="SampleFormat.cs" />
     <Compile Include="Samplers\HarmonicSampler.cs" />
     <Compile Include="Util.cs" />
@@ -69,7 +73,6 @@
     <Compile Include="VoiceParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Voice.Presets.cs" />
-    <Compile Include="VoiceData.cs" />
     <Compile Include="VoiceQuality.cs" />
     <Compile Include="Wav.cs" />
   </ItemGroup>

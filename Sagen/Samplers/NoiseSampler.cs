@@ -12,7 +12,7 @@ namespace Sagen.Samplers
 	    {
 		    using (
 			    var stream =
-				    Assembly.GetExecutingAssembly().GetManifestResourceStream("HAARP.Data.noise.raw") as UnmanagedMemoryStream)
+				    Assembly.GetExecutingAssembly().GetManifestResourceStream("Sagen.Data.noise.raw") as UnmanagedMemoryStream)
 		    {
 			    NoiseDataPointer = (float*)stream.PositionPointer;
 			    NoiseDataLength = (int)stream.Length / sizeof(float);

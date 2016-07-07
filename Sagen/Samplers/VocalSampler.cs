@@ -1,12 +1,13 @@
 ﻿using System;
 
+using Sagen.Pronunciation;
+
 namespace Sagen.Samplers
 {
 	internal unsafe class VocalSampler : Sampler
 	{
 		private double sampleIn, sampleOut;
-
-		private readonly VoiceData _voice;
+		
 		private readonly BandPassFilter[] bands;
 		private readonly ButterworthFilter lowPass, highPass;
 		private readonly int numBands;
@@ -19,7 +20,7 @@ namespace Sagen.Samplers
 		private const double LEVEL_F3 = .01250f;
 		private const double LEVEL_F4 = .00750f;
 
-		public VocalSampler(Synthesizer synth, long seed) : base(synth)
+		public VocalSampler(Synthesizer synth, Phoneme vowel) : base(synth)
 		{
 			bands = new[]
 			{
@@ -74,7 +75,6 @@ namespace Sagen.Samplers
 			highPass = new ButterworthFilter(6000, synth.SampleRate, PassFilterType.HighPass, .4f);
 
 			numBands = bands.Length;
-			_voice = VoiceData.Get(Voice.Jimmy);
 		}
 
 		public override void Update(ref double sample)

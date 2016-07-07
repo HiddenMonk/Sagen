@@ -1,7 +1,13 @@
-﻿namespace Sagen.Pronunciation
+﻿using System;
+using System.IO;
+
+namespace Sagen.Pronunciation
 {
-	public sealed class Lexicon
+	internal sealed class Lexicon
 	{
-		 
+		public static Lexicon FromStream(Stream stream)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
