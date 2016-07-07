@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -6,11 +7,14 @@ namespace Sagen
 {
 	internal sealed unsafe class AudioStream : IDisposable
 	{
-		private bool _disposed;
+		private static readonly HashSet<AudioStream> _activeStreams = new HashSet<AudioStream>(); 
+
+		private bool _disposed, _fullyQueued;
+		private int _queueSize = 0;
 		private readonly object apiLockObj = new object();
 
 		private readonly IntPtr waveOutDevicePtr;
-		private const uint WAVE_MAPPER = 0xffffffff;
+		private static readonly IntPtr WAVE_MAPPER = new IntPtr(-1);
 		private const short WAVE_FORMAT_PCM = 0x0001;
 
 		private delegate void WaveOutProcCallback(IntPtr hWaveOut, WaveOutMessage message, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2);
@@ -35,9 +39,13 @@ namespace Sagen
 		{
 			MMRESULT result;
 			var fmt = CreateFormatSpec(format, synth.SampleRate);
-			if ((result = waveOutOpen(ref waveOutDevicePtr, new IntPtr(-1), ref fmt, WaveOutProc, IntPtr.Zero, WaveOutOpenFlags.CALLBACK_FUNCTION)) != MMRESULT.MMSYSERR_NOERROR)
+			if ((result = waveOutOpen(ref waveOutDevicePtr, WAVE_MAPPER, ref fmt, WaveOutProc, IntPtr.Zero, WaveOutOpenFlags.CALLBACK_FUNCTION)) != MMRESULT.MMSYSERR_NOERROR)
 				throw new ExternalException($"Function 'waveOutOpen' returned error code {result}");
+
+			_activeStreams.Add(this);
 		}
+
+		public void MarkFullyQueued() => _fullyQueued = true;
 
 		public void QueueDataBlock(Stream stream)
 		{
@@ -64,6 +72,8 @@ namespace Sagen
 				throw new ExternalException($"Function 'waveOutPrepareHeader' returned error code {result}");
 			if ((result = waveOutWrite(waveOutDevicePtr, ptrHdr, sizeof(WAVEHDR))) != MMRESULT.MMSYSERR_NOERROR)
 				throw new ExternalException($"Function 'waveOutWrite' returned error code {result}");
+
+			_queueSize++;
 		}
 
 		private void WaveOutProc(IntPtr hWaveOut, WaveOutMessage message, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
@@ -78,6 +88,10 @@ namespace Sagen
 							throw new ExternalException($"Function 'waveOutUnprepareHeader' returned error code {result}");
 						Marshal.FreeHGlobal(hdr.Data);
 						Marshal.FreeHGlobal(dwParam1);
+						if (--_queueSize <= 0 && _fullyQueued)
+						{
+							_activeStreams.Remove(this);
+						}
 						break;
 					}
 			}

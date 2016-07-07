@@ -89,7 +89,7 @@ namespace Sagen
 			var format = SampleFormat.Signed16;
 			int blockSize = (int)(SampleRate * 0.1) * sizeof(short);
 			int sampleCount = (int)(SampleRate * lengthSeconds);
-			using (var player = new AudioStream(format, this))
+			var player = new AudioStream(format, this);
 			using (var stream = new MemoryStream(blockSize))
 			using (var writer = new BinaryWriter(stream))
 			{
@@ -111,6 +111,7 @@ namespace Sagen
 				if (stream.Position > 0)
 					player.QueueDataBlock(stream);
 			}
+			player.MarkFullyQueued();
 		}
 	}
 }
