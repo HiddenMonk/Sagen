@@ -12,7 +12,7 @@ namespace HaarpConsole
 
 			Console.WriteLine("Playing...");
 			tts.Speak("This is a test.");
-			TTS.Sync();
+			tts.Sync();
 
 			Console.WriteLine("Done. Press any key to exit.");
 			Console.ReadKey();

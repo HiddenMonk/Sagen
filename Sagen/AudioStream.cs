@@ -8,12 +8,11 @@ namespace Sagen
 {
 	internal sealed unsafe class AudioStream : IDisposable
 	{
-		private static readonly HashSet<AudioStream> _activeStreams = new HashSet<AudioStream>();
-
 		private bool _disposed, _fullyQueued;
 		private int _queueSize = 0;
 		private readonly ManualResetEventSlim _resetEvent = new ManualResetEventSlim(false);
-		private readonly IntPtr waveOutDevicePtr;
+		private readonly IntPtr _ptrOutputDevice;
+		private readonly Synthesizer _synth;
 
 		private const string LibraryName = "winmm.dll";
 		private static readonly IntPtr WAVE_MAPPER = new IntPtr(-1);
@@ -43,24 +42,20 @@ namespace Sagen
 			var fmt = CreateFormatSpec(format, synth.SampleRate);
 
 			// Create output device
-			if ((result = waveOutOpen(ref waveOutDevicePtr, WAVE_MAPPER, ref fmt, WaveOutProc, IntPtr.Zero, WaveOutOpenFlags.CALLBACK_FUNCTION)) != MMRESULT.MMSYSERR_NOERROR)
+			if ((result = waveOutOpen(ref _ptrOutputDevice, WAVE_MAPPER, ref fmt, WaveOutProc, IntPtr.Zero, WaveOutOpenFlags.CALLBACK_FUNCTION)) != MMRESULT.MMSYSERR_NOERROR)
 				throw new ExternalException($"Function 'waveOutOpen' returned error code {result}");
 
-			_activeStreams.Add(this);
+			synth.TTS.AddActiveAudio(this);
+
+			_synth = synth;
 		}
 
-		public static void SyncAll()
-		{
-			foreach (var player in _activeStreams)
-			{
-				player._resetEvent.Wait();
-			}
-		}
+		public void WaitToFinish() => _resetEvent.Wait();
 
 		public void MarkFullyQueued()
 		{
 			_fullyQueued = true;
-			if (_queueSize == 0) _activeStreams.Remove(this);
+			if (_queueSize == 0) _synth.TTS.RemoveActiveAudio(this);
 		}
 
 		public void QueueDataBlock(Stream stream)
@@ -95,9 +90,9 @@ namespace Sagen
 
 			// Prepare the header and queue it
 			MMRESULT result;
-			if ((result = waveOutPrepareHeader(waveOutDevicePtr, ptrHdr, sizeof(WAVEHDR))) != MMRESULT.MMSYSERR_NOERROR)
+			if ((result = waveOutPrepareHeader(_ptrOutputDevice, ptrHdr, sizeof(WAVEHDR))) != MMRESULT.MMSYSERR_NOERROR)
 				throw new ExternalException($"Function 'waveOutPrepareHeader' returned error code {result}");
-			if ((result = waveOutWrite(waveOutDevicePtr, ptrHdr, sizeof(WAVEHDR))) != MMRESULT.MMSYSERR_NOERROR)
+			if ((result = waveOutWrite(_ptrOutputDevice, ptrHdr, sizeof(WAVEHDR))) != MMRESULT.MMSYSERR_NOERROR)
 				throw new ExternalException($"Function 'waveOutWrite' returned error code {result}");
 
 			// Increment queue size
@@ -126,7 +121,7 @@ namespace Sagen
 						{
 							_resetEvent.Set();
 							Dispose();
-							_activeStreams.Remove(this);
+							_synth.TTS.RemoveActiveAudio(this);
 						}
 						break;
 					}
@@ -241,7 +236,7 @@ namespace Sagen
 		{
 			if (_disposed) return;
 			MMRESULT result;
-			if ((result = waveOutClose(waveOutDevicePtr)) != MMRESULT.MMSYSERR_NOERROR)
+			if ((result = waveOutClose(_ptrOutputDevice)) != MMRESULT.MMSYSERR_NOERROR)
 				throw new ExternalException($"Function 'waveOutClose' returned error code {result}");
 			_disposed = true;
 		}

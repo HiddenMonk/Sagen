@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 
 using Sagen.Samplers;
 
@@ -20,6 +21,8 @@ namespace Sagen
 		private readonly VoiceQuality _quality = TTS.Quality;
 		private int _position = 0;
 		private readonly VoiceParams _voice = VoiceParams.Jimmy;
+		private readonly TTS _tts;
+		private AudioStream _audioStream;
 
 		public double Fundamental { get; set; } = 100.0f;
 		public double TimePosition => (double)_position / _sampleRate;
@@ -27,9 +30,25 @@ namespace Sagen
 
 		public VoiceParams Voice => _voice;
 
-		public Synthesizer()
+		internal TTS TTS => _tts;
+		
+		public AudioStream AudioStream => _audioStream;
+
+		public Synthesizer(TTS engine)
 		{
 			TimeStep = 1.0f / _sampleRate;
+			_tts = engine;
+		}
+
+		/// <summary>
+		/// This method is used to create the audio stream and its accompanying ManualResetEventSlim ahead of time so that TTS.Sync works properly with multithreading.
+		/// </summary>
+		public void CreateAudioStream()
+		{
+			if (_audioStream == null)
+			{
+				_audioStream = new AudioStream(PlaybackFormat, this);
+			}
 		}
 
 		public int SampleRate => _sampleRate;
@@ -89,9 +108,9 @@ namespace Sagen
 
 		public void Play(double lengthSeconds)
 		{
+			CreateAudioStream();
 			int blockSize = (int)(SampleRate * StreamChunkDurationSeconds) * PlaybackFormatBytes;
 			int sampleCount = (int)(SampleRate * lengthSeconds);
-			var player = new AudioStream(PlaybackFormat, this);
 			using (var stream = new MemoryStream(blockSize))
 			using (var writer = new BinaryWriter(stream))
 			{
@@ -107,13 +126,13 @@ namespace Sagen
 					writer.Write((short)(currentSample * short.MaxValue));
 					if (stream.Position >= blockSize)
 					{
-						player.QueueDataBlock(stream);
+						_audioStream.QueueDataBlock(stream);
 					}
 				}
 				if (stream.Position > 0)
-					player.QueueDataBlock(stream);
+					_audioStream.QueueDataBlock(stream);
 			}
-			player.MarkFullyQueued();
+			_audioStream.MarkFullyQueued();
 		}
 	}
 }
