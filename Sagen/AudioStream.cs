@@ -7,7 +7,7 @@ namespace Sagen
 {
 	internal sealed unsafe class AudioStream : IDisposable
 	{
-		private static readonly HashSet<AudioStream> _activeStreams = new HashSet<AudioStream>(); 
+		private static readonly HashSet<AudioStream> _activeStreams = new HashSet<AudioStream>();
 
 		private bool _disposed, _fullyQueued;
 		private int _queueSize = 0;
@@ -45,7 +45,11 @@ namespace Sagen
 			_activeStreams.Add(this);
 		}
 
-		public void MarkFullyQueued() => _fullyQueued = true;
+		public void MarkFullyQueued()
+		{
+			_fullyQueued = true;
+			if (_queueSize == 0) _activeStreams.Remove(this);
+		}
 
 		public void QueueDataBlock(Stream stream)
 		{
@@ -88,7 +92,8 @@ namespace Sagen
 							throw new ExternalException($"Function 'waveOutUnprepareHeader' returned error code {result}");
 						Marshal.FreeHGlobal(hdr.Data);
 						Marshal.FreeHGlobal(dwParam1);
-						if (--_queueSize <= 0 && _fullyQueued)
+						_queueSize--;
+						if (_fullyQueued && _queueSize <= 0)
 						{
 							_activeStreams.Remove(this);
 						}
