@@ -9,7 +9,7 @@ namespace HaarpConsole
 	{
 		static void Main(string[] args)
 		{
-			var synth = new Synthesizer { Fundamental = 155f };
+			var synth = new Synthesizer { Fundamental = 165f };
 
 			const float amp = .015f;
 			const float tilt = -3.00f;
@@ -18,10 +18,16 @@ namespace HaarpConsole
 			for (int i = 0; i < 100; i++)
 				synth.AddSampler(new HarmonicSampler(synth, i, amp, .14f * i, tilt));
 			synth.AddSampler(new VocalSampler(synth, Phoneme.GetPresetIPA("e")));
-			
-			synth.Play(4.0f);
 
-			Console.ReadLine();
+			Console.WriteLine("Playing...");
+
+			synth.Play(4.5f);
+
+			TTS.Sync();
+
+			Console.WriteLine("Done. Press any key to exit.");
+
+			Console.ReadKey();
 		}
 	}
 }

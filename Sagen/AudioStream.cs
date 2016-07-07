@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Sagen
 {
@@ -11,6 +12,7 @@ namespace Sagen
 
 		private bool _disposed, _fullyQueued;
 		private int _queueSize = 0;
+		private readonly ManualResetEventSlim _resetEvent = new ManualResetEventSlim(false);
 
 		private readonly IntPtr waveOutDevicePtr;
 		private static readonly IntPtr WAVE_MAPPER = new IntPtr(-1);
@@ -44,6 +46,14 @@ namespace Sagen
 				throw new ExternalException($"Function 'waveOutOpen' returned error code {result}");
 
 			_activeStreams.Add(this);
+		}
+
+		public static void SyncAll()
+		{
+			foreach (var player in _activeStreams)
+			{
+				player._resetEvent.Wait();
+			}
 		}
 
 		public void MarkFullyQueued()
@@ -112,6 +122,7 @@ namespace Sagen
 						_queueSize--;
 						if (_fullyQueued && _queueSize <= 0)
 						{
+							_resetEvent.Set();
 							Dispose();
 							_activeStreams.Remove(this);
 						}
@@ -220,6 +231,8 @@ namespace Sagen
 		~AudioStream()
 		{
 			Dispose();
+			_resetEvent.Set();
+			_resetEvent.Dispose();
 		}
 
 		public void Dispose()
