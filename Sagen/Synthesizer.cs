@@ -10,6 +10,9 @@ namespace Sagen
 	internal class Synthesizer
 	{
 		public const int MaxSamplers = 128;
+		public const SampleFormat PlaybackFormat = SampleFormat.Signed16;
+		public const int PlaybackFormatBytes = (int)PlaybackFormat / 8;
+		private const double StreamChunkDurationSeconds = 0.1;
 
 		private readonly HashSet<Sampler> samplers = new HashSet<Sampler>();
 		private readonly List<Sampler> samplerSequence = new List<Sampler>();
@@ -87,10 +90,9 @@ namespace Sagen
 
 		public void Play(double lengthSeconds)
 		{
-			var format = SampleFormat.Signed16;
-			int blockSize = (int)(SampleRate * 0.16) * sizeof(short);
+			int blockSize = (int)(SampleRate * StreamChunkDurationSeconds) * PlaybackFormatBytes;
 			int sampleCount = (int)(SampleRate * lengthSeconds);
-			var player = new AudioStream(format, this);
+			var player = new AudioStream(PlaybackFormat, this);
 			using (var stream = new MemoryStream(blockSize))
 			using (var writer = new BinaryWriter(stream))
 			{
