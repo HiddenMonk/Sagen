@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C3770497-DA08-4D9F-B6C0-5DBC0A0DA57C}</ProjectGuid>
+    <ProjectGuid>{0B9FAD5A-50E8-49FA-8C9D-78DC9FDD5193}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sagen</RootNamespace>
-    <AssemblyName>Sagen</AssemblyName>
+    <RootNamespace>Sagen.Languages</RootNamespace>
+    <AssemblyName>Sagen_en_US</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -16,20 +16,18 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -42,45 +40,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioStream.cs" />
-    <Compile Include="Pronunciation\ArticulationPlace.cs" />
-    <Compile Include="Pronunciation\ArticulationManner.cs" />
-    <Compile Include="Pronunciation\Phoneme.cs" />
-    <Compile Include="BandPassFilter.cs" />
-    <Compile Include="ButterworthFilter.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="FunctionCurves\CosineCurve.cs" />
-    <Compile Include="FunctionCurves\Curve.cs" />
-    <Compile Include="FunctionCurves\Keyframe.cs" />
-    <Compile Include="FunctionCurves\LinearCurve.cs" />
-    <Compile Include="Pronunciation\Phoneme.Presets.cs" />
-    <Compile Include="Pronunciation\SagenDictionary.cs" />
-    <Compile Include="Languages\LanguageCodeAttribute.cs" />
-    <Compile Include="Languages\SagenLanguage.cs" />
-    <Compile Include="Pronunciation\VoiceKey.cs" />
-    <Compile Include="SampleFormat.cs" />
-    <Compile Include="Samplers\HarmonicSampler.cs" />
-    <Compile Include="Util.cs" />
-    <Compile Include="Phrase.cs" />
-    <Compile Include="Samplers\NoiseSampler.cs" />
-    <Compile Include="Samplers\SineSampler.cs" />
-    <Compile Include="TTS.cs" />
-    <Compile Include="Samplers\Sampler.cs" />
-    <Compile Include="RNG.cs" />
-    <Compile Include="Samplers\VocalSampler.cs" />
-    <Compile Include="Synthesizer.cs" />
-    <Compile Include="Voice.cs" />
-    <Compile Include="VoiceParams.cs" />
+    <Compile Include="AmericanEnglish.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Voice.Presets.cs" />
-    <Compile Include="VoiceQuality.cs" />
-    <Compile Include="Wav.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Data\noise.raw" />
+    <ProjectReference Include="..\Sagen\Sagen.csproj">
+      <Project>{c3770497-da08-4d9f-b6c0-5dbc0a0da57c}</Project>
+      <Name>Sagen</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Data\vocal.raw" />
+    <EmbeddedResource Include="en_US.dic" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

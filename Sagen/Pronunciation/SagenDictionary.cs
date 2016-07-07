@@ -3,9 +3,9 @@ using System.IO;
 
 namespace Sagen.Pronunciation
 {
-	internal sealed class Lexicon
+	internal sealed class SagenDictionary
 	{
-		public static Lexicon FromStream(Stream stream)
+		public static SagenDictionary FromStream(Stream stream)
 		{
 			throw new NotImplementedException();
 		}

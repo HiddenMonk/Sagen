@@ -3,5 +3,10 @@
 	public sealed class VoiceKey
 	{
 		private double _duration;
+
+		internal VoiceKey()
+		{
+			
+		}
 	}
 }
