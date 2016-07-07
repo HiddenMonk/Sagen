@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
-[assembly: AssemblyTitle("SagenLangUSEnglish")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Sagen - US English")]
+[assembly: AssemblyDescription("US English support for Sagen TTS")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SagenLangUSEnglish")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyProduct("Sagen - US Engish")]
+[assembly: AssemblyCopyright("Copyright © Nicholas Fleck 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
