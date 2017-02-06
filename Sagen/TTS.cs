@@ -74,7 +74,7 @@ namespace Sagen
 
 			var synth = new Synthesizer(this)
 			{
-				Fundamental = 150
+				Fundamental = 175
 			};
 
             RNG rng = new RNG();

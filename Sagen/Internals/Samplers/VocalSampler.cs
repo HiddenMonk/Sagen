@@ -17,25 +17,35 @@ namespace Sagen.Internals.Samplers
 
         // Constants which control the attenuation of each individual formant
         private const double LEVEL_F1 = .02500;
-        private const double LEVEL_F2 = .03800;
-        private const double LEVEL_F3 = .02200;
+        private const double LEVEL_F2 = .04000;
+        private const double LEVEL_F3 = .02500;
         private const double LEVEL_F4 = .00150;
         private const double LEVEL_F5 = .00025;
 
         // Resonance levels for each formant
         private const double RES_F1 = .22;
         private const double RES_F2 = .08;
-        private const double RES_F3 = .09;
+        private const double RES_F3 = .08;
         private const double RES_F4 = .2;
         private const double RES_F5 = .23;
+
+        // Half-bandwidths for each formant
+        private const double BWH_F1 = 5.0;
+        private const double BWH_F2 = 7.0;
+        private const double BWH_F3 = 7.0;
+        private const double BWH_F4 = 3.0;
 
         private const double Height = .25;
         private const double Backness = 0;
         private const double Roundedness = 0;
         private const double HeadSize = 1;
+        private const double Rhotacization = 0.0;
 
         // Formants 3 and 4 are amplified by lerp(1.0, x, backness) where x is this constant, to simulate the "dark" quality of back vowels
         private const double BacknessF34AttenuationFactor = 0.25;
+
+        // F3 - F2 will be multiplied by this amount times rhotacization
+        private const double RhotF3LowerFactor = 0.15;
 
 
         public VocalSampler(Synthesizer synth, Phoneme vowel) : base(synth)
@@ -53,20 +63,27 @@ namespace Sagen.Internals.Samplers
             f3 += hsOffset;
             f4 += hsOffset;
 
+            Rhotacize(f2, ref f3, Rhotacization);
+
             Console.WriteLine($"{f1}, {f2}, {f3}, {f4}");
 
             bands = new[]
             {
-                new BandPassFilter(f4, f4, synth.SampleRate, RES_F4, RES_F4) { Volume = LEVEL_F4 * Util.Lerp(1.0, BacknessF34AttenuationFactor, Backness) },
-                new BandPassFilter(f3, f3, synth.SampleRate, RES_F3, RES_F3) { Volume = LEVEL_F3 * Util.Lerp(1.0, BacknessF34AttenuationFactor, Backness) },
-                new BandPassFilter(f2, f2, synth.SampleRate, RES_F2, RES_F2) { Volume = LEVEL_F2 },
-                new BandPassFilter(f1, f1, synth.SampleRate, RES_F1, RES_F1) { Volume = LEVEL_F1 },
+                new BandPassFilter(f4 - BWH_F4, f4 + BWH_F4, synth.SampleRate, RES_F4, RES_F4) { Volume = LEVEL_F4 * Util.Lerp(1.0, BacknessF34AttenuationFactor, Backness) },
+                new BandPassFilter(f3 - BWH_F3, f3 + BWH_F3, synth.SampleRate, RES_F3, RES_F3) { Volume = LEVEL_F3 * Util.Lerp(1.0, BacknessF34AttenuationFactor, Backness) },
+                new BandPassFilter(f2 - BWH_F2, f2 + BWH_F2, synth.SampleRate, RES_F2, RES_F2) { Volume = LEVEL_F2 },
+                new BandPassFilter(f1 - BWH_F1, f1 + BWH_F1, synth.SampleRate, RES_F1, RES_F1) { Volume = LEVEL_F1 },
             };
 
             lowPass = new ButterworthFilter(500, synth.SampleRate, PassFilterType.LowPass, .15f);
             highPass = new ButterworthFilter(6500, synth.SampleRate, PassFilterType.HighPass, .2f);
 
             numBands = bands.Length;
+        }
+
+        private static void Rhotacize(double f2, ref double f3, double rf)
+        {
+            f3 = f2 + (f3 - f2) * Util.Lerp(1.0, RhotF3LowerFactor, rf);
         }
 
         private static double HeadSizeToFormantOffset(double headSize)
