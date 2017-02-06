@@ -1,5 +1,8 @@
 ﻿namespace Sagen
 {
+	/// <summary>
+	/// Specifies available audio quality levels (sample rates) for the TTS engine.
+	/// </summary>
 	public enum VoiceQuality
 	{
 		/// <summary>

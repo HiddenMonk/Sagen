@@ -2,6 +2,9 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
+using Sagen.Extensibility;
+using Sagen.Languages;
+
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
@@ -34,3 +37,6 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+// Define plugin class
+[assembly: SagenPluginClass(typeof(AmericanEnglish))]

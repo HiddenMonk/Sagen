@@ -50,6 +50,12 @@
 		/// Values below one will diminish higher harmonics. Values above one will amplify them.
 		/// </summary>
 		public float SpectralTilt { get; set; } = 0.8f;
+
+        /// <summary>
+        /// Head size represents the vocal tract length of the speaker, which affects the offset of the formant frequencies.
+        /// Higher values cause the voice to sound more "throaty". Lower values are ideal for more feminine voices.
+        /// </summary>
+        public float HeadSize { get; set; } = 1.0f;
 	}
 
 	public enum VoiceGender

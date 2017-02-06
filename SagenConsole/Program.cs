@@ -2,7 +2,7 @@
 
 using Sagen;
 
-namespace HaarpConsole
+namespace SagenConsole
 {
 	class Program
 	{
@@ -12,6 +12,7 @@ namespace HaarpConsole
 
 			Console.WriteLine("Playing...");
 			tts.Speak("This is a test.");
+            
 			tts.Sync();
 
 			Console.WriteLine("Done. Press any key to exit.");

@@ -16,8 +16,8 @@ namespace WaveGen
 
 		static double GenerateVocalWave(int sampleIndex, int sampleCount)
 		{
-			double x = ((double)sampleIndex / (sampleCount - 1f)) * Math.PI * 2f;
-			return Math.Sin(x + Math.Sin(x + Math.Sin(x) / 3f) / 3f);
+			double x = ((double)sampleIndex / (sampleCount - 1.0)) * Math.PI * 2.0;
+			return Math.Sin(x + Math.Sin(x + Math.Sin(x + Math.Sin(x + Math.Sin(x + Math.Sin(x + Math.Sin(x)))))));
 		}
 
 		static void GenerateSampleFile(GeneratorFunc func, string path, int samples)

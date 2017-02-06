@@ -42,39 +42,48 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioStream.cs" />
-    <Compile Include="Pronunciation\ArticulationPlace.cs" />
-    <Compile Include="Pronunciation\ArticulationManner.cs" />
-    <Compile Include="Pronunciation\Phoneme.cs" />
-    <Compile Include="BandPassFilter.cs" />
-    <Compile Include="ButterworthFilter.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="FunctionCurves\CosineCurve.cs" />
-    <Compile Include="FunctionCurves\Curve.cs" />
-    <Compile Include="FunctionCurves\Keyframe.cs" />
-    <Compile Include="FunctionCurves\LinearCurve.cs" />
-    <Compile Include="Pronunciation\Phoneme.Presets.cs" />
-    <Compile Include="Pronunciation\SagenDictionary.cs" />
-    <Compile Include="Languages\LanguageCodeAttribute.cs" />
-    <Compile Include="Languages\SagenLanguage.cs" />
-    <Compile Include="Pronunciation\VoiceKey.cs" />
+    <Compile Include="Extensibility\ISampler.cs" />
+    <Compile Include="Extensibility\ISynthesizer.cs" />
+    <Compile Include="Extensibility\PhonemeWriter.cs" />
+    <Compile Include="Internals\AudioStream.cs" />
+    <Compile Include="Extensibility\SagenPluginClassAttribute.cs" />
+    <Compile Include="Internals\Vowel.cs" />
+    <Compile Include="Internals\VowelQuality.cs" />
+    <Compile Include="Phonetics\ArticulationPlace.cs" />
+    <Compile Include="Phonetics\ArticulationManner.cs" />
+    <Compile Include="Phonetics\Phoneme.cs" />
+    <Compile Include="Internals\BandPassFilter.cs" />
+    <Compile Include="Internals\ButterworthFilter.cs" />
+    <Compile Include="Internals\Extensions.cs" />
+    <Compile Include="Internals\FunctionCurves\CosineCurve.cs" />
+    <Compile Include="Internals\FunctionCurves\Curve.cs" />
+    <Compile Include="Internals\FunctionCurves\Keyframe.cs" />
+    <Compile Include="Internals\FunctionCurves\LinearCurve.cs" />
+    <Compile Include="Phonetics\Phoneme.Presets.cs" />
+    <Compile Include="Extensibility\SagenDictionary.cs" />
+    <Compile Include="Extensibility\LanguageCodeAttribute.cs" />
+    <Compile Include="Extensibility\SagenLanguage.cs" />
+    <Compile Include="Phonetics\PhoneticAlphabet.cs" />
+    <Compile Include="Phonetics\PhoneticEvent.cs" />
+    <Compile Include="Phonetics\PhoneticFlags.cs" />
+    <Compile Include="Phonetics\Stress.cs" />
     <Compile Include="SampleFormat.cs" />
-    <Compile Include="Samplers\HarmonicSampler.cs" />
-    <Compile Include="Util.cs" />
+    <Compile Include="Internals\Samplers\HarmonicSampler.cs" />
+    <Compile Include="Internals\Util.cs" />
     <Compile Include="Phrase.cs" />
-    <Compile Include="Samplers\NoiseSampler.cs" />
-    <Compile Include="Samplers\SineSampler.cs" />
+    <Compile Include="Internals\Samplers\NoiseSampler.cs" />
+    <Compile Include="Internals\Samplers\SineSampler.cs" />
     <Compile Include="TTS.cs" />
-    <Compile Include="Samplers\Sampler.cs" />
-    <Compile Include="RNG.cs" />
-    <Compile Include="Samplers\VocalSampler.cs" />
-    <Compile Include="Synthesizer.cs" />
+    <Compile Include="Internals\Samplers\Sampler.cs" />
+    <Compile Include="Internals\RNG.cs" />
+    <Compile Include="Internals\Samplers\VocalSampler.cs" />
+    <Compile Include="Internals\Synthesizer.cs" />
     <Compile Include="Voice.cs" />
     <Compile Include="VoiceParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Voice.Presets.cs" />
     <Compile Include="VoiceQuality.cs" />
-    <Compile Include="Wav.cs" />
+    <Compile Include="Internals\Wav.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\noise.raw" />
@@ -82,6 +91,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\vocal.raw" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
