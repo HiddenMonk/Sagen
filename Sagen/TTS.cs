@@ -6,7 +6,7 @@ using System.Threading;
 
 using Sagen.Extensibility;
 using Sagen.Internals;
-using Sagen.Internals.Samplers;
+using Sagen.Internals.Filters;
 using Sagen.Phonetics;
 
 namespace Sagen
@@ -70,27 +70,48 @@ namespace Sagen
 
 		public void Speak(string text)
 		{
-			// Actual speaking isn't supported yet. This is debug code for testing vocal properties.
+            // Actual speaking isn't supported yet. This is debug code for testing vocal properties.
 
-			var synth = new Synthesizer(this)
-			{
-				Fundamental = 175
-			};
+            var synth = new Synthesizer(this);
 
             RNG rng = new RNG();
 
-			const float amp = .0050f;
-			const float tilt = -3.00f;
-            
-			for (int i = 0; i < 45; i++)
-				synth.AddSampler(new HarmonicSampler(synth, i, amp, i * 0.0015, tilt) { HarmonicOffsetFactor = rng.NextSingle(.05f, .0501f)});
+			const float amp = .0025f;
+			const float tilt = -4.00f;
 
-			synth.AddSampler(new VocalSampler(synth, Phoneme.GetPresetIPA("e")));
+            synth.AddSampler(new IntonationFilter(synth));
+
+            for (int i = 0; i < 20; i++)
+				synth.AddSampler(new HarmonicFilter(synth, i, amp, i * 0.00175, tilt));
+
+			synth.AddSampler(new PhonationFilter(synth, Phoneme.GetPresetIPA("e")));
 
 			synth.CreateAudioStream();            
 
 			ThreadPool.QueueUserWorkItem(PlaySynthFunc, synth);
 		}
+
+        public void SpeakToFile(string path, string text)
+        {
+            var synth = new Synthesizer(this)
+            {
+                Fundamental = 150
+            };
+
+            RNG rng = new RNG();
+
+            const float amp = .0025f;
+            const float tilt = -4.00f;
+
+            synth.AddSampler(new IntonationFilter(synth));
+
+            for (int i = 0; i < 20; i++)
+                synth.AddSampler(new HarmonicFilter(synth, i, amp, i * 0.00175, tilt));
+
+            synth.AddSampler(new PhonationFilter(synth, Phoneme.GetPresetIPA("e")));
+
+            synth.Generate(5, File.Create(path), SampleFormat.Float32, true);
+        }
 
 		private void PlaySynthFunc(object synthObj)
 		{

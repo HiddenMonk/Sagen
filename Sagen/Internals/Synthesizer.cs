@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 
 using Sagen.Extensibility;
-using Sagen.Internals.Samplers;
+using Sagen.Internals.Filters;
 
 namespace Sagen.Internals
 {
@@ -14,8 +14,8 @@ namespace Sagen.Internals
 		public const int PlaybackFormatBytes = (int)PlaybackFormat / 8;
 		private const double StreamChunkDurationSeconds = 0.1;
 
-		private readonly HashSet<Sampler> samplers = new HashSet<Sampler>();
-		private readonly List<Sampler> samplerSequence = new List<Sampler>();
+		private readonly HashSet<Filter> samplers = new HashSet<Filter>();
+		private readonly List<Filter> samplerSequence = new List<Filter>();
 		private readonly int _sampleRate = (int)TTS.Quality;
 		private readonly VoiceQuality _quality = TTS.Quality;
 		private readonly VoiceParams _voice = VoiceParams.Jimmy;
@@ -60,7 +60,7 @@ namespace Sagen.Internals
 			set { _position = value; }
 		}
 
-		public void AddSampler(Sampler sampler)
+		public void AddSampler(Filter sampler)
 		{
 			if (sampler != null && samplers.Add(sampler))
 			{

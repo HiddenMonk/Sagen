@@ -1,14 +1,14 @@
 ﻿using System.IO;
 using System.Reflection;
 
-namespace Sagen.Internals.Samplers
+namespace Sagen.Internals.Filters
 {
-    internal unsafe class NoiseSampler : Sampler
+    internal unsafe class NoiseFilter : Filter
     {
 	    internal static readonly float* NoiseDataPointer;
 	    internal static readonly int NoiseDataLength;
 
-	    static NoiseSampler()
+	    static NoiseFilter()
 	    {
 		    using (
 			    var stream =
@@ -25,7 +25,7 @@ namespace Sagen.Internals.Samplers
         public float MaxFrequency { get; set; } = 2000.0f;
         public float Amplitude { get; set; } = 1.0f;
 
-        public NoiseSampler(Synthesizer synth, float minFrequency, float maxFrequency, float filterResonance = .3f) : base(synth)
+        public NoiseFilter(Synthesizer synth, float minFrequency, float maxFrequency, float filterResonance = .3f) : base(synth)
         {
             MinFrequency = minFrequency;
             MaxFrequency = maxFrequency;

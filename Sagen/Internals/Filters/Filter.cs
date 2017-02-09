@@ -1,13 +1,13 @@
-﻿namespace Sagen.Internals.Samplers
+﻿namespace Sagen.Internals.Filters
 {
-    internal abstract class Sampler
+    internal abstract class Filter
     {
         protected readonly Synthesizer synth;
 
         public bool Enabled { get; set; } = true;
         public abstract void Update(ref double sample);
 
-        public Sampler(Synthesizer synthesizer)
+        public Filter(Synthesizer synthesizer)
         {
             synth = synthesizer;
         }

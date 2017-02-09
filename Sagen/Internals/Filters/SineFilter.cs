@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Sagen.Internals.Samplers
+namespace Sagen.Internals.Filters
 {
-    internal class SineSampler : Sampler
+    internal class SineFilter : Filter
     {
         private double state;
         private const double FullPhase = Math.PI * 2.0;
@@ -27,12 +27,12 @@ namespace Sagen.Internals.Samplers
         /// </summary>
         public double DCOffset { get; set; } = 0.0f;
 
-        public SineSampler(Synthesizer synth) : base(synth)
+        public SineFilter(Synthesizer synth) : base(synth)
         {
             
         }
 
-        public SineSampler(Synthesizer synth, double frequency, double amplitude, double phase = 0.0f, double dcOffset = 0.0f) : base(synth)
+        public SineFilter(Synthesizer synth, double frequency, double amplitude, double phase = 0.0f, double dcOffset = 0.0f) : base(synth)
         {
             Frequency = frequency;
             Amplitude = amplitude;

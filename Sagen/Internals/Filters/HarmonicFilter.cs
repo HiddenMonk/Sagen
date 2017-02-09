@@ -4,16 +4,16 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace Sagen.Internals.Samplers
+namespace Sagen.Internals.Filters
 {
-	internal unsafe class HarmonicSampler : Sampler
+	internal unsafe class HarmonicFilter : Filter
 	{
 		private double state, frequency;
 		private Converter64 converter;
 		private static readonly int _dataLength, _dataLastIndex;
 		private static readonly double* _ptrSamples;
 
-		static HarmonicSampler()
+		static HarmonicFilter()
 		{
 			using (
 				var stream =
@@ -55,12 +55,12 @@ namespace Sagen.Internals.Samplers
 		/// </summary>
 		public double SpectralTilt { get; set; } = 0.0;
 
-		public HarmonicSampler(Synthesizer synth) : base(synth)
+		public HarmonicFilter(Synthesizer synth) : base(synth)
 		{
 
 		}
 
-		public HarmonicSampler(Synthesizer synth, int harmonic, double amplitude, double phase = 0.0f, double tilt = 0.0f, double dcOffset = 0.0f) : base(synth)
+		public HarmonicFilter(Synthesizer synth, int harmonic, double amplitude, double phase = 0.0f, double tilt = 0.0f, double dcOffset = 0.0f) : base(synth)
 		{
 			Amplitude = amplitude;
 			Harmonic = harmonic;
