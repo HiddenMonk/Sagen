@@ -47,7 +47,7 @@
     <Compile Include="Extensibility\PhonemeWriter.cs" />
     <Compile Include="Internals\AudioStream.cs" />
     <Compile Include="Extensibility\SagenPluginClassAttribute.cs" />
-    <Compile Include="Internals\Filters\IntonationFilter.cs" />
+    <Compile Include="Internals\Filters\PitchFilter.cs" />
     <Compile Include="Internals\Vowel.cs" />
     <Compile Include="Internals\VowelQuality.cs" />
     <Compile Include="Phonetics\ArticulationPlace.cs" />
@@ -80,7 +80,6 @@
     <Compile Include="Internals\Filters\PhonationFilter.cs" />
     <Compile Include="Internals\Synthesizer.cs" />
     <Compile Include="Voice.cs" />
-    <Compile Include="VoiceParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Voice.Presets.cs" />
     <Compile Include="VoiceQuality.cs" />

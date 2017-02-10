@@ -18,16 +18,32 @@ namespace Sagen.Internals
 		private readonly List<Filter> samplerSequence = new List<Filter>();
 		private readonly int _sampleRate = (int)TTS.Quality;
 		private readonly VoiceQuality _quality = TTS.Quality;
-		private readonly VoiceParams _voice = VoiceParams.Jimmy;
+		private readonly Voice _voice;
 		private readonly TTS _tts;
 		private AudioStream _audioStream;
 		private int _position = 0;
 
+        /// <summary>
+        /// Pitch, measured in relative octaves.
+        /// </summary>
+        public double Pitch { get; set; } = 0.0f;
+
+        /// <summary>
+        /// Fundamental frequency calculated from gender, pitch, and intonation.
+        /// </summary>
 		public double Fundamental { get; set; } = 100.0f;
+
+        /// <summary>
+        /// The time, in seconds, already elapsed before the current sample
+        /// </summary>
 		public double TimePosition => (double)_position / _sampleRate;
+
+        /// <summary>
+        /// The amount of time, in seconds, elapsed per sample
+        /// </summary>
 		public double TimeStep { get; }
 
-		public VoiceParams Voice => _voice;
+		public Voice Voice => _tts.Voice;
 
 		internal TTS TTS => _tts;
 		
@@ -37,6 +53,7 @@ namespace Sagen.Internals
 		{
 			TimeStep = 1.0f / _sampleRate;
 			_tts = engine;
+            _voice = engine.Voice;
 		}
 
 		/// <summary>

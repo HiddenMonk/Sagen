@@ -8,7 +8,7 @@ namespace SagenConsole
 	{
 		static void Main(string[] args)
 		{
-			var tts = new TTS();
+			var tts = new TTS(Voice.Rosa);
 
 			Console.WriteLine("Playing...");
             tts.SpeakToFile("speech.wav", "playground");

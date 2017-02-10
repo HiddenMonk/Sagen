@@ -62,6 +62,28 @@ namespace Sagen
 			}
 		}
 
+        private Voice _voice;
+
+        public TTS()
+        {
+            _voice = Voice.Jimmy;
+        }
+
+        public TTS(Voice voice)
+        {
+            _voice = voice ?? Voice.Jimmy;
+        }
+
+        public Voice Voice
+        {
+            get { return _voice; }
+            set
+            {
+                if (value == null) throw new ArgumentNullException(nameof(value));
+                _voice = value;
+            }
+        }
+
 		internal void AddActiveAudio(AudioStream audio) => _activeStreams.Add(audio);
 		internal void RemoveActiveAudio(AudioStream audio)
 		{
@@ -76,10 +98,10 @@ namespace Sagen
 
             RNG rng = new RNG();
 
-			const float amp = .0025f;
+			const float amp = .002f;
 			const float tilt = -4.00f;
 
-            synth.AddSampler(new IntonationFilter(synth));
+            synth.AddSampler(new PitchFilter(synth));
 
             for (int i = 0; i < 20; i++)
 				synth.AddSampler(new HarmonicFilter(synth, i, amp, i * 0.00175, tilt));
@@ -103,7 +125,7 @@ namespace Sagen
             const float amp = .0025f;
             const float tilt = -4.00f;
 
-            synth.AddSampler(new IntonationFilter(synth));
+            synth.AddSampler(new PitchFilter(synth));
 
             for (int i = 0; i < 20; i++)
                 synth.AddSampler(new HarmonicFilter(synth, i, amp, i * 0.00175, tilt));

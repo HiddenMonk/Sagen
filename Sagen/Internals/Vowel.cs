@@ -39,7 +39,7 @@ namespace Sagen.Internals
                 // Near-close near-back unrounded
                 new VowelQuality(.85, .75, 0.0, 400, 1040, 2525, 3375),
                 // Close-mid front unrounded
-                new VowelQuality(.75, 0.0, 0.0, 390, 2150, 2750, 3490),
+                new VowelQuality(.75, 0.0, 0.0, 390, 2100, 2650, 4800),
                 // Close-mid front rounded
                 new VowelQuality(.75, 0.0, 1.0, 390, 1475, 2180, 2850),
                 // Close-mid central unrounded
@@ -74,7 +74,7 @@ namespace Sagen.Internals
                 new VowelQuality(.15, 0.0, 0.0, 800, 1650, 2500, 2900),
 
                 // Open-front unrounded
-                new VowelQuality(0.0, 0.0, 0.0, 800, 1610, 2750, 3300),
+                new VowelQuality(0.0, 0.0, 0.0, 940, 1500, 3100, 4200),
             };
             _weightBuffer = new double[_points.Length];
         }
