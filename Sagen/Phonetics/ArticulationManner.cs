@@ -31,7 +31,7 @@
 		Approximant,
 
 		/// <summary>
-		/// Lateral approximants are approximants with lateralization, meaning that airflow is directed past the sides of the tongue rather than over it.
+		/// Lateral approximants are approximants where the airflow is directed along the sides of the tongue instead of over it.
 		/// </summary>
 		LateralApproximant,
 
