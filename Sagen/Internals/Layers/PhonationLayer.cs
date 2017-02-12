@@ -6,14 +6,14 @@ using System.Runtime.InteropServices;
 
 namespace Sagen.Internals.Layers
 {
-	internal unsafe class HarmonicFilter : Layer
+	internal unsafe class PhonationLayer : Layer
 	{
 		private double state, frequency;
 		private Converter64 converter;
 		private static readonly int _dataLength, _dataLastIndex;
 		private static readonly double* _ptrSamples;
 
-		static HarmonicFilter()
+		static PhonationLayer()
 		{
 			using (
 				var stream =
@@ -55,12 +55,12 @@ namespace Sagen.Internals.Layers
 		/// </summary>
 		public double SpectralTilt { get; set; } = 0.0;
 
-		public HarmonicFilter(Synthesizer synth) : base(synth)
+		public PhonationLayer(Synthesizer synth) : base(synth)
 		{
 
 		}
 
-		public HarmonicFilter(Synthesizer synth, int harmonic, double amplitude, double phase = 0.0f, double tilt = 0.0f, double dcOffset = 0.0f) : base(synth)
+		public PhonationLayer(Synthesizer synth, int harmonic, double amplitude, double phase = 0.0f, double tilt = 0.0f, double dcOffset = 0.0f) : base(synth)
 		{
 			Amplitude = amplitude;
 			Harmonic = harmonic;
