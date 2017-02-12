@@ -5,14 +5,14 @@ namespace Sagen.Internals
     /// <summary>
     /// Represents a formant frequency gradient based on articulatory orientation parameters, which may be sampled from.
     /// </summary>
-    internal static class Vowel
+    internal static class VowelConverter
     {
         private static readonly VowelQuality[] _points;
 
         [ThreadStatic]
         private static readonly double[] _weightBuffer;
 
-        static Vowel()
+        static VowelConverter()
         {
             _points = new VowelQuality[]
             {
@@ -73,6 +73,8 @@ namespace Sagen.Internals
                 // Near-open front unrounded
                 new VowelQuality(.15, 0.0, 0.0, 800, 1650, 2500, 2900),
 
+				// Open-back unrounded
+				new VowelQuality(0.0, 1.0, 0.0, 750, 1000, 3300, 4200),
                 // Open-front unrounded
                 new VowelQuality(0.0, 0.0, 0.0, 940, 1500, 3100, 4200),
             };

@@ -4,9 +4,9 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace Sagen.Internals.Filters
+namespace Sagen.Internals.Layers
 {
-	internal unsafe class HarmonicFilter : Filter
+	internal unsafe class HarmonicFilter : Layer
 	{
 		private double state, frequency;
 		private Converter64 converter;

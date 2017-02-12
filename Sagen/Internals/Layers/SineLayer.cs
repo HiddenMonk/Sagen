@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Sagen.Internals.Filters
+namespace Sagen.Internals.Layers
 {
-    internal class SineFilter : Filter
+    internal class SineLayer : Layer
     {
         private double state;
         private const double FullPhase = Math.PI * 2.0;
@@ -27,12 +27,12 @@ namespace Sagen.Internals.Filters
         /// </summary>
         public double DCOffset { get; set; } = 0.0f;
 
-        public SineFilter(Synthesizer synth) : base(synth)
+        public SineLayer(Synthesizer synth) : base(synth)
         {
             
         }
 
-        public SineFilter(Synthesizer synth, double frequency, double amplitude, double phase = 0.0f, double dcOffset = 0.0f) : base(synth)
+        public SineLayer(Synthesizer synth, double frequency, double amplitude, double phase = 0.0f, double dcOffset = 0.0f) : base(synth)
         {
             Frequency = frequency;
             Amplitude = amplitude;

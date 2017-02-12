@@ -48,7 +48,7 @@
     <Compile Include="Internals\AudioStream.cs" />
     <Compile Include="Extensibility\SagenPluginClassAttribute.cs" />
     <Compile Include="Internals\Filters\PitchFilter.cs" />
-    <Compile Include="Internals\Vowel.cs" />
+    <Compile Include="Internals\VowelConverter.cs" />
     <Compile Include="Internals\VowelQuality.cs" />
     <Compile Include="Phonetics\ArticulationPlace.cs" />
     <Compile Include="Phonetics\ArticulationManner.cs" />
@@ -68,6 +68,9 @@
     <Compile Include="Phonetics\PhoneticEvent.cs" />
     <Compile Include="Phonetics\PhoneticFlags.cs" />
     <Compile Include="Phonetics\Stress.cs" />
+    <Compile Include="Phonetics\Consonant.cs" />
+    <Compile Include="Phonetics\Syllable.cs" />
+    <Compile Include="Phonetics\Vowel.cs" />
     <Compile Include="SampleFormat.cs" />
     <Compile Include="Internals\Filters\HarmonicFilter.cs" />
     <Compile Include="Internals\Util.cs" />

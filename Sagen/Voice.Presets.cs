@@ -17,7 +17,7 @@
         public static readonly Voice Susan = new Voice
         {
             Gender = VoiceGender.Female,
-            HeadSize = 0.96
+            HeadSize = 0.95
         };
 
 		/// <summary>

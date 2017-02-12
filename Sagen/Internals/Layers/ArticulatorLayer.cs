@@ -2,12 +2,12 @@
 
 using Sagen.Phonetics;
 
-namespace Sagen.Internals.Filters
+namespace Sagen.Internals.Layers
 {
 	/// <summary>
 	/// Handles filtering, voicing/noise synthesis, and articulation given a pre-generated timeline of phonation events.
 	/// </summary>
-	internal unsafe class PhonationFilter : Filter
+	internal unsafe class ArticulatorLayer : Layer
 	{
 		private double sampleIn, sampleOut;
 
@@ -15,17 +15,16 @@ namespace Sagen.Internals.Filters
 		private readonly BandPassFilter bpf2;
 		private readonly BandPassFilter bpf3;
 		private readonly BandPassFilter bpf4;
-		private readonly BandPassFilter bsNasal;
 		private readonly ButterworthFilter lpOverlay, hpOverlay;
 
 		// Attenuation for filters
 		private double LEVEL_F1 = .04000;
-		private double LEVEL_F2 = .05000;
+		private double LEVEL_F2 = .04000;
 		private double LEVEL_F3 = .03000;
 		private double LEVEL_F4 = .02000;
 
-		private const double LEVEL_HPO = .08;
-		private const double LEVEL_LPO = .1;
+		private double LEVEL_HPO = .08;
+		private double LEVEL_LPO = .1;
 
 		// Frequency constants
 		private const double FREQ_LPO = 390;
@@ -40,28 +39,30 @@ namespace Sagen.Internals.Filters
 		private const double RES_LPO = .25;
 
 		// Half-bandwidths for each formant
-		private const double BWH_F1 = 10.0;
-		private const double BWH_F2 = 10.0;
-		private const double BWH_F3 = 10.0;
-		private const double BWH_F4 = 10.0;
+		private double BWH_F1 = 15.0;
+		private double BWH_F2 = 10.0;
+		private double BWH_F3 = 15.0;
+		private double BWH_F4 = 20.0;
 
-		private const double Height = 0.0;
-		private const double Backness = 0.0;
+		// Temporary constants for controlling articulation parameters
+		private const double Height = 0;
+		private const double Backness = 1.0;
 		private const double Roundedness = 0.0;
 		private const double Rhotacization = 0.0;
 		private const double Nasalization = 0.0;
 
 		// Formants 3 and 4 are amplified by lerp(1.0, x, backness) where x is this constant, to simulate the "dark" quality of back vowels
-		private const double BacknessF34AttenuationFactor = 0.1;
+		private const double BacknessF34AttenuationFactor = 0.2;
 
 		// F3 - F2 will be multiplied by lerp(1.0, x, rhotacization) where x is this constant
 		private const double RhotF3LowerFactor = 0.2;
 
 		private const double NasalF1DiminishFactor = 0.2;
 
-		private const double NasalF2LowerFactor = 0.8;
+		private const double NasalF2LowerFactor = 0.7;
+		private const double NasalF3RaiseFactor = 0.2;
 
-		public PhonationFilter(Synthesizer synth, Phoneme vowel) : base(synth)
+		public ArticulatorLayer(Synthesizer synth, Phoneme vowel) : base(synth)
 		{
 			bpf1 = new BandPassFilter(0, 0, synth.SampleRate, RES_F1, RES_F1);
 			bpf2 = new BandPassFilter(0, 0, synth.SampleRate, RES_F2, RES_F2);
@@ -82,7 +83,7 @@ namespace Sagen.Internals.Filters
 			double f4 = 0.0;
 
 			// Calculate initial formant frequencies
-			Vowel.GetFormants(Height, Backness, Roundedness, ref f1, ref f2, ref f3, ref f4);
+			VowelConverter.GetFormants(Height, Backness, Roundedness, ref f1, ref f2, ref f3, ref f4);
 
 			// Apply head size
 			double factor = 1.0 / synth.Voice.HeadSize;
@@ -97,6 +98,7 @@ namespace Sagen.Internals.Filters
 				LEVEL_F1 *= Util.Lerp(1.0, NasalF1DiminishFactor, Nasalization);
 
 				f2 = f1 + (f2 - f1) * Util.Lerp(1.0, NasalF2LowerFactor, Nasalization);
+				f3 = f4 - (f4 - f3) * Util.Lerp(1.0, NasalF3RaiseFactor, Nasalization);
 			}
 
 			// Rhotacize
@@ -129,7 +131,7 @@ namespace Sagen.Internals.Filters
 			sampleOut = 0f;
 
 			sampleIn = sample;
-			sampleIn += NoiseFilter.NoiseDataPointer[synth.Position % NoiseFilter.NoiseDataLength] * 0.11;
+			sampleIn += NoiseLayer.NoiseDataPointer[synth.Position % NoiseLayer.NoiseDataLength] * 0.11;
 
 			// Update filters
 			bpf1.Update(sampleIn);

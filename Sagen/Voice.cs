@@ -53,20 +53,22 @@
 		public double SpectralTilt { get; set; } = 0.8;
 
         /// <summary>
-        /// Head size represents the vocal tract length of the speaker, which affects the offset of the formant frequencies.
+        /// Head size represents the vocal tract length of the speaker, which will shift the formants up or down.
         /// Values greater than 1.0 cause the voice to sound more "throaty". Values less than 1.0 are ideal for more feminine/childlike voices.
-        /// <para>Range: (0, Infinity)</para>
-        /// <para>Default: 1.0</para>
+		/// <para>The recommended maximum value for this parameter is 2.0, as higher values may cause speech to become incomprehensible.</para>
+        /// <para>Range = (0, Infinity), Default = 1.0</para>
         /// </summary>
         public double HeadSize { get; set; } = 1.0;
         
         /// <summary>
         /// How fast F0 ascends when shaking
+		/// <para>Default: 12.0</para>
         /// </summary>
         public double VoiceShakeAscendRate { get; set; } = 12.0;
 
         /// <summary>
         /// How fast F0 descends when shaking
+		/// <para>Default: 5.0</para>
         /// </summary>
         public double VoiceShakeDescendRate { get; set; } = 5.0;
 
@@ -77,18 +79,29 @@
 
         /// <summary>
         /// Master multiplier of fundamental frequency.
+		/// <para>Default: 1.0</para>
         /// </summary>
         public double FundamentalFrequencyMultiplier { get; set; } = 1.0;
 
 		/// <summary>
-		/// Vibrato amount in octaves
+		/// Vibrato amount in octaves.
+		/// <para>Range: [0, Infinity)</para>
+		/// <para>Default: 0</para>
 		/// </summary>
 		public double VibratoAmount { get; set; } = 0.0;
 
 		/// <summary>
-		/// Vibrato speed in hertz
+		/// Vibrato speed in hertz.
+		/// <para>Default: 8.0</para>
 		/// </summary>
 		public double VibratoSpeed { get; set; } = 8.0;
+
+		/// <summary>
+		/// Master nasalization level.
+		/// <para>Range: [0, 1]</para>
+		/// <para>Default: 0</para>
+		/// </summary>
+		public double Nasalization { get; set; } = 0.0;
 	}
 
 	public enum VoiceGender

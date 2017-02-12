@@ -6,7 +6,7 @@ using System.Threading;
 
 using Sagen.Extensibility;
 using Sagen.Internals;
-using Sagen.Internals.Filters;
+using Sagen.Internals.Layers;
 using Sagen.Phonetics;
 
 namespace Sagen
@@ -49,7 +49,7 @@ namespace Sagen
 						Console.WriteLine($"(Sagen) Plugin type {attrPluginClass.PluginClassType} in {Path.GetFileName(path)} does not have a valid language code defined. Skipping.");
 						continue;
 					}
-					
+
 					_languages[plugin.LanguageCode] = plugin;
 #if DEBUG
 					System.Console.WriteLine($"(Sagen) Loaded plugin: {attrPluginClass.PluginClassType}");
@@ -62,27 +62,27 @@ namespace Sagen
 			}
 		}
 
-        private Voice _voice;
+		private Voice _voice;
 
-        public TTS()
-        {
-            _voice = Voice.Jimmy;
-        }
+		public TTS()
+		{
+			_voice = Voice.Jimmy;
+		}
 
-        public TTS(Voice voice)
-        {
-            _voice = voice ?? Voice.Jimmy;
-        }
+		public TTS(Voice voice)
+		{
+			_voice = voice ?? Voice.Jimmy;
+		}
 
-        public Voice Voice
-        {
-            get { return _voice; }
-            set
-            {
-                if (value == null) throw new ArgumentNullException(nameof(value));
-                _voice = value;
-            }
-        }
+		public Voice Voice
+		{
+			get { return _voice; }
+			set
+			{
+				if (value == null) throw new ArgumentNullException(nameof(value));
+				_voice = value;
+			}
+		}
 
 		internal void AddActiveAudio(AudioStream audio) => _activeStreams.Add(audio);
 		internal void RemoveActiveAudio(AudioStream audio)
@@ -92,48 +92,40 @@ namespace Sagen
 
 		public void Speak(string text)
 		{
-            // Actual speaking isn't supported yet. This is debug code for testing vocal properties.
+			// Actual speaking isn't supported yet. This is debug code for testing vocal properties.
 
-            var synth = new Synthesizer(this);
+			var synth = CreateSynth();
 
-            RNG rng = new RNG();
-
-			const float amp = .002f;
-			const float tilt = -4.00f;
-
-            synth.AddSampler(new PitchFilter(synth));
-
-            for (int i = 0; i < 20; i++)
-				synth.AddSampler(new HarmonicFilter(synth, i, amp, i * 0.00175, tilt));
-
-			synth.AddSampler(new PhonationFilter(synth, Phoneme.GetPresetIPA("e")));
-
-			synth.CreateAudioStream();            
+			synth.CreateAudioStream();
 
 			ThreadPool.QueueUserWorkItem(PlaySynthFunc, synth);
 		}
 
-        public void SpeakToFile(string path, string text)
-        {
-            var synth = new Synthesizer(this)
-            {
-                Fundamental = 150
-            };
+		public void SpeakToFile(string path, string text)
+		{
+			var synth = CreateSynth();
 
-            RNG rng = new RNG();
+			synth.Generate(5, File.Create(path), SampleFormat.Float32, true);
+		}
 
-            const float amp = .0025f;
-            const float tilt = -4.00f;
+		private Synthesizer CreateSynth()
+		{
+			var synth = new Synthesizer(this);
 
-            synth.AddSampler(new PitchFilter(synth));
+			RNG rng = new RNG();
 
-            for (int i = 0; i < 20; i++)
-                synth.AddSampler(new HarmonicFilter(synth, i, amp, i * 0.00175, tilt));
+			const float amp = .0025f;
+			const float tilt = -4.00f;
 
-            synth.AddSampler(new PhonationFilter(synth, Phoneme.GetPresetIPA("e")));
+			synth.AddSampler(new PitchLayer(synth));
 
-            synth.Generate(5, File.Create(path), SampleFormat.Float32, true);
-        }
+			for (int i = 0; i < 15; i++)
+				synth.AddSampler(new HarmonicFilter(synth, i, amp, i * 0.003, tilt));
+
+			synth.AddSampler(new ArticulatorLayer(synth, Phoneme.GetPresetIPA("e")));
+
+			return synth;
+		}
 
 		private void PlaySynthFunc(object synthObj)
 		{

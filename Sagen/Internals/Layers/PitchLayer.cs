@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Sagen.Internals.Filters
+namespace Sagen.Internals.Layers
 {
-    class PitchFilter : Filter
+    class PitchLayer : Layer
     {
         private const double F0Male = 120;
-        private const double F0Female = 230;
+        private const double F0Female = 240;
 		
         private bool shakeAscend = false;
         private double shakeOffset = 0.0;
@@ -14,7 +14,7 @@ namespace Sagen.Internals.Filters
 		private double vibTimer = 0.0;
         private readonly RNG rng;
 
-        public PitchFilter(Synthesizer synthesizer) : base(synthesizer)
+        public PitchLayer(Synthesizer synthesizer) : base(synthesizer)
         {
             rng = new RNG();
         }
