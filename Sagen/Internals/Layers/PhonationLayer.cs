@@ -6,12 +6,20 @@ using System.Runtime.InteropServices;
 
 namespace Sagen.Internals.Layers
 {
+	/// <summary>
+	/// This layer handles the production of the raw vocal harmonics, which are generated in the larynx via vibration of the vocal folds.
+	/// </summary>
 	internal unsafe class PhonationLayer : Layer
-	{
-		private double state, frequency;
-		private Converter64 converter;
+	{		
 		private static readonly int _dataLength, _dataLastIndex;
 		private static readonly double* _ptrSamples;
+
+		private const double AttenuationPerOctave = 0.25;
+		private const double SecondOctaveAttenuation = 0.4;
+
+		private readonly double[] envelope;
+		private readonly int numHarmonics;
+		private double state, frequency;
 
 		static PhonationLayer()
 		{
@@ -26,19 +34,9 @@ namespace Sagen.Internals.Layers
 		}
 
 		/// <summary>
-		/// The frequency in Hertz.
+		/// The amplitude of the fundamental frequency.
 		/// </summary>
-		public float HarmonicOffsetFactor { get; set; } = .05f;
-
-		/// <summary>
-		/// The harmonic number. 0 = fundamental frequency
-		/// </summary>
-		public int Harmonic { get; set; } = 0;
-
-		/// <summary>
-		/// The amplitude of the wave.
-		/// </summary>
-		public double Amplitude { get; set; } = 0.5;
+		public double Amplitude { get; } = 0.5;
 
 		/// <summary>
 		/// The phase offset of the wave.
@@ -55,29 +53,43 @@ namespace Sagen.Internals.Layers
 		/// </summary>
 		public double SpectralTilt { get; set; } = 0.0;
 
-		public PhonationLayer(Synthesizer synth) : base(synth)
-		{
-
-		}
-
-		public PhonationLayer(Synthesizer synth, int harmonic, double amplitude, double phase = 0.0f, double tilt = 0.0f, double dcOffset = 0.0f) : base(synth)
+		public PhonationLayer(Synthesizer synth, int harmonics, double amplitude, double phase = 0.0f, double tilt = 0.0f, double dcOffset = 0.0f) : base(synth)
 		{
 			Amplitude = amplitude;
-			Harmonic = harmonic;
 			Phase = phase;
 			state = phase;
 			DCOffset = dcOffset;
 			SpectralTilt = tilt;
+
+			// Generate envelope
+			numHarmonics = harmonics;
+			envelope = new double[harmonics];
+			envelope[0] = amplitude;
+
+			for(int i = 1; i < harmonics; i++)
+			{
+				if (i == 1)
+				{
+					envelope[1] = amplitude * SecondOctaveAttenuation;
+				}
+				else
+				{
+					envelope[i] = envelope[1] * Math.Pow(AttenuationPerOctave, Math.Log(i - 1, 2));
+				}
+			}
 		}
 		
 		public override void Update(ref double sample)
 		{
 			unchecked
 			{
-				frequency = synth.Fundamental * (Harmonic + 1) + HarmonicOffsetFactor * Harmonic;
-				state = (state + synth.TimeStep * frequency) % 1.0;
-				converter.ValueInteger = (long)(((frequency * NYQUIST * 2.0 - 1.0) * SpectralTilt) * MAGICAL_NUMBER + 1072632447);
-				sample += _ptrSamples[(int)(state * _dataLastIndex)] * Amplitude * converter.ValueDouble + DCOffset;
+				for(int i = 0; i < numHarmonics; i++)
+				{
+					frequency = synth.Fundamental * (i + 1);
+					sample += _ptrSamples[(int)(((state + Phase * i) % 1.0) * _dataLastIndex)] * envelope[i] + DCOffset;
+				}
+
+				state = (state + synth.TimeStep * synth.Fundamental) % 1.0;
 			}
 		}
 

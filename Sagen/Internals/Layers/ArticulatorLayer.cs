@@ -18,17 +18,17 @@ namespace Sagen.Internals.Layers
 		private readonly ButterworthFilter lpOverlay, hpOverlay;
 
 		// Attenuation for filters
-		private double LEVEL_F1 = .04000;
-		private double LEVEL_F2 = .04000;
-		private double LEVEL_F3 = .03000;
-		private double LEVEL_F4 = .02000;
+		private double LEVEL_F1 = .06000;
+		private double LEVEL_F2 = .05000;
+		private double LEVEL_F3 = .06000;
+		private double LEVEL_F4 = .04000;
 
-		private double LEVEL_HPO = .08;
+		private double LEVEL_HPO = .1;
 		private double LEVEL_LPO = .1;
 
 		// Frequency constants
 		private const double FREQ_LPO = 390;
-		private const double FREQ_HPO = 7000;
+		private const double FREQ_HPO = 6500;
 
 		// Resonance levels
 		private const double RES_F1 = .15;
@@ -45,8 +45,8 @@ namespace Sagen.Internals.Layers
 		private double BWH_F4 = 20.0;
 
 		// Temporary constants for controlling articulation parameters
-		private const double Height = 0;
-		private const double Backness = 1.0;
+		private const double Height = .25;
+		private const double Backness = 0.0;
 		private const double Roundedness = 0.0;
 		private const double Rhotacization = 0.0;
 		private const double Nasalization = 0.0;
@@ -131,7 +131,7 @@ namespace Sagen.Internals.Layers
 			sampleOut = 0f;
 
 			sampleIn = sample;
-			sampleIn += NoiseLayer.NoiseDataPointer[synth.Position % NoiseLayer.NoiseDataLength] * 0.11;
+			sampleIn += NoiseLayer.NoiseDataPointer[synth.Position % NoiseLayer.NoiseDataLength] * 0.015;
 
 			// Update filters
 			bpf1.Update(sampleIn);
