@@ -18,49 +18,49 @@ namespace Sagen.Internals.Layers
 		private readonly ButterworthFilter lpOverlay, hpOverlay;
 
 		// Attenuation for filters
-		private double LEVEL_F1 = .06000;
-		private double LEVEL_F2 = .05000;
+		private double LEVEL_F1 = .05000;
+		private double LEVEL_F2 = .10000;
 		private double LEVEL_F3 = .06000;
-		private double LEVEL_F4 = .04000;
+		private double LEVEL_F4 = .02500;
 
-		private double LEVEL_HPO = .1;
-		private double LEVEL_LPO = .1;
+		private double LEVEL_HPO = .175;
+		private double LEVEL_LPO = .04;
 
 		// Frequency constants
-		private const double FREQ_LPO = 390;
-		private const double FREQ_HPO = 6500;
+		private const double FREQ_LPO = 350;
+		private const double FREQ_HPO = 5000;
 
 		// Resonance levels
-		private const double RES_F1 = .15;
-		private const double RES_F2 = .075;
+		private const double RES_F1 = .1;
+		private const double RES_F2 = .09;
 		private const double RES_F3 = .075;
-		private const double RES_F4 = .15;
+		private const double RES_F4 = .1;
 		private const double RES_HPO = .2;
-		private const double RES_LPO = .25;
+		private const double RES_LPO = .2;
 
 		// Half-bandwidths for each formant
-		private double BWH_F1 = 15.0;
-		private double BWH_F2 = 10.0;
-		private double BWH_F3 = 15.0;
-		private double BWH_F4 = 20.0;
+		private double BWH_F1 = 50.0;
+		private double BWH_F2 = 50.0;
+		private double BWH_F3 = 25.0;
+		private double BWH_F4 = 50.0;
 
 		// Temporary constants for controlling articulation parameters
-		private const double Height = .25;
+		private const double Height = 0;
 		private const double Backness = 0.0;
 		private const double Roundedness = 0.0;
 		private const double Rhotacization = 0.0;
 		private const double Nasalization = 0.0;
 
 		// Formants 3 and 4 are amplified by lerp(1.0, x, backness) where x is this constant, to simulate the "dark" quality of back vowels
-		private const double BacknessF34AttenuationFactor = 0.2;
+		private const double BacknessF34AttenuationFactor = 0.3;
 
 		// F3 - F2 will be multiplied by lerp(1.0, x, rhotacization) where x is this constant
 		private const double RhotF3LowerFactor = 0.2;
 
 		private const double NasalF1DiminishFactor = 0.2;
 
-		private const double NasalF2LowerFactor = 0.7;
-		private const double NasalF3RaiseFactor = 0.2;
+		private const double NasalF2LowerFactor = 0.3;
+		private const double NasalF3RaiseFactor = 0.1;
 
 		public ArticulatorLayer(Synthesizer synth, Phoneme vowel) : base(synth)
 		{
@@ -131,7 +131,7 @@ namespace Sagen.Internals.Layers
 			sampleOut = 0f;
 
 			sampleIn = sample;
-			sampleIn += NoiseLayer.NoiseDataPointer[synth.Position % NoiseLayer.NoiseDataLength] * 0.015;
+			sampleIn += NoiseLayer.NoiseDataPointer[synth.Position % NoiseLayer.NoiseDataLength] * 0.0125 * sample;
 
 			// Update filters
 			bpf1.Update(sampleIn);

@@ -114,7 +114,7 @@ namespace Sagen
 
 			RNG rng = new RNG();
 
-			const float amp = .3f;
+			const float amp = .35f;
 
 			synth.AddSampler(new PitchLayer(synth));			
 			synth.AddSampler(new PhonationLayer(synth, 15, amp, 0.003, 1));

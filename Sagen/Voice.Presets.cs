@@ -3,11 +3,12 @@
     public partial class Voice
     {
         /// <summary>
-        /// Jimmy is a young man, no older than 21. He is quite partial to the delicate flavor of wallpaper.
+        /// Jimmy is a young man of 21. He is partial to the delicate flavor of wallpaper.
         /// </summary>
         public static readonly Voice Jimmy = new Voice
         {
-            Gender = VoiceGender.Male
+            Gender = VoiceGender.Male,
+			HeadSize = 1.03
         };
 
         /// <summary>
@@ -17,7 +18,7 @@
         public static readonly Voice Susan = new Voice
         {
             Gender = VoiceGender.Female,
-            HeadSize = 0.95
+            HeadSize = 0.88
         };
 
 		/// <summary>
@@ -33,6 +34,12 @@
 			VibratoAmount = .03,
 			VibratoSpeed = 10,
 			FundamentalFrequencyMultiplier = 2.0
+		};
+
+		public static readonly Voice Jane = new Voice
+		{
+			Gender = VoiceGender.Female,
+			HeadSize = 0.90
 		};
 
 		/// <summary>

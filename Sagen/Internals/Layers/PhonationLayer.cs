@@ -15,11 +15,12 @@ namespace Sagen.Internals.Layers
 		private static readonly double* _ptrSamples;
 
 		private const double AttenuationPerOctave = 0.25;
-		private const double SecondOctaveAttenuation = 0.4;
+		private const double SecondOctaveAttenuation = 0.3;
 
 		private readonly double[] envelope;
 		private readonly int numHarmonics;
 		private double state, frequency;
+		private readonly GlottalPulse glottalPulse = new GlottalPulse(4, 0.75);
 
 		static PhonationLayer()
 		{
@@ -86,7 +87,8 @@ namespace Sagen.Internals.Layers
 				for(int i = 0; i < numHarmonics; i++)
 				{
 					frequency = synth.Fundamental * (i + 1);
-					sample += _ptrSamples[(int)(((state + Phase * i) % 1.0) * _dataLastIndex)] * envelope[i] + DCOffset;
+					//sample += _ptrSamples[(int)(((state + Phase * i) % 1.0) * _dataLastIndex)] * envelope[i] + DCOffset;
+					sample += glottalPulse.Sample((state + Phase * i) % 1.0) * envelope[i] + DCOffset;
 				}
 
 				state = (state + synth.TimeStep * synth.Fundamental) % 1.0;

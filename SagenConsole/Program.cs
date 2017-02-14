@@ -11,7 +11,7 @@ namespace SagenConsole
 			var tts = new TTS(Voice.Jimmy);
 
 			Console.WriteLine("Playing...");
-            tts.SpeakToFile("speech.wav", "playground");
+            //tts.SpeakToFile("speech.wav", "playground");
 			tts.Speak("playground");
             
 			tts.Sync();
