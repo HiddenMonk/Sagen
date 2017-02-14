@@ -126,7 +126,7 @@ namespace Sagen.Internals.Layers
 		}
 
 		public override void Update(ref double sample)
-		{
+		{	
 			synth.Pitch -= 0.1f * synth.TimeStep;
 			sampleOut = 0f;
 

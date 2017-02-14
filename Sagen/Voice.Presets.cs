@@ -1,28 +1,28 @@
 ﻿namespace Sagen
 {
-    public partial class Voice
-    {
-        /// <summary>
-        /// Jimmy is a young man of 21. He is partial to the delicate flavor of wallpaper.
-        /// </summary>
-        public static readonly Voice Jimmy = new Voice
-        {
-            Gender = VoiceGender.Male,
+	public partial class Voice
+	{
+		/// <summary>
+		/// Jimmy is a young man of 21. He is partial to the delicate flavor of wallpaper.
+		/// </summary>
+		public static readonly Voice Jimmy = new Voice
+		{
+			Gender = VoiceGender.Male,
 			HeadSize = 1.03
-        };
-
-        /// <summary>
-        /// Susan is a world-renowned psychic whose sole ability is being able to accurately
-        /// determine an individual's affinity to garlic bread from their brain waves alone.
-        /// </summary>
-        public static readonly Voice Susan = new Voice
-        {
-            Gender = VoiceGender.Female,
-            HeadSize = 0.88
-        };
+		};
 
 		/// <summary>
-		/// Middle-aged woman
+		/// Susan is a world-renowned psychic whose sole ability is accurately detecting 
+		/// an individual's affinity to garlic bread from their brain waves alone.
+		/// </summary>
+		public static readonly Voice Susan = new Voice
+		{
+			Gender = VoiceGender.Female,
+			HeadSize = 0.88
+		};
+
+		/// <summary>
+		/// Now happily retired, Rosa spends her time singing along to her personal orchestra of vacuum cleaners.
 		/// </summary>
 		public static readonly Voice Rosa = new Voice
 		{
@@ -36,6 +36,9 @@
 			FundamentalFrequencyMultiplier = 2.0
 		};
 
+		/// <summary>
+		/// Jane is a doctor fresh out of grad school who specializes in the treatment of Rotary Saw Teeth Disorder.
+		/// </summary>
 		public static readonly Voice Jane = new Voice
 		{
 			Gender = VoiceGender.Female,
@@ -53,24 +56,26 @@
 			VoiceShakeAmountHz = 1.0
 		};
 
-        /// <summary>
-        /// A humble, throaty man, Bob has witnessed several innocent zucchinis perish during his plumbing career.
-        /// </summary>
-        public static readonly Voice Bob = new Voice
-        {
-            Gender = VoiceGender.Male,
-            FundamentalFrequencyMultiplier = 1.2,
-            HeadSize = 1.35
-        };
+		/// <summary>
+		/// A humble, throaty man, Bob has witnessed several innocent zucchinis perish during his plumbing career.
+		/// </summary>
+		public static readonly Voice Bob = new Voice
+		{
+			Gender = VoiceGender.Male,
+			FundamentalFrequencyMultiplier = 1.2,
+			HeadSize = 1.35
+		};
 
-        /// <summary>
-        /// At the early age of ten, Cade has perfected the art of talking only through his nasal passages.
-        /// </summary>
-        public static readonly Voice Cade = new Voice
-        {
-            Gender = VoiceGender.Male,
-            FundamentalFrequencyMultiplier = 2.0,
-            HeadSize = 0.75
-        };
-    }
+		/// <summary>
+		/// At the early age of six, Cade perfected the art of talking only through his nasal passages
+		/// with perfect articulation, making him the world's most accomplished ventriloquist.
+		/// </summary>
+		public static readonly Voice Cade = new Voice
+		{
+			Gender = VoiceGender.Male,
+			FundamentalFrequencyMultiplier = 2.0,
+			HeadSize = 0.75,
+			Nasalization = 0.65
+		};
+	}
 }
