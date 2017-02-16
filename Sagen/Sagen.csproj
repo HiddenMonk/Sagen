@@ -49,6 +49,7 @@
     <Compile Include="Extensibility\SagenPluginClassAttribute.cs" />
     <Compile Include="Internals\GlottalPulse.cs" />
     <Compile Include="Internals\Layers\PitchLayer.cs" />
+    <Compile Include="Internals\NotchFilter.cs" />
     <Compile Include="Internals\VowelConverter.cs" />
     <Compile Include="Internals\VowelQuality.cs" />
     <Compile Include="Phonetics\ArticulationPlace.cs" />
@@ -76,7 +77,7 @@
     <Compile Include="Internals\Layers\PhonationLayer.cs" />
     <Compile Include="Internals\Util.cs" />
     <Compile Include="Phrase.cs" />
-    <Compile Include="Internals\Layers\NoiseLayer.cs" />
+    <Compile Include="Internals\Noise.cs" />
     <Compile Include="Internals\Layers\SineLayer.cs" />
     <Compile Include="TTS.cs" />
     <Compile Include="Internals\Layers\Layer.cs" />
@@ -88,12 +89,6 @@
     <Compile Include="Voice.Presets.cs" />
     <Compile Include="VoiceQuality.cs" />
     <Compile Include="Internals\Wav.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Data\noise.raw" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Data\vocal.raw" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -10,7 +10,7 @@ namespace Sagen.Internals
         private static readonly VowelQuality[] _points;
 
         [ThreadStatic]
-        private static readonly double[] _weightBuffer;
+        private static double[] _weightBuffer;
 
         static VowelConverter()
         {
@@ -76,13 +76,14 @@ namespace Sagen.Internals
 				// Open-back unrounded
 				new VowelQuality(0.0, 1.0, 0.0, 750, 1000, 3300, 4200),
                 // Open-front unrounded
-                new VowelQuality(0.0, 0.0, 0.0, 940, 1400, 3100, 4200),
+                new VowelQuality(0.0, 0.0, 0.0, 940, 1400, 3100, 5650),
             };
             _weightBuffer = new double[_points.Length];
         }
 
         public static void GetFormants(double height, double backness, double roundedness, ref double f1, ref double f2, ref double f3, ref double f4)
         {
+			if (_weightBuffer == null) _weightBuffer = new double[_points.Length];
             double distSum = 0.0;
             double minDist = -1.0;
             double weightSum = 0.0; 
@@ -114,7 +115,7 @@ namespace Sagen.Internals
             for (int i = 0; i < _points.Length; i++)
             {
                 dist = _weightBuffer[i];
-                weightSum += _weightBuffer[i] = (1.0 - dist / distSum) / Math.Pow(10.0, dist / minDist);
+                weightSum += _weightBuffer[i] = (1.0 - dist / distSum) / Math.Pow(10, dist / minDist);
             }
 
             // Calculate weights

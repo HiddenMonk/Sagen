@@ -46,12 +46,6 @@
 		/// </summary>
 		public double FricativeBandStrength { get; set; } = 1.0;
 
-		/// <summary>
-		/// The spectral tilt of the glottal pulse train (vibrations of the vocal folds).
-		/// Values below one will diminish higher harmonics. Values above one will amplify them.
-		/// </summary>
-		public double SpectralTilt { get; set; } = 0.8;
-
         /// <summary>
         /// Head size represents the vocal tract length of the speaker, which will shift the formants up or down.
         /// Values greater than 1.0 cause the voice to sound more "throaty". Values less than 1.0 are ideal for more feminine/childlike voices.
@@ -86,7 +80,7 @@
 		/// <summary>
 		/// Vibrato amount in octaves.
 		/// <para>Range: [0, Infinity)</para>
-		/// <para>Default: 0</para>
+		/// <para>Default: 0.0</para>
 		/// </summary>
 		public double VibratoAmount { get; set; } = 0.0;
 
@@ -99,9 +93,22 @@
 		/// <summary>
 		/// Master nasalization level.
 		/// <para>Range: [0, 1]</para>
-		/// <para>Default: 0</para>
+		/// <para>Default: 0.0</para>
 		/// </summary>
 		public double Nasalization { get; set; } = 0.0;
+
+		/// <summary>
+		/// Breathiness level.
+		/// <para>Range: [0, 1]</para>
+		/// <para>Default: 0.0</para>
+		/// </summary>
+		public double Breathiness { get; set; } = 0.0;
+
+		/// <summary>
+		/// Quantization quality. Set to 0 to disable.
+		/// <para>Range: [0, Infinity)</para>
+		/// </summary>
+		public int Quantization { get; set; } = 0;
 	}
 
 	public enum VoiceGender

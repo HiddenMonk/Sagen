@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Sagen")]
-[assembly: AssemblyDescription("A free text-to-speech system")]
+[assembly: AssemblyDescription("Sagen TTS Engine")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Sagen")]
-[assembly: AssemblyCopyright("Copyright © Nicholas Fleck 2015")]
+[assembly: AssemblyCopyright("Copyright © Nicholas Fleck 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
