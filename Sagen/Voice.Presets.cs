@@ -19,7 +19,7 @@
 		{
 			Gender = VoiceGender.Female,
 			HeadSize = 0.93,
-			Breathiness = 0.6
+			Breathiness = 0.5
 		};
 
 		/// <summary>
@@ -64,7 +64,8 @@
 		{
 			Gender = VoiceGender.Male,
 			FundamentalFrequencyMultiplier = 1.2,
-			HeadSize = 1.35
+			HeadSize = 1.35,
+            Breathiness = 0.35
 		};
 
 		/// <summary>

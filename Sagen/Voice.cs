@@ -109,6 +109,26 @@
 		/// <para>Range: [0, Infinity)</para>
 		/// </summary>
 		public int Quantization { get; set; } = 0;
+
+        /// <summary>
+        /// The frequency offset of F4 in Hertz. This value is inversely scaled by head size.
+        /// </summary>
+        public double FrequencyOffsetF4 { get; set; } = 0.0;
+        
+        /// <summary>
+        /// The frequency offset of F5 in Hertz. This value is inversely scaled by head size.
+        /// </summary>
+        public double FrequencyOffsetF5 { get; set; } = 0.0;
+
+        /// <summary>
+        /// The bandwidth of the fourth formant in Hertz.
+        /// </summary>
+        public double BandwidthF4 { get; set; } = 280.0;
+
+        /// <summary>
+        /// The bandwidth of the fifth formant in Hertz.
+        /// </summary>
+        public double BandwidthF5 { get; set; } = 300.0;
 	}
 
 	public enum VoiceGender

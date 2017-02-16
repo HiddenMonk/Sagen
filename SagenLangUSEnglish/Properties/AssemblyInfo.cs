@@ -39,4 +39,4 @@ using Sagen.Languages;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 // Define plugin class
-[assembly: SagenPluginClass(typeof(AmericanEnglish))]
+[assembly: SagenPluginClass(typeof(EnglishUS))]

@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensibility\Heteronym.cs" />
     <Compile Include="Extensibility\ISampler.cs" />
     <Compile Include="Extensibility\ISynthesizer.cs" />
     <Compile Include="Extensibility\PhonemeWriter.cs" />
@@ -63,7 +64,7 @@
     <Compile Include="Internals\FunctionCurves\Keyframe.cs" />
     <Compile Include="Internals\FunctionCurves\LinearCurve.cs" />
     <Compile Include="Phonetics\Phoneme.Presets.cs" />
-    <Compile Include="Extensibility\SagenDictionary.cs" />
+    <Compile Include="Extensibility\SagenLexicon.cs" />
     <Compile Include="Extensibility\LanguageCodeAttribute.cs" />
     <Compile Include="Extensibility\SagenLanguage.cs" />
     <Compile Include="Phonetics\PhoneticAlphabet.cs" />

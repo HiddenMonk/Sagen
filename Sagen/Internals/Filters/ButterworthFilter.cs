@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sagen.Internals
+namespace Sagen.Internals.Filters
 {
 	// This algorithm is an adaptation of the one found here: http://www.musicdsp.org/archive.php?classid=3#38
 	public class ButterworthFilter

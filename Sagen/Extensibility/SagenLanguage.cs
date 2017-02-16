@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-using Sagen.Phonetics;
-
 namespace Sagen.Extensibility
 {
-	public abstract class SagenLanguage
+    public abstract class SagenLanguage
 	{
 		protected readonly string _languageCode;
-		private readonly SagenDictionary _lexicon;
+		private readonly SagenLexicon _lexicon;
 
 		public string LanguageCode => _languageCode;
 
@@ -26,7 +23,7 @@ namespace Sagen.Extensibility
 			{
 				if (stream == null)
 					throw new FileNotFoundException($"Could not find dictionary ({dicFileName}) in assembly {Assembly.GetAssembly(GetType()).FullName}.");
-				//_lexicon = SagenDictionary.FromStream(stream);
+				_lexicon = SagenLexicon.FromStream(stream);
 			}
 		}
 

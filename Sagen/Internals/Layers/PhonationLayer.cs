@@ -13,11 +13,13 @@ namespace Sagen.Internals.Layers
 	{		
 		private const double AttenuationPerOctave = 0.25;
 		private const double SecondOctaveAttenuation = 0.65;
+        private const double MaxBreathinessVocalOpeningFactor = 0.5;
 
 		private readonly double[] envelope;
 		private readonly int numHarmonics;
 		private double state, frequency;
 		private readonly GlottalPulse glottalPulse = new GlottalPulse(4, 0.2);
+        private double breathFactor;
 		
 		/// <summary>
 		/// The amplitude of the fundamental frequency.
@@ -45,6 +47,7 @@ namespace Sagen.Internals.Layers
 			numHarmonics = harmonics;
 			envelope = new double[harmonics];
 			envelope[0] = amplitude;
+            breathFactor = synth.Voice.Breathiness * MaxBreathinessVocalOpeningFactor;
 
 			for(int i = 1; i < harmonics; i++)
 			{
@@ -70,7 +73,10 @@ namespace Sagen.Internals.Layers
 				}
 
 				state = (state + synth.TimeStep * synth.Fundamental) % 1.0;
-			}
+
+                // As breathiness increases, flatten pulse towards y = 1. This allows more noise through while still allowing phonation.
+                sample += breathFactor - breathFactor * sample;
+            }
 		}
 	}
 }
