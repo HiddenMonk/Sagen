@@ -10,7 +10,7 @@ namespace SagenConsole
 
 		static void Main(string[] args)
 		{
-			var tts = new TTS(Voice.Jimmy);
+			var tts = new TTS(Voice.Susan);
 
 			Console.WriteLine("Playing...");
 #if DEBUG

@@ -3,18 +3,20 @@
 namespace Sagen.Internals
 {
 	/// <summary>
-	/// Generates glottal pulses using Fant's glottal model.
+	/// Generates glottal pulses using a modified version of Fant's glottal model.
 	/// </summary>
 	internal sealed class GlottalPulse
 	{
 		private double _k = 4.0;
 		private double _tp = 0.5;
+		private double _o = 0.1;
 		private double og; // Coefficient used in ascending and descending branches
 		private double tc; // Time of closure
 
-		public GlottalPulse(double k, double peakTime)
+		public GlottalPulse(double k, double o, double peakTime)
 		{
 			_k = k < 0.5 ? 0.5 : k;
+			_o = o;
 			_tp = peakTime < 0.0 ? 0.0 : peakTime > 1.0 ? 1.0 : peakTime;
 			SetCoefficients();
 		}
@@ -50,19 +52,22 @@ namespace Sagen.Internals
 		private void SetCoefficients()
 		{
 			og = Math.PI / _tp;
-			tc = _tp + 1.0 / og * Math.Acos((_k - 1) / _k);
+			tc = _tp + _o + 1.0 / og * Math.Acos((_k - 1) / _k);
 		}
 
 		public double Sample(double normalizedTime)
 		{
+			// Ascending branch
 			if (normalizedTime <= _tp)
 			{
 				return 0.5 * (1.0 - Math.Cos(normalizedTime * og));
 			}
+
+			if (normalizedTime <= _tp + _o) return 1.0;
 			
 			if (normalizedTime <= tc)
 			{
-				return _k * Math.Cos(og * (normalizedTime - _tp)) - _k + 1.0;
+				return _k * Math.Cos(og * (normalizedTime - _tp - _o)) - _k + 1.0;
 			}
 
 			return 0.0;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sagen.Internals.Filters;
+using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -11,14 +12,22 @@ namespace Sagen.Internals.Layers
 	/// </summary>
 	internal unsafe class PhonationLayer : Layer
 	{		
-		private const double AttenuationPerOctave = 0.25;
-		private const double SecondOctaveAttenuation = 0.65;
+		private const double AttenuationPerOctave = 0.251;
+		private const double SecondOctaveAttenuation = 0.35;
         private const double MaxBreathinessVocalOpeningFactor = 0.5;
+
+		private const double OPEN_GLOTTIS_SUSTAIN = 0.1;
+
+		private const double CLEAR_GLOTTAL_DESCENT = 6;
+		private const double CLEAR_GLOTTAL_PEAK = 0.4;
+
+		private const double BREATHY_GLOTTAL_DESCENT = 1;
+		private const double BREATHY_GLOTTAL_PEAK = 0.5;
 
 		private readonly double[] envelope;
 		private readonly int numHarmonics;
 		private double state, frequency;
-		private readonly GlottalPulse glottalPulse = new GlottalPulse(4, 0.2);
+		private readonly GlottalPulse glottalPulse;
         private double breathFactor;
 		
 		/// <summary>
@@ -48,6 +57,12 @@ namespace Sagen.Internals.Layers
 			envelope = new double[harmonics];
 			envelope[0] = amplitude;
             breathFactor = synth.Voice.Breathiness * MaxBreathinessVocalOpeningFactor;
+
+			glottalPulse = new GlottalPulse(
+				Util.Lerp(CLEAR_GLOTTAL_DESCENT, BREATHY_GLOTTAL_DESCENT, synth.Voice.Breathiness), 
+				OPEN_GLOTTIS_SUSTAIN, 
+				Util.Lerp(CLEAR_GLOTTAL_PEAK, BREATHY_GLOTTAL_PEAK, synth.Voice.Breathiness)
+				);
 
 			for(int i = 1; i < harmonics; i++)
 			{

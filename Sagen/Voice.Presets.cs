@@ -8,7 +8,9 @@
 		public static readonly Voice Jimmy = new Voice
 		{
 			Gender = VoiceGender.Male,
-			HeadSize = 1.03
+			HeadSize = 1.0,
+			FrequencyOffsetF4 = 410,
+			FrequencyOffsetF5 = 520
 		};
 
 		/// <summary>
@@ -18,8 +20,8 @@
 		public static readonly Voice Susan = new Voice
 		{
 			Gender = VoiceGender.Female,
-			HeadSize = 0.93,
-			Breathiness = 0.5
+			HeadSize = 0.96,
+			Breathiness = 0.65
 		};
 
 		/// <summary>
@@ -54,7 +56,8 @@
 			Gender = VoiceGender.Male,
 			HeadSize = 1.3,
 			FundamentalFrequencyMultiplier = .5,
-			VoiceShakeAmountHz = 1.0
+			VoiceShakeAmountHz = 1.0,
+			Breathiness = 0.1
 		};
 
 		/// <summary>
@@ -65,7 +68,7 @@
 			Gender = VoiceGender.Male,
 			FundamentalFrequencyMultiplier = 1.2,
 			HeadSize = 1.35,
-            Breathiness = 0.35
+			Breathiness = 0.25
 		};
 
 		/// <summary>
@@ -76,7 +79,7 @@
 		{
 			Gender = VoiceGender.Male,
 			FundamentalFrequencyMultiplier = 2.0,
-			HeadSize = 0.75,
+			HeadSize = 0.7,
 			Nasalization = 0.65
 		};
 	}

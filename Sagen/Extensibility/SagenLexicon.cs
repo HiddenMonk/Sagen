@@ -12,6 +12,7 @@ namespace Sagen.Extensibility
 
 		public static SagenLexicon FromStream(Stream stream)
 		{
+			return null;
 			using (var reader = new StreamReader(stream, Encoding.Unicode, true, 256, true))
 			{
 				while(!reader.EndOfStream)
@@ -19,7 +20,7 @@ namespace Sagen.Extensibility
                     
                 }
 			}
-            return null;
+            
 		}
 	}
 }
