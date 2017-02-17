@@ -194,25 +194,25 @@ namespace Sagen.Internals.Layers
 
 			// Update filters
 			bpf1.Update(sampleIn);
-			sampleOut += bpf1.Value;
+			sampleOut += bpf1.Value * synth.Voice.FormantGain;
 
 			bpf2.Update(sampleIn);
-			sampleOut += bpf2.Value;
+			sampleOut += bpf2.Value * synth.Voice.FormantGain;
 
 			bpf3.Update(sampleIn);
-			sampleOut += bpf3.Value;
+			sampleOut += bpf3.Value * synth.Voice.FormantGain;
 
 			bpf4.Update(sampleIn);
-			sampleOut += bpf4.Value;
-
-			lpOverlay.Update(sample);
-			sampleOut += lpOverlay.Value * LEVEL_LPO;
+			sampleOut += bpf4.Value * synth.Voice.FormantGain;
 
 			if (synth.Voice.Gender != VoiceGender.Female)
 			{
 				bpf5.Update(sampleIn);
-				sampleOut += bpf5.Value;
+				sampleOut += bpf5.Value * synth.Voice.FormantGain;
 			}
+
+			lpOverlay.Update(sample);
+			sampleOut += lpOverlay.Value * LEVEL_LPO;
 
 			if (synth.Voice.Quantization > 0)
 			{
