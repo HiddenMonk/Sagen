@@ -18,7 +18,6 @@ namespace Sagen.Internals.Playback
 		private readonly ManualResetEventSlim _resetEvent = new ManualResetEventSlim(false);
 
 		private readonly Synthesizer s;
-		private IntPtr pDevice, pContext;
 		private uint[] buffers = new uint[BUFFER_COUNT];
 		private uint[] removedBuffers = new uint[BUFFER_COUNT];
 		private readonly Stack<uint> freeBuffers = new Stack<uint>();
@@ -26,10 +25,6 @@ namespace Sagen.Internals.Playback
 
 		public AudioStreamAL(SampleFormat format, Synthesizer synth)
 		{
-			pDevice = alcOpenDevice(null);
-			pContext = alcCreateContext(pDevice, null);
-			alcMakeContextCurrent(pContext);
-
 			s = synth;
 			alGenBuffers(new IntPtr(BUFFER_COUNT), buffers);
 			alGenSources(new IntPtr(1), out source);
@@ -68,30 +63,28 @@ namespace Sagen.Internals.Playback
 
 		public override void Cleanup()
 		{
-			ThreadPool.QueueUserWorkItem(DisposeOnFinish, this);
+			ThreadPool.QueueUserWorkItem(DisposeOnFinish);
 		}
 
 		private void DisposeOnFinish(object arg)
 		{
-			int state;
-			alGetSourcei(source, AL_SOURCE_STATE, out state);
-			while (state == AL_PLAYING)
+			int state, free;
+			
+			do
 			{
 				alGetSourcei(source, AL_SOURCE_STATE, out state);
 				Thread.Sleep(10);
-			}
+			} while (state == AL_PLAYING);
 
 			alSourcei(source, AL_BUFFER, 0);
+			alGetSourcei(source, AL_BUFFERS_PROCESSED, out free);
+			alDeleteSources(new IntPtr(1), ref source);
 			alDeleteBuffers(new IntPtr(BUFFER_COUNT), buffers);
-			
-			alcMakeContextCurrent(IntPtr.Zero);
-			alcDestroyContext(pContext); // Destroys sources too?
-			alcCloseDevice(pDevice);
 
 			s.TTS.RemoveActiveAudio(this);
 			_resetEvent.Set();
 			_resetEvent.Dispose();
-			GC.KeepAlive(arg);
+			GC.KeepAlive(this);
 		}
 
 		public override void WaitToFinish()

@@ -10,13 +10,19 @@ using Sagen.Internals.Layers;
 using Sagen.Internals.Playback;
 using Sagen.Phonetics;
 
+using static Sagen.Internals.Playback.AL.AL10;
+using static Sagen.Internals.Playback.AL.ALC10;
+
 namespace Sagen
 {
 	/// <summary>
 	/// Represents a single instance of the Sagen TTS Engine, exposing speech output functionality.
 	/// </summary>
-	public sealed class TTS
+	public sealed class TTS : IDisposable
 	{
+		private static readonly IntPtr pDevice, pContext;
+		private bool _disposed;
+
 		public static VoiceQuality Quality = VoiceQuality.VeryHigh;
 
 		private static readonly Dictionary<string, SagenLanguage> _languages = new Dictionary<string, SagenLanguage>();
@@ -25,6 +31,7 @@ namespace Sagen
 
 		static TTS()
 		{
+			#region Plugin loading
 			foreach (var path in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "Sagen.*.dll"))
 			{
 				try
@@ -61,6 +68,12 @@ namespace Sagen
 					Console.WriteLine($"(Sagen) An exception of type {ex.GetType().Name} was thrown while loading plugin {Path.GetFileName(path)}: {ex.Message}");
 				}
 			}
+			#endregion
+			#region OpenAL Initialization
+			pDevice = alcOpenDevice(null);
+			pContext = alcCreateContext(pDevice, null);
+			alcMakeContextCurrent(pContext);
+			#endregion
 		}
 
 		private Voice _voice;
@@ -137,6 +150,22 @@ namespace Sagen
 			{
 				audio.WaitToFinish();
 			}
+		}
+
+		public void Dispose()
+		{
+			if (_disposed) return;
+
+			alcMakeContextCurrent(IntPtr.Zero);			
+			alcDestroyContext(pContext); // Destroys sources too?
+			alcCloseDevice(pDevice);
+
+			_disposed = true;
+		}
+
+		~TTS()
+		{
+			Dispose();
 		}
 	}
 }

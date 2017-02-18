@@ -22,6 +22,8 @@ namespace SagenConsole
 
 			Console.WriteLine("Done. Press any key to exit.");
 			Console.ReadKey();
+
+			tts.Dispose();
 		}
 	}
 }
