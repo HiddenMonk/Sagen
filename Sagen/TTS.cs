@@ -35,11 +35,7 @@ namespace Sagen
 				{
 					var asm = Assembly.LoadFile(path);
 					var attrPluginClass = asm.GetCustomAttribute<SagenPluginClassAttribute>();
-					if (attrPluginClass == null)
-					{
-						Console.WriteLine($"(Sagen) Plugin {path} does not have a [SagenPluginClass] attribute defined on the assembly. Skipping.");
-						continue;
-					}
+					if (attrPluginClass == null) continue;
 
 					var plugin = Activator.CreateInstance(attrPluginClass.PluginClassType) as SagenLanguage;
 
@@ -57,17 +53,14 @@ namespace Sagen
 
 					_languages[plugin.LanguageCode] = plugin;
 #if DEBUG
-					System.Console.WriteLine($"(Sagen) Loaded plugin: {attrPluginClass.PluginClassType}");
+					System.Console.WriteLine($"(Sagen) Loaded plugin: {attrPluginClass.PluginName}");
 #endif
 				}
 				catch (Exception ex)
 				{
-					Console.WriteLine($"(Sagen) An exception of type {ex.GetType().Name} was thrown while loading plugin {Path.GetFileName(path)}: {ex.Message}");
+					Console.WriteLine($"(Sagen) An exception of type {ex.GetType().Name} was thrown while loading plugin {Path.GetFileName(path)}: {ex}");
 				}
 			}
-			#endregion
-			#region OpenAL Initialization
-
 			#endregion
 		}
 

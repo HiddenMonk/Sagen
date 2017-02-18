@@ -5,11 +5,16 @@ using Sagen.Extensibility;
 namespace Sagen.Languages
 {
 	[LanguageCode("en_US")]
-    public sealed class EnglishUS : SagenLanguage
-    {
-			protected override void ReadUnknownWord(string word, PhonemeWriter writer)
-			{
-				
-			}
-    }
+	public sealed class EnglishUS : SagenLanguage
+	{
+		public EnglishUS()
+		{
+
+		}
+
+		protected override void ReadUnknownWord(string word, PhonemeWriter writer)
+		{
+
+		}
+	}
 }
