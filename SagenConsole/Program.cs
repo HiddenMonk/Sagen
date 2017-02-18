@@ -15,12 +15,10 @@ namespace SagenConsole
 
 			Console.WriteLine("Playing...");
 #if DEBUG
-            tts.SpeakToFile("speech.wav", TestString);
+			tts.SpeakToFile("speech.wav", TestString);
 #endif
-            tts.Speak<ALPlaybackEngine>(TestString);
 			tts.Speak<ALPlaybackEngine>(TestString);
-			tts.Speak<ALPlaybackEngine>(TestString);
-            
+
 			tts.Sync();
 
 			Console.WriteLine("Done. Press any key to exit.");
