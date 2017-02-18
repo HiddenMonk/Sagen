@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Rebracer.xml = Rebracer.xml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sagen.Lang.EnglishUS", "SagenLangUSEnglish\Sagen.Lang.EnglishUS.csproj", "{0B9FAD5A-50E8-49FA-8C9D-78DC9FDD5193}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sagen.Languages.EnglishUS", "Sagen.Languages.USEnglish\Sagen.Languages.EnglishUS.csproj", "{0B9FAD5A-50E8-49FA-8C9D-78DC9FDD5193}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Languages", "Languages", "{331C84AF-2691-4C65-BF77-BB4785430509}"
 EndProject
