@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Sagen;
+using Sagen.Playback.OpenAL;
 
 namespace SagenConsole
 {
@@ -16,14 +17,14 @@ namespace SagenConsole
 #if DEBUG
             tts.SpeakToFile("speech.wav", TestString);
 #endif
-            tts.Speak(TestString);
+            tts.Speak<ALPlaybackEngine>(TestString);
+			tts.Speak<ALPlaybackEngine>(TestString);
+			tts.Speak<ALPlaybackEngine>(TestString);
             
 			tts.Sync();
 
 			Console.WriteLine("Done. Press any key to exit.");
 			Console.ReadKey();
-
-			tts.Dispose();
 		}
 	}
 }

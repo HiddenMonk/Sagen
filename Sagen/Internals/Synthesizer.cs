@@ -4,8 +4,8 @@ using System.Text;
 
 using Sagen.Extensibility;
 using Sagen.Internals.Layers;
-using Sagen.Internals.Playback;
 using System;
+using System.Threading;
 
 namespace Sagen.Internals
 {
@@ -22,8 +22,8 @@ namespace Sagen.Internals
 		private readonly VoiceQuality _quality = TTS.Quality;
 		private readonly Voice _voice;
 		private readonly TTS _tts;
-		private AudioStream _audioStream;
 		private int _position = 0;
+		private IPlaybackEngine playback;
 
 		/// <summary>
 		/// Pitch, measured in relative octaves.
@@ -49,24 +49,11 @@ namespace Sagen.Internals
 
 		internal TTS TTS => _tts;
 
-		public AudioStream AudioStream => _audioStream;
-
 		public Synthesizer(TTS engine)
 		{
 			TimeStep = 1.0f / _sampleRate;
 			_tts = engine;
 			_voice = engine.Voice;
-		}
-
-		/// <summary>
-		/// This method is used to create the audio stream and its accompanying ManualResetEventSlim ahead of time so that TTS.Sync works properly with multithreading.
-		/// </summary>
-		public void CreateAudioStream()
-		{
-			if (_audioStream == null)
-			{
-				_audioStream = new AudioStreamAL(PlaybackFormat, this);
-			}
 		}
 
 		public int SampleRate => _sampleRate;
@@ -124,34 +111,38 @@ namespace Sagen.Internals
 			}
 		}
 
-		public void Play(double lengthSeconds)
+		public void Play<TPlaybackEngine>(double lengthSeconds) where TPlaybackEngine : IPlaybackEngine, new()
 		{
-			CreateAudioStream();
-			int blockSize = (int)(SampleRate * StreamChunkDurationSeconds) * PlaybackFormatBytes;
-			int sampleCount = (int)(SampleRate * lengthSeconds);
-			short[] data = new short[blockSize];
-			int len = 0;
-
-			for (_position = 0; _position < sampleCount; _position++)
+			var playback = new TPlaybackEngine();
+			_tts.AddActiveAudio(playback);
+			ThreadPool.QueueUserWorkItem(o =>
 			{
-				double currentSample = 0f;
-				foreach (var sampler in samplerSequence)
+				int blockSize = (int)(SampleRate * StreamChunkDurationSeconds) * PlaybackFormatBytes;
+				int sampleCount = (int)(SampleRate * lengthSeconds);
+				short[] data = new short[blockSize];
+				int len = 0;
+
+				for (_position = 0; _position < sampleCount; _position++)
 				{
-					if (!sampler.Enabled) continue;
-					sampler.Update(ref currentSample);
+					double currentSample = 0f;
+					foreach (var sampler in samplerSequence)
+					{
+						if (!sampler.Enabled) continue;
+						sampler.Update(ref currentSample);
+					}
+
+					data[len++] = (short)(currentSample * short.MaxValue);
+
+					if (len >= blockSize)
+					{
+						playback.QueueDataBlock(data, len, _sampleRate);
+						len = 0;
+					}
 				}
 
-				data[len++] = (short)(currentSample * short.MaxValue);
-
-				if (len >= blockSize)
-				{
-					_audioStream.QueueDataBlock(data, len);
-					len = 0;
-				}
-			}
-			
-			if (len > 0) _audioStream.QueueDataBlock(data, len);
-			_audioStream.Cleanup();
+				if (len > 0) playback.QueueDataBlock(data, len, _sampleRate);
+				playback.MarkComplete(() => _tts.RemoveActiveAudio(playback));
+			});
 		}
 	}
 }

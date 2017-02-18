@@ -34,7 +34,7 @@ using System.Runtime.InteropServices;
 /*
  * NOTICE: This source code is altered from its original form as written by Ethan Lee.
  */
-namespace Sagen.Internals.Playback.AL
+namespace Sagen.Playback.OpenAL
 {
 	public static class AL10
 	{

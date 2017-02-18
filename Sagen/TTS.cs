@@ -7,27 +7,24 @@ using System.Threading;
 using Sagen.Extensibility;
 using Sagen.Internals;
 using Sagen.Internals.Layers;
-using Sagen.Internals.Playback;
-using Sagen.Phonetics;
 
-using static Sagen.Internals.Playback.AL.AL10;
-using static Sagen.Internals.Playback.AL.ALC10;
+
 
 namespace Sagen
 {
 	/// <summary>
 	/// Represents a single instance of the Sagen TTS Engine, exposing speech output functionality.
 	/// </summary>
-	public sealed class TTS : IDisposable
+	public sealed class TTS
 	{
-		private static readonly IntPtr pDevice, pContext;
 		private bool _disposed;
 
 		public static VoiceQuality Quality = VoiceQuality.VeryHigh;
 
 		private static readonly Dictionary<string, SagenLanguage> _languages = new Dictionary<string, SagenLanguage>();
 
-		private readonly HashSet<AudioStream> _activeStreams = new HashSet<AudioStream>();
+		private readonly HashSet<IPlaybackEngine> _activeStreams = new HashSet<IPlaybackEngine>();
+		private readonly Dictionary<IPlaybackEngine, ManualResetEventSlim> _resetEvents = new Dictionary<IPlaybackEngine, ManualResetEventSlim>();
 
 		static TTS()
 		{
@@ -70,9 +67,7 @@ namespace Sagen
 			}
 			#endregion
 			#region OpenAL Initialization
-			pDevice = alcOpenDevice(null);
-			pContext = alcCreateContext(pDevice, null);
-			alcMakeContextCurrent(pContext);
+
 			#endregion
 		}
 
@@ -98,21 +93,31 @@ namespace Sagen
 			}
 		}
 
-		internal void AddActiveAudio(AudioStream audio) => _activeStreams.Add(audio);
-		internal void RemoveActiveAudio(AudioStream audio)
+		internal void AddActiveAudio(IPlaybackEngine audio)
 		{
-			_activeStreams.Remove(audio);
+			lock (_activeStreams)
+			{
+				_activeStreams.Add(audio);
+				_resetEvents[audio] = new ManualResetEventSlim();
+			}
 		}
 
-		public void Speak(string text)
+		internal void RemoveActiveAudio(IPlaybackEngine audio)
 		{
-			// Actual speaking isn't supported yet. This is debug code for testing vocal properties.
+			var resetEvent = _resetEvents[audio];
+			resetEvent.Set();
+			lock (_activeStreams)
+			{
+				_activeStreams.Remove(audio);
+				_resetEvents.Remove(audio);
+				resetEvent.Dispose();
+			}
+		}
 
-			var synth = CreateSynth();
-
-			synth.CreateAudioStream();
-
-			ThreadPool.QueueUserWorkItem(PlaySynthFunc, synth);
+		public void Speak<TPlaybackEngine>(string text) where TPlaybackEngine : IPlaybackEngine, new()
+		{
+			// Actual speaking isn't supported yet. This is debug code for testing vocal properties.			
+			CreateSynth().Play<TPlaybackEngine>(5.0);
 		}
 
 		public void SpeakToFile(string path, string text)
@@ -130,42 +135,22 @@ namespace Sagen
 
 			const float amp = .25f;
 
-			synth.AddSampler(new PitchLayer(synth));			
-			synth.AddSampler(new PhonationLayer(synth, 20, amp, 0.003));			
+			synth.AddSampler(new PitchLayer(synth));
+			synth.AddSampler(new PhonationLayer(synth, 20, amp, 0.003));
 			synth.AddSampler(new ArticulatorLayer(synth));
 
 			return synth;
 		}
 
-		private void PlaySynthFunc(object synthObj)
-		{
-			var synth = synthObj as Synthesizer;
-			if (synth == null) return;
-			synth.Play(5);
-		}
-
 		public void Sync()
 		{
-			foreach (var audio in _activeStreams)
+			lock (_activeStreams)
 			{
-				audio.WaitToFinish();
+				foreach (var audio in _activeStreams)
+				{
+					_resetEvents[audio].Wait();
+				}
 			}
-		}
-
-		public void Dispose()
-		{
-			if (_disposed) return;
-
-			alcMakeContextCurrent(IntPtr.Zero);			
-			alcDestroyContext(pContext); // Destroys sources too?
-			alcCloseDevice(pDevice);
-
-			_disposed = true;
-		}
-
-		~TTS()
-		{
-			Dispose();
 		}
 	}
 }

@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sagen</RootNamespace>
     <AssemblyName>Sagen</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,23 +44,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensibility\Heteronym.cs" />
+    <Compile Include="Extensibility\IPlaybackEngine.cs" />
     <Compile Include="Extensibility\ISampler.cs" />
     <Compile Include="Extensibility\ISynthesizer.cs" />
     <Compile Include="Extensibility\PhonemeWriter.cs" />
-    <Compile Include="Internals\Playback\AL\AL10.cs" />
-    <Compile Include="Internals\Playback\AL\AL11.cs" />
-    <Compile Include="Internals\Playback\AL\ALC10.cs" />
-    <Compile Include="Internals\Playback\AL\ALC11.cs" />
-    <Compile Include="Internals\Playback\AL\ALEXT.cs" />
-    <Compile Include="Internals\Playback\AL\EFX.cs" />
-    <Compile Include="Internals\Playback\AudioStreamAL.cs" />
     <Compile Include="Extensibility\SagenPluginClassAttribute.cs" />
     <Compile Include="Internals\Filters\BandPassFilter.cs" />
     <Compile Include="Internals\Filters\ButterworthFilter.cs" />
     <Compile Include="Internals\Filters\NotchFilter.cs" />
     <Compile Include="Internals\GlottalPulse.cs" />
     <Compile Include="Internals\Layers\PitchLayer.cs" />
-    <Compile Include="Internals\Playback\AudioStream.cs" />
     <Compile Include="Internals\VowelConverter.cs" />
     <Compile Include="Internals\VowelQuality.cs" />
     <Compile Include="Phonetics\ArticulationPlace.cs" />
