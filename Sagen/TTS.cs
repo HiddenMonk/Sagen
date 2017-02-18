@@ -7,6 +7,7 @@ using System.Threading;
 using Sagen.Extensibility;
 using Sagen.Internals;
 using Sagen.Internals.Layers;
+using Sagen.Internals.Playback;
 using Sagen.Phonetics;
 
 namespace Sagen

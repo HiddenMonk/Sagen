@@ -1,17 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace Sagen.Internals
+namespace Sagen.Internals.Playback
 {
-	internal sealed unsafe class AudioStream : IDisposable
+	internal sealed unsafe class AudioStreamMM
 	{
 		private bool _disposed, _fullyQueued;
 		private int _queueSize = 0;
 		private readonly ManualResetEventSlim _resetEvent = new ManualResetEventSlim(false);
 		private readonly IntPtr _ptrOutputDevice;
 		private readonly Synthesizer _synth;
+		private readonly object waveLock = new object();
+		private readonly HashSet<IntPtr> bufferTrash = new HashSet<IntPtr>();
 
 		private const string LibraryName = "winmm.dll";
 		private static readonly IntPtr WAVE_MAPPER = new IntPtr(-1);
@@ -35,7 +38,7 @@ namespace Sagen.Internals
 		[DllImport(LibraryName, SetLastError = true, CharSet = CharSet.Auto)]
 		private static extern MMRESULT waveOutWrite(IntPtr hwo, IntPtr pwh, int cbwh);
 
-		public AudioStream(SampleFormat format, Synthesizer synth)
+		public AudioStreamMM(SampleFormat format, Synthesizer synth)
 		{
 			MMRESULT result;
 			var fmt = CreateFormatSpec(format, synth.SampleRate);
@@ -100,30 +103,46 @@ namespace Sagen.Internals
 
 		private void WaveOutProc(IntPtr hWaveOut, WaveOutMessage message, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
 		{
-			MMRESULT result;
 			switch (message)
 			{
 				case WaveOutMessage.WOM_DONE:
+				{
+					lock (bufferTrash)
 					{
-						// Remove data block from device so it can be freed
-						var hdr = (WAVEHDR)Marshal.PtrToStructure(dwParam1, typeof(WAVEHDR));
-						if ((result = waveOutUnprepareHeader(hWaveOut, dwParam1, sizeof(WAVEHDR))) != MMRESULT.MMSYSERR_NOERROR)
-							throw new ExternalException($"Function 'waveOutUnprepareHeader' returned error code {result}");
-
-						// Free memory used by WAVEHDR and samples
-						Marshal.FreeHGlobal(hdr.Data);
-						Marshal.FreeHGlobal(dwParam1);
-
-						// Decrease queue size and check if audio is no longer being streamed
-						_queueSize--;
-						if (_fullyQueued && _queueSize <= 0)
-						{
-							_resetEvent.Set();
-							Dispose();
-							_synth.TTS.RemoveActiveAudio(this);
-						}
-						break;
+						bufferTrash.Add(dwParam1);
 					}
+
+					// Decrease queue size and check if audio is no longer being streamed
+					_queueSize--;
+					if (_fullyQueued && _queueSize <= 0)
+					{
+						_resetEvent.Set();
+						_synth.TTS.RemoveActiveAudio(this);						
+					}
+					break;
+				}
+			}
+		}
+
+		public void DisposeOldBuffers()
+		{
+			lock (bufferTrash)
+			{
+				MMRESULT result;
+				WAVEHDR hdr;
+				foreach (IntPtr ptr in bufferTrash)
+				{
+					// Remove data block from device so it can be freed
+					hdr = (WAVEHDR)Marshal.PtrToStructure(ptr, typeof(WAVEHDR));
+
+					if ((result = waveOutUnprepareHeader(_ptrOutputDevice, ptr, sizeof(WAVEHDR))) != MMRESULT.MMSYSERR_NOERROR)
+						throw new ExternalException($"Function 'waveOutUnprepareHeader' returned error code {result}");
+
+					// Free memory used by WAVEHDR and samples
+					Marshal.FreeHGlobal(hdr.Data);
+					Marshal.FreeHGlobal(ptr);
+				}
+				bufferTrash.Clear();
 			}
 		}
 
@@ -224,20 +243,16 @@ namespace Sagen.Internals
 			WAVE_FORMAT_DIRECT = 8
 		}
 
-		~AudioStream()
-		{
-			Dispose();
-			_resetEvent.Set();
-			_resetEvent.Dispose();
-		}
-
 		public void Dispose()
 		{
 			if (_disposed) return;
+			DisposeOldBuffers();
 			MMRESULT result;
 			if ((result = waveOutClose(_ptrOutputDevice)) != MMRESULT.MMSYSERR_NOERROR)
 				throw new ExternalException($"Function 'waveOutClose' returned error code {result}");
+			_resetEvent.Dispose();
 			_disposed = true;
+			Console.WriteLine("Disposed");
 		}
 	}
 }

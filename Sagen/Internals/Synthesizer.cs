@@ -4,6 +4,8 @@ using System.Text;
 
 using Sagen.Extensibility;
 using Sagen.Internals.Layers;
+using Sagen.Internals.Playback;
+using System;
 
 namespace Sagen.Internals
 {
@@ -23,37 +25,37 @@ namespace Sagen.Internals
 		private AudioStream _audioStream;
 		private int _position = 0;
 
-        /// <summary>
-        /// Pitch, measured in relative octaves.
-        /// </summary>
-        public double Pitch { get; set; } = 0.0f;
+		/// <summary>
+		/// Pitch, measured in relative octaves.
+		/// </summary>
+		public double Pitch { get; set; } = 0.0f;
 
-        /// <summary>
-        /// Fundamental frequency calculated from gender, pitch, and intonation.
-        /// </summary>
+		/// <summary>
+		/// Fundamental frequency calculated from gender, pitch, and intonation.
+		/// </summary>
 		public double Fundamental { get; set; } = 100.0f;
 
-        /// <summary>
-        /// The time, in seconds, already elapsed before the current sample
-        /// </summary>
+		/// <summary>
+		/// The time, in seconds, already elapsed before the current sample
+		/// </summary>
 		public double TimePosition => (double)_position / _sampleRate;
 
-        /// <summary>
-        /// The amount of time, in seconds, elapsed per sample
-        /// </summary>
+		/// <summary>
+		/// The amount of time, in seconds, elapsed per sample
+		/// </summary>
 		public double TimeStep { get; }
 
 		public Voice Voice => _tts.Voice;
 
 		internal TTS TTS => _tts;
-		
+
 		public AudioStream AudioStream => _audioStream;
 
 		public Synthesizer(TTS engine)
 		{
 			TimeStep = 1.0f / _sampleRate;
 			_tts = engine;
-            _voice = engine.Voice;
+			_voice = engine.Voice;
 		}
 
 		/// <summary>
@@ -63,7 +65,7 @@ namespace Sagen.Internals
 		{
 			if (_audioStream == null)
 			{
-				_audioStream = new AudioStream(PlaybackFormat, this);
+				_audioStream = new AudioStreamAL(PlaybackFormat, this);
 			}
 		}
 
@@ -105,17 +107,17 @@ namespace Sagen.Internals
 					switch (format)
 					{
 						case SampleFormat.Float64:
-							writer.Write(currentSample);
-							break;
+						writer.Write(currentSample);
+						break;
 						case SampleFormat.Float32:
-							writer.Write((float)currentSample);
-							break;
+						writer.Write((float)currentSample);
+						break;
 						case SampleFormat.Signed16:
-							writer.Write((short)(currentSample * short.MaxValue));
-							break;
+						writer.Write((short)(currentSample * short.MaxValue));
+						break;
 						case SampleFormat.Unsigned8:
-							writer.Write((byte)((currentSample + 1.0f) / 2.0f * byte.MaxValue));
-							break;
+						writer.Write((byte)((currentSample + 1.0f) / 2.0f * byte.MaxValue));
+						break;
 					}
 				}
 				writer.Flush();
@@ -127,28 +129,29 @@ namespace Sagen.Internals
 			CreateAudioStream();
 			int blockSize = (int)(SampleRate * StreamChunkDurationSeconds) * PlaybackFormatBytes;
 			int sampleCount = (int)(SampleRate * lengthSeconds);
-			using (var stream = new MemoryStream(blockSize))
-			using (var writer = new BinaryWriter(stream))
-			{
-				for (_position = 0; _position < sampleCount; _position++)
-				{
-					double currentSample = 0f;
-					foreach (var sampler in samplerSequence)
-					{
-						if (!sampler.Enabled) continue;
-						sampler.Update(ref currentSample);
-					}
+			short[] data = new short[blockSize];
+			int len = 0;
 
-					writer.Write((short)(currentSample * short.MaxValue));
-					if (stream.Position >= blockSize)
-					{
-						_audioStream.QueueDataBlock(stream);
-					}
+			for (_position = 0; _position < sampleCount; _position++)
+			{
+				double currentSample = 0f;
+				foreach (var sampler in samplerSequence)
+				{
+					if (!sampler.Enabled) continue;
+					sampler.Update(ref currentSample);
 				}
-				if (stream.Position > 0)
-					_audioStream.QueueDataBlock(stream);
+
+				data[len++] = (short)(currentSample * short.MaxValue);
+
+				if (len >= blockSize)
+				{
+					_audioStream.QueueDataBlock(data, len);
+					len = 0;
+				}
 			}
-			_audioStream.MarkFullyQueued();
+			
+			if (len > 0) _audioStream.QueueDataBlock(data, len);
+			_audioStream.Cleanup();
 		}
 	}
 }
