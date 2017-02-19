@@ -14,6 +14,21 @@
 		};
 
 		/// <summary>
+		/// Greg is a hardened criminal serving time for multiple charges of breaking into houses and ravenously
+		/// eating the dust out of vacuum cleaners. Upon being caught, he raspily exclaimed: "Another one bites the dust!"
+		/// </summary>
+		public static readonly Voice Greg = new Voice
+		{
+			Gender = VoiceGender.Male,
+			HeadSize = 1.11,
+			VibratoAmount = 0.01,
+			Breathiness = 0.85,
+			VoiceShakeAmountHz = 2.0,
+			VoiceShakeAscendRate = 100.0,
+			VoiceShakeDescendRate = 100.0
+		};
+
+		/// <summary>
 		/// Susan is a world-renowned psychic whose sole ability is accurately detecting 
 		/// an individual's affinity to garlic bread from their brain waves alone.
 		/// </summary>
@@ -25,7 +40,7 @@
 		};
 
 		/// <summary>
-		/// Now happily retired, Rosa spends her time singing along to her personal orchestra of vacuum cleaners.
+		/// Now happily retired, Rosa spends her time humming along to the sweet tune of tornado sirens.
 		/// </summary>
 		public static readonly Voice Rosa = new Voice
 		{
@@ -36,7 +51,8 @@
 			VoiceShakeDescendRate = 10.0,
 			VibratoAmount = .03,
 			VibratoSpeed = 10,
-			FundamentalFrequencyMultiplier = 2.0
+			FundamentalFrequencyMultiplier = 2.0,
+			FormantGain = 0.5
 		};
 
 		/// <summary>
