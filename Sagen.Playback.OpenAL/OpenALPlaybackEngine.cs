@@ -8,19 +8,18 @@ using static Sagen.Playback.OpenAL.ALC10;
 
 namespace Sagen.Playback.OpenAL
 {
-	public sealed class ALPlaybackEngine : IPlaybackEngine
+	public sealed class OpenALPlaybackEngine : IPlaybackEngine
 	{
 		private static readonly IntPtr pDevice, pContext;
 
 		private const int BUFFER_COUNT = 64;
-		private readonly ManualResetEventSlim _resetEvent = new ManualResetEventSlim(false);
 
 		private readonly uint[] buffers = new uint[BUFFER_COUNT];
 		private readonly uint[] removedBuffers = new uint[BUFFER_COUNT];
 		private readonly Stack<uint> freeBuffers = new Stack<uint>();
 		private uint source;
 
-		static ALPlaybackEngine()
+		static OpenALPlaybackEngine()
 		{
 			pDevice = alcOpenDevice(null);
 			pContext = alcCreateContext(pDevice, null);
@@ -33,7 +32,7 @@ namespace Sagen.Playback.OpenAL
 			};
 		}
 
-		public ALPlaybackEngine()
+		public OpenALPlaybackEngine()
 		{
 			alGenBuffers(new IntPtr(BUFFER_COUNT), buffers);
 			alGenSources(new IntPtr(1), out source);

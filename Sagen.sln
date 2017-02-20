@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26206.0
+VisualStudioVersion = 15.0.26127.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sagen", "Sagen\Sagen.csproj", "{C3770497-DA08-4D9F-B6C0-5DBC0A0DA57C}"
 EndProject
@@ -17,6 +17,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Languages", "Languages", "{331C84AF-2691-4C65-BF77-BB4785430509}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sagen.Playback.OpenAL", "Sagen.Playback.OpenAL\Sagen.Playback.OpenAL.csproj", "{FE4853C0-4FB3-4001-8498-D0751E833481}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sagen.Playback.XAudio2", "Sagen.Playback.XAudio2\Sagen.Playback.XAudio2.csproj", "{1003BEC1-347C-49D0-B7C7-394BA7381587}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,6 +78,18 @@ Global
 		{FE4853C0-4FB3-4001-8498-D0751E833481}.Release|x64.Build.0 = Release|Any CPU
 		{FE4853C0-4FB3-4001-8498-D0751E833481}.Release|x86.ActiveCfg = Release|Any CPU
 		{FE4853C0-4FB3-4001-8498-D0751E833481}.Release|x86.Build.0 = Release|Any CPU
+		{1003BEC1-347C-49D0-B7C7-394BA7381587}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1003BEC1-347C-49D0-B7C7-394BA7381587}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1003BEC1-347C-49D0-B7C7-394BA7381587}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1003BEC1-347C-49D0-B7C7-394BA7381587}.Debug|x64.Build.0 = Debug|Any CPU
+		{1003BEC1-347C-49D0-B7C7-394BA7381587}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1003BEC1-347C-49D0-B7C7-394BA7381587}.Debug|x86.Build.0 = Debug|Any CPU
+		{1003BEC1-347C-49D0-B7C7-394BA7381587}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1003BEC1-347C-49D0-B7C7-394BA7381587}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1003BEC1-347C-49D0-B7C7-394BA7381587}.Release|x64.ActiveCfg = Release|Any CPU
+		{1003BEC1-347C-49D0-B7C7-394BA7381587}.Release|x64.Build.0 = Release|Any CPU
+		{1003BEC1-347C-49D0-B7C7-394BA7381587}.Release|x86.ActiveCfg = Release|Any CPU
+		{1003BEC1-347C-49D0-B7C7-394BA7381587}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

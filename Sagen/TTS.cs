@@ -8,23 +8,16 @@ using Sagen.Extensibility;
 using Sagen.Internals;
 using Sagen.Internals.Layers;
 
-
-
 namespace Sagen
 {
 	/// <summary>
 	/// Represents a single instance of the Sagen TTS Engine, exposing speech output functionality.
 	/// </summary>
-	public sealed class TTS
+	public class TTS
 	{
-		private bool _disposed;
-
 		public static VoiceQuality Quality = VoiceQuality.VeryHigh;
 
 		private static readonly Dictionary<string, SagenLanguage> _languages = new Dictionary<string, SagenLanguage>();
-
-		private readonly HashSet<IPlaybackEngine> _activeStreams = new HashSet<IPlaybackEngine>();
-		private readonly Dictionary<IPlaybackEngine, ManualResetEventSlim> _resetEvents = new Dictionary<IPlaybackEngine, ManualResetEventSlim>();
 
 		static TTS()
 		{
@@ -86,33 +79,6 @@ namespace Sagen
 			}
 		}
 
-		internal void AddActiveAudio(IPlaybackEngine audio)
-		{
-			lock (_activeStreams)
-			{
-				_activeStreams.Add(audio);
-				_resetEvents[audio] = new ManualResetEventSlim();
-			}
-		}
-
-		internal void RemoveActiveAudio(IPlaybackEngine audio)
-		{
-			var resetEvent = _resetEvents[audio];
-			resetEvent.Set();
-			lock (_activeStreams)
-			{
-				_activeStreams.Remove(audio);
-				_resetEvents.Remove(audio);
-				resetEvent.Dispose();
-			}
-		}
-
-		public void Speak<TPlaybackEngine>(string text) where TPlaybackEngine : IPlaybackEngine, new()
-		{
-			// Actual speaking isn't supported yet. This is debug code for testing vocal properties.			
-			CreateSynth().Play<TPlaybackEngine>(5.0);
-		}
-
 		public void SpeakToFile(string path, string text)
 		{
 			var synth = CreateSynth();
@@ -120,7 +86,7 @@ namespace Sagen
 			synth.Generate(5, File.Create(path), SampleFormat.Float32, true);
 		}
 
-		private Synthesizer CreateSynth()
+		internal Synthesizer CreateSynth()
 		{
 			var synth = new Synthesizer(this);
 
@@ -133,17 +99,6 @@ namespace Sagen
 			synth.AddSampler(new ArticulatorLayer(synth));
 
 			return synth;
-		}
-
-		public void Sync()
-		{
-			lock (_activeStreams)
-			{
-				foreach (var audio in _activeStreams)
-				{
-					_resetEvents[audio].Wait();
-				}
-			}
 		}
 	}
 }

@@ -11,14 +11,13 @@ namespace SagenConsole
 
 		static void Main(string[] args)
 		{
-			var tts = new TTS(Voice.Greg);
+			var tts = new TTS<OpenALPlaybackEngine>(Voice.Greg);
 
 			Console.WriteLine("Playing...");
 #if DEBUG
 			tts.SpeakToFile("speech.wav", TestString);
 #endif
-			tts.Speak<ALPlaybackEngine>(TestString);
-
+			tts.Speak(TestString);
 			tts.Sync();
 
 			Console.WriteLine("Done. Press any key to exit.");
