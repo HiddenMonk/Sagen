@@ -2,6 +2,7 @@
 
 using Sagen;
 using Sagen.Playback.OpenAL;
+using Sagen.Playback.XAudio2;
 
 namespace SagenConsole
 {
@@ -11,7 +12,7 @@ namespace SagenConsole
 
 		static void Main(string[] args)
 		{
-			var tts = new TTS<OpenALPlaybackEngine>(Voice.Greg);
+			var tts = new TTS<XAudio2PlaybackEngine>(Voice.Greg);
 
 			Console.WriteLine("Playing...");
 #if DEBUG

@@ -4,7 +4,7 @@ using System.Text;
 
 using Sagen.Extensibility;
 using Sagen.Internals.Layers;
-using System;
+
 using System.Threading;
 
 namespace Sagen.Internals
@@ -20,10 +20,8 @@ namespace Sagen.Internals
 		private readonly List<Layer> samplerSequence = new List<Layer>();
 		private readonly int _sampleRate = (int)TTS.Quality;
 		private readonly VoiceQuality _quality = TTS.Quality;
-		private readonly Voice _voice;
 		private readonly TTS _tts;
 		private int _position = 0;
-		private IPlaybackEngine playback;
 
 		/// <summary>
 		/// Pitch, measured in relative octaves.
@@ -53,7 +51,6 @@ namespace Sagen.Internals
 		{
 			TimeStep = 1.0f / _sampleRate;
 			_tts = engine;
-			_voice = engine.Voice;
 		}
 
 		public int SampleRate => _sampleRate;
@@ -111,10 +108,10 @@ namespace Sagen.Internals
 			}
 		}
 
-		public void Play<TPlaybackEngine>(double lengthSeconds) where TPlaybackEngine : IPlaybackEngine, new()
+		public void Play<TPlaybackEngine>(double lengthSeconds, TTS<TPlaybackEngine> ttsPlayback) where TPlaybackEngine : IPlaybackEngine, new()
 		{
 			var playback = new TPlaybackEngine();
-			_tts.AddActiveAudio(playback);
+			ttsPlayback.AddActiveAudio(playback);
 			ThreadPool.QueueUserWorkItem(o =>
 			{
 				int blockSize = (int)(SampleRate * StreamChunkDurationSeconds) * PlaybackFormatBytes;
@@ -141,7 +138,7 @@ namespace Sagen.Internals
 				}
 
 				if (len > 0) playback.QueueDataBlock(data, len, _sampleRate);
-				playback.MarkComplete(() => _tts.RemoveActiveAudio(playback));
+				playback.MarkComplete(() => ttsPlayback.RemoveActiveAudio(playback));
 			});
 		}
 	}

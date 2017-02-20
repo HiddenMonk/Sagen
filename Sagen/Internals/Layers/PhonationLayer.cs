@@ -1,9 +1,4 @@
-﻿using Sagen.Internals.Filters;
-using System;
-using System.IO;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+﻿using System;
 
 namespace Sagen.Internals.Layers
 {
@@ -14,21 +9,19 @@ namespace Sagen.Internals.Layers
 	{		
 		private const double AttenuationPerOctave = 0.251;
 		private const double SecondOctaveAttenuation = 0.35;
-        private const double MaxBreathinessVocalOpeningFactor = 0.5;
 
 		private const double OPEN_GLOTTIS_SUSTAIN = 0.1;
 
 		private const double CLEAR_GLOTTAL_DESCENT = 6;
 		private const double CLEAR_GLOTTAL_PEAK = 0.4;
 
-		private const double BREATHY_GLOTTAL_DESCENT = 1;
-		private const double BREATHY_GLOTTAL_PEAK = 0.5;
+		private const double WHISPER_GLOTTAL_DESCENT = 1;
+		private const double WHISPER_GLOTTAL_PEAK = 0.5;
 
 		private readonly double[] envelope;
 		private readonly int numHarmonics;
 		private double state, frequency;
 		private readonly GlottalPulse glottalPulse;
-        private double breathFactor;
 		
 		/// <summary>
 		/// The amplitude of the fundamental frequency.
@@ -56,12 +49,11 @@ namespace Sagen.Internals.Layers
 			numHarmonics = harmonics;
 			envelope = new double[harmonics];
 			envelope[0] = amplitude;
-            breathFactor = synth.Voice.Breathiness * MaxBreathinessVocalOpeningFactor;
 
 			glottalPulse = new GlottalPulse(
-				Util.Lerp(CLEAR_GLOTTAL_DESCENT, BREATHY_GLOTTAL_DESCENT, synth.Voice.Breathiness), 
+				Util.Lerp(CLEAR_GLOTTAL_DESCENT, WHISPER_GLOTTAL_DESCENT, synth.Voice.Breathiness), 
 				OPEN_GLOTTIS_SUSTAIN, 
-				Util.Lerp(CLEAR_GLOTTAL_PEAK, BREATHY_GLOTTAL_PEAK, synth.Voice.Breathiness)
+				Util.Lerp(CLEAR_GLOTTAL_PEAK, WHISPER_GLOTTAL_PEAK, synth.Voice.Breathiness)
 				);
 
 			for(int i = 1; i < harmonics; i++)
@@ -89,8 +81,8 @@ namespace Sagen.Internals.Layers
 
 				state = (state + synth.TimeStep * synth.Fundamental) % 1.0;
 
-                // As breathiness increases, flatten pulse towards y = 1. This allows more noise through while still allowing phonation.
-                sample += breathFactor - breathFactor * sample;
+                // As voicing decreases, flatten pulse towards y = 1. This allows more noise through while still allowing phonation.
+                sample += (1.0 - synth.Voice.VoicingGain) * (1.0 - sample);
             }
 		}
 	}

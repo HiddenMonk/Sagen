@@ -1,10 +1,7 @@
 ﻿using Sagen.Extensibility;
-using System;
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Sagen
 {
@@ -45,7 +42,7 @@ namespace Sagen
         public void Speak(string text)
         {
             // Actual speaking isn't supported yet. This is debug code for testing vocal properties.			
-            CreateSynth().Play<TPlaybackEngine>(5.0);
+            CreateSynth().Play(5.0, this);
         }
 
         public void Sync()

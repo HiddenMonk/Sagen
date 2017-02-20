@@ -15,7 +15,7 @@
 
 		/// <summary>
 		/// Greg is a hardened criminal serving time for multiple charges of breaking into houses and ravenously
-		/// eating the dust out of vacuum cleaners. Upon being caught, he raspily exclaimed: "Another one bites the dust!"
+		/// eating the dust out of vacuum cleaners. <para>Upon being caught, he raspily exclaimed: "Another one bites the dust!"</para>
 		/// </summary>
 		public static readonly Voice Greg = new Voice
 		{
@@ -23,6 +23,7 @@
 			HeadSize = 1.11,
 			VibratoAmount = 0.01,
 			Breathiness = 0.85,
+			VoicingGain = 0.75,
 			VoiceShakeAmountHz = 2.0,
 			VoiceShakeAscendRate = 100.0,
 			VoiceShakeDescendRate = 100.0
@@ -93,10 +94,10 @@
 		/// </summary>
 		public static readonly Voice Cade = new Voice
 		{
-			Gender = VoiceGender.Male,
-			FundamentalFrequencyMultiplier = 2.0,
-			HeadSize = 0.7,
-			Nasalization = 0.65
+			Gender = VoiceGender.Child,
+			HeadSize = 0.73,
+			Nasalization = 0.35,
+			Breathiness = 0.15
 		};
 	}
 }

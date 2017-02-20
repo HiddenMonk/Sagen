@@ -43,8 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="XAudio2Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XAudio2PlaybackEngine.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sagen\Sagen.csproj">

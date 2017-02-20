@@ -6,6 +6,7 @@ namespace Sagen.Internals.Layers
     {
         private const double F0Male = 120;
         private const double F0Female = 240;
+		private const double F0Child = 240;
 		
         private bool shakeAscend = false;
         private double shakeOffset = 0.0;
@@ -21,6 +22,7 @@ namespace Sagen.Internals.Layers
 
         public override void Update(ref double sample)
         {
+			// Update shake-related variables
             if ((shakeTimer -= synth.TimeStep) <= 0.0)
             {
                 shakeTimer = rng.NextDouble(0.01, 0.2);
@@ -48,7 +50,7 @@ namespace Sagen.Internals.Layers
                     synth.Fundamental = F0Female * synth.Voice.FundamentalFrequencyMultiplier;
                     break;
                 default:
-                    synth.Fundamental = 150.0 * synth.Voice.FundamentalFrequencyMultiplier;
+                    synth.Fundamental = F0Child * synth.Voice.FundamentalFrequencyMultiplier;
                     break;
             }
 
@@ -62,7 +64,7 @@ namespace Sagen.Internals.Layers
 				synth.Fundamental *= Math.Pow(2.0, synth.Voice.VibratoAmount * Math.Sin(vibTimer * Math.PI * 2.0 * synth.Voice.VibratoSpeed));
 			}
 
-            // Apply offset
+            // Apply shake offset
             synth.Fundamental += shakeOffset * synth.Voice.VoiceShakeAmountHz;
         }
     }

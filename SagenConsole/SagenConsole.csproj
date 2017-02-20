@@ -54,6 +54,10 @@
       <Project>{fe4853c0-4fb3-4001-8498-d0751e833481}</Project>
       <Name>Sagen.Playback.OpenAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Sagen.Playback.XAudio2\Sagen.Playback.XAudio2.csproj">
+      <Project>{1003bec1-347c-49d0-b7c7-394ba7381587}</Project>
+      <Name>Sagen.Playback.XAudio2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sagen\Sagen.csproj">
       <Project>{c3770497-da08-4d9f-b6c0-5dbc0a0da57c}</Project>
       <Name>Sagen</Name>

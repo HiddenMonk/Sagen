@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Sagen.Phonetics;
 using Sagen.Internals.Filters;
 
 namespace Sagen.Internals.Layers
@@ -8,51 +7,19 @@ namespace Sagen.Internals.Layers
 	/// <summary>
 	/// Handles filtering, voicing/noise synthesis, and articulation given a pre-generated timeline of phonation events.
 	/// </summary>
-	internal unsafe class ArticulatorLayer : Layer
+	internal class ArticulatorLayer : Layer
 	{
-		private double sampleIn, sampleOut, noiseIn;
+		private const double F4BaseMale = 3250.0;
+		private const double F4BaseFemale = 3700.0;
+		private const double F5MinDifference = 300.0;
 
-		private readonly BandPassFilter bpf1;
-		private readonly BandPassFilter bpf2;
-		private readonly BandPassFilter bpf3;
-		private readonly BandPassFilter bpf4;
-        private readonly BandPassFilter bpf5;
-		private readonly ButterworthFilter lpNoise, lpOverlay;
-
-		// Attenuation for filters
-		private double LEVEL_F1 = .10000;
-		private double LEVEL_F2 = .13000;
-		private double LEVEL_F3 = .10000;
-		private double LEVEL_F4 = .12000;
-        private double LEVEL_F5 = .10000;
-		
-		private double LEVEL_LPNOISE = 9;
-		private double LEVEL_LPO = 0.04;
-		private double LEVEL_NOISE = 0.075;
-
-		private double f1, f2, f3, f4, f5;
-
-		// Half-bandwidths for each formant
-		private double bwhF1, bwhF2, bwhF3;
-
-		// Temporary constants for controlling articulation parameters
-		private double Height = 0.0;
-		private double Backness = 0.0;
-		private double Roundedness = 0.0;
-		private double Rhotacization = 0.0;
-		private double Nasalization = 0.0;
-
-        private const double F4BaseMale = 3250.0;
-        private const double F4BaseFemale = 3700.0;
-        private const double F5MinDifference = 300.0;
-
-        // Resonance levels
-        private const double RES_F1 = .09;
-        private const double RES_F2 = .1;
-        private const double RES_F3 = .09;
-        private const double RES_F4 = .12;
-        private const double RES_F5 = .1;
-        private const double RES_LPO = .16;
+		// Resonance levels
+		private const double RES_F1 = .09;
+		private const double RES_F2 = .1;
+		private const double RES_F3 = .09;
+		private const double RES_F4 = .12;
+		private const double RES_F5 = .1;
+		private const double RES_LPO = .16;
 		private const double RES_LPNOISE = .35;
 
 		// Gender-specific bandwidths for formants
@@ -64,19 +31,51 @@ namespace Sagen.Internals.Layers
 		private const double BW_F2_FEMALE = 100.0;
 		private const double BW_F3_FEMALE = 150.0;
 
-        // Frequency constants
-        private const double FREQ_LPNOISE = 280;
+		// Frequency constants
+		private const double FREQ_LPNOISE = 280;
 		private const double FREQ_LPO = 180;
 
-        // Formants 3 and 4 are amplified by lerp(1.0, x, backness) where x is this constant, to simulate the "dark" quality of back vowels
-        private const double BacknessF34AttenuationFactor = 0.3;
+		// Formants 3 and 4 are amplified by lerp(1.0, x, backness) where x is this constant, to simulate the "dark" quality of back vowels
+		private const double BacknessF34AttenuationFactor = 0.3;
 
 		// F3 - F2 will be multiplied by lerp(1.0, x, rhotacization) where x is this constant
 		private const double RhotF3LowerFactor = 0.2;
 
 		private const double NasalF1DiminishFactor = 0.2;
 		private const double NasalF2LowerFactor = 0.3;
-		private const double NasalF3RaiseFactor = 0.1;
+
+		private readonly BandPassFilter bpf1;
+		private readonly BandPassFilter bpf2;
+		private readonly BandPassFilter bpf3;
+		private readonly BandPassFilter bpf4;
+		private readonly BandPassFilter bpf5;
+		private readonly ButterworthFilter lpNoise, lpOverlay;
+		private readonly double Backness = 0.0;
+
+		// Half-bandwidths for each formant
+		private double bwhF1, bwhF2, bwhF3;
+
+		private double f1, f2, f3, f4, f5;
+
+		// Temporary constants for controlling articulation parameters
+		private readonly double Height = 0.0;
+		private readonly double LEVEL_ASPIRATION = 0.075;
+		private readonly double LEVEL_ASPIRATION_LPO = 9;
+
+		// Attenuation for filters
+		private double LEVEL_F1 = .10000;
+		private readonly double LEVEL_F2 = .13000;
+		private readonly double LEVEL_F3 = .10000;
+		private readonly double LEVEL_F4 = .12000;
+		private readonly double LEVEL_F5 = .10000;
+
+		private readonly double LEVEL_LPO = 0.04;
+		private readonly double Nasalization = 0.0;
+
+		private double nasalMix;
+		private readonly double Rhotacization = 0.0;
+		private readonly double Roundedness = 0.0;
+		private double sampleIn, sampleOut, aspirationIn, fricationIn;
 
 		public ArticulatorLayer(Synthesizer synth) : base(synth)
 		{
@@ -84,14 +83,14 @@ namespace Sagen.Internals.Layers
 			bpf2 = new BandPassFilter(0, 0, synth.SampleRate, RES_F2, RES_F2);
 			bpf3 = new BandPassFilter(0, 0, synth.SampleRate, RES_F3, RES_F3);
 			bpf4 = new BandPassFilter(0, 0, synth.SampleRate, RES_F4, RES_F4);
-            bpf5 = new BandPassFilter(0, 0, synth.SampleRate, RES_F5, RES_F5);
+			bpf5 = new BandPassFilter(0, 0, synth.SampleRate, RES_F5, RES_F5);
 
 			lpNoise = new ButterworthFilter(FREQ_LPNOISE, synth.SampleRate, PassFilterType.LowPass, RES_LPNOISE);
 			lpOverlay = new ButterworthFilter(FREQ_LPO, synth.SampleRate, PassFilterType.LowPass, RES_LPO);
 
 			UpdateLowerBandwidths();
 			UpdateLowerFormants();
-            UpdateHigherFormants();
+			UpdateHigherFormants();
 			Console.WriteLine($"{f1:0.00}Hz, {f2:0.00}Hz, {f3:0.00}Hz, {f4:0.00}Hz, {f5:0.00}Hz");
 		}
 
@@ -107,18 +106,16 @@ namespace Sagen.Internals.Layers
 			f3 *= factor;
 
 			// Nasalize
-			if (Nasalization > 0)
+			if ((nasalMix = synth.Voice.Nasalization * (1.0 - Nasalization) + synth.Voice.Nasalization) > 0.0)
 			{
-				LEVEL_F1 *= Util.Lerp(1.0, NasalF1DiminishFactor, Nasalization);
+				LEVEL_F1 *= Util.Lerp(1.0, NasalF1DiminishFactor, nasalMix);
 
-				f2 = f1 + (f2 - f1) * Util.Lerp(1.0, NasalF2LowerFactor, Nasalization);
+				f2 = f1 + (f2 - f1) * Util.Lerp(1.0, NasalF2LowerFactor, nasalMix);
 			}
 
 			// Rhotacize
 			if (Rhotacization > 0)
-			{
 				f3 = f2 + (f3 - f2) * Util.Lerp(1.0, RhotF3LowerFactor, Rhotacization);
-			}
 
 			// Update filters with formant frequencies / amplitudes
 			bpf1.LowerBound = f1 - bwhF1;
@@ -134,38 +131,37 @@ namespace Sagen.Internals.Layers
 			bpf4.Volume = LEVEL_F4 * Util.Lerp(1.0, BacknessF34AttenuationFactor, Backness);
 		}
 
-        private void UpdateHigherFormants()
-        {
-            double bwh4, bwh5;
-            double scale = 1.0 / synth.Voice.HeadSize;
+		private void UpdateHigherFormants()
+		{
+			double scale = 1.0 / synth.Voice.HeadSize;
 
-            switch(synth.Voice.Gender)
-            {   
-                case VoiceGender.Male:
-                    f4 = (F4BaseMale + synth.Voice.FrequencyOffsetF4) * scale;
-                    f5 = (F4BaseMale + F5MinDifference + synth.Voice.FrequencyOffsetF5) * scale;
-                    break;
-                default:
-                    f4 = (F4BaseFemale + synth.Voice.FrequencyOffsetF4) * scale;
-                    f5 = (F4BaseFemale + F5MinDifference + synth.Voice.FrequencyOffsetF5) * scale;
-                    break;
-            }
+			switch (synth.Voice.Gender)
+			{
+				case VoiceGender.Male:
+					f4 = (F4BaseMale + synth.Voice.FrequencyOffsetF4) * scale;
+					f5 = (F4BaseMale + F5MinDifference + synth.Voice.FrequencyOffsetF5) * scale;
+					break;
+				case VoiceGender.Female:
+					f4 = (F4BaseFemale + synth.Voice.FrequencyOffsetF4) * scale;
+					//f5 = (F4BaseFemale + F5MinDifference + synth.Voice.FrequencyOffsetF5) * scale;
+					break;
+			}
 
-            bwh4 = synth.Voice.BandwidthF4 / 2.0;
-            bwh5 = synth.Voice.BandwidthF5 / 2.0;
+			double bwh4 = synth.Voice.BandwidthF4 / 2.0;
+			double bwh5 = synth.Voice.BandwidthF5 / 2.0;
 
-            bpf4.LowerBound = f4 - bwh4;
-            bpf4.UpperBound = f4 + bwh4;
-            bpf5.LowerBound = f5 - bwh5;
-            bpf5.UpperBound = f5 + bwh5;
+			bpf4.LowerBound = f4 - bwh4;
+			bpf4.UpperBound = f4 + bwh4;
+			bpf5.LowerBound = f5 - bwh5;
+			bpf5.UpperBound = f5 + bwh5;
 
-            bpf4.Volume = LEVEL_F4;
-            bpf5.Volume = LEVEL_F5;
-        }
+			bpf4.Volume = LEVEL_F4;
+			bpf5.Volume = LEVEL_F5;
+		}
 
 		private void UpdateLowerBandwidths()
 		{
-			switch(synth.Voice.Gender)
+			switch (synth.Voice.Gender)
 			{
 				case VoiceGender.Male:
 					bwhF1 = BW_F1_MALE * 0.5;
@@ -181,16 +177,16 @@ namespace Sagen.Internals.Layers
 		}
 
 		public override void Update(ref double sample)
-		{	
+		{
 			sampleOut = 0.0;
 			sampleIn = 0.0;
-			synth.Pitch += 0.10f * synth.TimeStep;
+			synth.Pitch -= 0.10f * synth.TimeStep;
 			UpdateLowerFormants();
 
 			// Combine noise with glottal sample
-			Noise.SampleProcedural(ref noiseIn);
-			lpNoise.Update(noiseIn);
-			sampleIn = sample + (noiseIn + lpNoise.Value * LEVEL_LPNOISE) * LEVEL_NOISE * sample;
+			Noise.SampleProcedural(ref aspirationIn);
+			lpNoise.Update(aspirationIn);
+			sampleIn = sample + (aspirationIn + lpNoise.Value * LEVEL_ASPIRATION_LPO) * LEVEL_ASPIRATION * sample * synth.Voice.Breathiness;
 
 			// Update filters
 			bpf1.Update(sampleIn);
@@ -202,22 +198,24 @@ namespace Sagen.Internals.Layers
 			bpf3.Update(sampleIn);
 			sampleOut += bpf3.Value * synth.Voice.FormantGain;
 
-			bpf4.Update(sampleIn);
-			sampleOut += bpf4.Value * synth.Voice.FormantGain;
-
-			if (synth.Voice.Gender != VoiceGender.Female)
+			// Young children do not have higher formants
+			switch (synth.Voice.Gender)
 			{
-				bpf5.Update(sampleIn);
-				sampleOut += bpf5.Value * synth.Voice.FormantGain;
+				case VoiceGender.Male:
+					bpf5.Update(sampleIn);
+					sampleOut += bpf5.Value * synth.Voice.FormantGain;
+					goto case VoiceGender.Female;
+				case VoiceGender.Female:
+					bpf4.Update(sampleIn);
+					sampleOut += bpf4.Value * synth.Voice.FormantGain;
+					break;
 			}
 
 			lpOverlay.Update(sample);
 			sampleOut += lpOverlay.Value * LEVEL_LPO;
 
 			if (synth.Voice.Quantization > 0)
-			{
 				sampleOut = Math.Round(synth.Voice.Quantization * sampleOut) / synth.Voice.Quantization;
-			}
 
 			sample = sampleOut;
 		}

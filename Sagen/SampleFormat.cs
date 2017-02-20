@@ -1,5 +1,8 @@
 ﻿namespace Sagen
 {
+	/// <summary>
+	/// Defines sample formats for streaming speech data.
+	/// </summary>
 	public enum SampleFormat : short
 	{
 		/// <summary>

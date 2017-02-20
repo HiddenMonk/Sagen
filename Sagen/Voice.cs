@@ -16,9 +16,11 @@
 		public VoiceGender Gender { get; set; } = VoiceGender.Male;
 
 		/// <summary>
-		/// Controls the voicing strength. Values below one create a whispering effect.
+		/// Controls the voicing gain. Values below one create a whispering effect.
+		/// <para>Range: [0, Infinity)</para>
+		/// <para>Default: 1.0</para>
 		/// </summary>
-		public double VoicingLevel { get; set; } = 1.0;
+		public double VoicingGain { get; set; } = 1.0;
 
 		/// <summary>
 		/// Controls the strength of glottal consonants.
@@ -55,13 +57,13 @@
 		public double HeadSize { get; set; } = 1.0;
 
 		/// <summary>
-		/// How fast F0 ascends when shaking
+		/// Controls how fast F0 ascends when shaking.
 		/// <para>Default: 12.0</para>
 		/// </summary>
 		public double VoiceShakeAscendRate { get; set; } = 12.0;
 
 		/// <summary>
-		/// How fast F0 descends when shaking
+		/// Controls how fast F0 descends when shaking.
 		/// <para>Default: 5.0</para>
 		/// </summary>
 		public double VoiceShakeDescendRate { get; set; } = 5.0;
@@ -112,30 +114,60 @@
 
 		/// <summary>
 		/// The frequency offset of F4 in Hertz. This value is inversely scaled by head size.
+		/// <para>Default: 0.0</para>
 		/// </summary>
 		public double FrequencyOffsetF4 { get; set; } = 0.0;
 
 		/// <summary>
 		/// The frequency offset of F5 in Hertz. This value is inversely scaled by head size.
+		/// <para>Default: 0.0</para>
 		/// </summary>
 		public double FrequencyOffsetF5 { get; set; } = 0.0;
 
 		/// <summary>
 		/// The bandwidth of the fourth formant in Hertz.
+		/// <para>Default: 280.0</para>
 		/// </summary>
 		public double BandwidthF4 { get; set; } = 280.0;
 
 		/// <summary>
 		/// The bandwidth of the fifth formant in Hertz.
+		/// <para>Default: 300.0</para>
 		/// </summary>
 		public double BandwidthF5 { get; set; } = 300.0;
 
+		/// <summary>
+		/// The relative gain of the formants.
+		/// <para>Default: 1.0</para>
+		/// </summary>
 		public double FormantGain { get; set; } = 1.0;
+
+		/// <summary>
+		/// Controls the amount of laryngealization (creakiness) in the voice.
+		/// <para>Range: [0, 1]</para>
+		/// <para>Default: 0.0</para>
+		/// </summary>
+		public double Creakiness { get; set; } = 0.0;
 	}
 
+	/// <summary>
+	/// Provides voice gender categories, which affect vocal characteristics such as pitch, vocal tract length, and presence of higher formants.
+	/// </summary>
 	public enum VoiceGender
 	{
+		/// <summary>
+		/// Indicates an adult male voice.
+		/// </summary>
 		Male,
-		Female
+
+		/// <summary>
+		/// Indicates an adult female voice.
+		/// </summary>
+		Female,
+
+		/// <summary>
+		/// Indicates a child under ten years old, for which gender is generally indistinguishable by voice.
+		/// </summary>
+		Child
 	}
 }

@@ -46,7 +46,7 @@
     <Compile Include="AL\ALC11.cs" />
     <Compile Include="AL\ALEXT.cs" />
     <Compile Include="AL\EFX.cs" />
-    <Compile Include="OpenALPlayer.cs" />
+    <Compile Include="OpenALPlaybackEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

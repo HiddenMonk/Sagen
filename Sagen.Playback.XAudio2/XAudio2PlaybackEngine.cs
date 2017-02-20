@@ -25,7 +25,6 @@ namespace Sagen.Playback.XAudio2
         {
             device = new AudioDevice();
             voice = new MasteringVoice(device);
-
             AppDomain.CurrentDomain.ProcessExit += (o, args) =>
             {
                 voice.Dispose();
@@ -44,6 +43,7 @@ namespace Sagen.Playback.XAudio2
                 Thread.Sleep(10);
             }
             source.Dispose();
+	        callback();
         }
 
         public void QueueDataBlock(short[] buffer, int length, int sampleRate)
@@ -51,18 +51,20 @@ namespace Sagen.Playback.XAudio2
             // Initialize source if it's null
             if (source == null)
             {
-                source = new SourceVoice(device, new WaveFormat
-                {
-                    SamplesPerSecond = sampleRate,
-                    BitsPerSample = BITS_PER_SAMPLE,
-                    AverageBytesPerSecond = sampleRate * BYTES_PER_SAMPLE,
-                    Channels = NUM_CHANNELS,
-                    BlockAlignment = BLOCK_ALIGN
-                });
+	            var fmt = new WaveFormat
+	            {
+		            SamplesPerSecond = sampleRate,
+		            BitsPerSample = BITS_PER_SAMPLE,
+		            AverageBytesPerSecond = sampleRate * BYTES_PER_SAMPLE,
+		            Channels = NUM_CHANNELS,
+		            BlockAlignment = BLOCK_ALIGN,
+					FormatTag = WaveFormatTag.Pcm
+	            };
+                source = new SourceVoice(device, fmt);
             }
 
             // Copy the samples to a stream
-            using (var ms = new MemoryStream())
+            using (var ms = new MemoryStream(length * 2))
             {
                 using (var writer = new BinaryWriter(ms, Encoding.Default, true))
                 {
@@ -73,9 +75,10 @@ namespace Sagen.Playback.XAudio2
                     writer.Flush();
                 }
                 ms.Position = 0;
-
+	            ms.Seek(0, SeekOrigin.Begin);
+	            
                 // Queue the buffer
-                source.SubmitSourceBuffer(new AudioBuffer() { AudioData = ms, AudioBytes = length * 2 });
+                source.SubmitSourceBuffer(new AudioBuffer { AudioData = ms, AudioBytes = length * 2});
             }
 
             // Make sure it's playing
