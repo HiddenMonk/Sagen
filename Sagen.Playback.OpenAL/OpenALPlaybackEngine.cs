@@ -8,6 +8,9 @@ using static Sagen.Playback.OpenAL.ALC10;
 
 namespace Sagen.Playback.OpenAL
 {
+	/// <summary>
+	/// Represents a speech playback engine that implements the OpenAL API.
+	/// </summary>
 	public sealed class OpenALPlaybackEngine : IPlaybackEngine
 	{
 		private static readonly IntPtr pDevice, pContext;

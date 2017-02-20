@@ -9,6 +9,9 @@ using System.Threading;
 
 namespace Sagen.Playback.XAudio2
 {
+	/// <summary>
+	/// Represents a speech playback engine that implements the XAudio2 API.
+	/// </summary>
 	public sealed class XAudio2PlaybackEngine : IPlaybackEngine
 	{
 		private const short BITS_PER_SAMPLE = 16;
@@ -42,8 +45,10 @@ namespace Sagen.Playback.XAudio2
 			{
 				Thread.Sleep(10);
 			}
+
 			source.Dispose();
 			callback();
+			GC.KeepAlive(this);
 		}
 
 		public void QueueDataBlock(short[] buffer, int length, int sampleRate)
@@ -64,21 +69,17 @@ namespace Sagen.Playback.XAudio2
 			}
 
 			// Copy the samples to a stream
-			using (var ms = new MemoryStream(length * 2))
+			using (var ms = new MemoryStream(length * BYTES_PER_SAMPLE))
 			{
 				using (var writer = new BinaryWriter(ms, Encoding.Default, true))
 				{
-					for (int i = 0; i < length; i++)
-					{
-						writer.Write(buffer[i]);
-					}
+					for (int i = 0; i < length; i++) writer.Write(buffer[i]);
 					writer.Flush();
 				}
 				ms.Position = 0;
-				ms.Seek(0, SeekOrigin.Begin);
 
 				// Queue the buffer
-				source.SubmitSourceBuffer(new AudioBuffer { AudioData = ms, AudioBytes = length * 2 });
+				source.SubmitSourceBuffer(new AudioBuffer { AudioData = ms, AudioBytes = length * BYTES_PER_SAMPLE });
 			}
 
 			// Make sure it's playing
