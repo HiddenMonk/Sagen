@@ -49,13 +49,15 @@
     <Compile Include="Extensibility\ISynthesizer.cs" />
     <Compile Include="Extensibility\PhonemeWriter.cs" />
     <Compile Include="Extensibility\SagenPluginClassAttribute.cs" />
+    <Compile Include="Internals\Nodes\SilenceNode.cs" />
+    <Compile Include="Internals\Nodes\SpeechNode.cs" />
     <Compile Include="Internals\Filters\BandPassFilter.cs" />
     <Compile Include="Internals\Filters\ButterworthFilter.cs" />
     <Compile Include="Internals\Filters\NotchFilter.cs" />
     <Compile Include="Internals\GlottalPulse.cs" />
     <Compile Include="Internals\Layers\PitchLayer.cs" />
-    <Compile Include="Internals\VowelConverter.cs" />
-    <Compile Include="Internals\VowelQuality.cs" />
+    <Compile Include="Phonetics\VowelConverter.cs" />
+    <Compile Include="Phonetics\VowelQuality.cs" />
     <Compile Include="Phonetics\ArticulationPlace.cs" />
     <Compile Include="Phonetics\ArticulationManner.cs" />
     <Compile Include="Phonetics\Phoneme.cs" />
@@ -69,7 +71,6 @@
     <Compile Include="Extensibility\LanguageCodeAttribute.cs" />
     <Compile Include="Extensibility\SagenLanguage.cs" />
     <Compile Include="Phonetics\PhoneticAlphabet.cs" />
-    <Compile Include="Phonetics\PhoneticEvent.cs" />
     <Compile Include="Phonetics\PhoneticFlags.cs" />
     <Compile Include="Phonetics\Stress.cs" />
     <Compile Include="Phonetics\Consonant.cs" />

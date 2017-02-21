@@ -5,7 +5,7 @@ namespace Sagen.Internals.Layers
 	/// <summary>
 	/// This layer handles the production of the raw vocal harmonics, which are generated in the larynx via vibration of the vocal folds.
 	/// </summary>
-	internal unsafe class PhonationLayer : Layer
+	internal class PhonationLayer : Layer
 	{		
 		private const double AttenuationPerOctave = 0.251;
 		private const double SecondOctaveAttenuation = 0.35;
@@ -20,7 +20,7 @@ namespace Sagen.Internals.Layers
 
 		private readonly double[] envelope;
 		private readonly int numHarmonics;
-		private double state, frequency;
+		private double state;
 		private readonly GlottalPulse glottalPulse;
 		
 		/// <summary>
@@ -75,7 +75,6 @@ namespace Sagen.Internals.Layers
 			{
 				for(int i = 0; i < numHarmonics; i++)
 				{
-					frequency = synth.Fundamental * (i + 1);
 					sample += glottalPulse.Sample((state + Phase * i) % 1.0) * envelope[i] + DCOffset;
 				}
 

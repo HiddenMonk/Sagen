@@ -116,7 +116,7 @@ namespace Sagen.Internals
 			{
 				int blockSize = (int)(SampleRate * StreamChunkDurationSeconds) * PlaybackFormatBytes;
 				int sampleCount = (int)(SampleRate * lengthSeconds);
-				short[] data = new short[blockSize];
+				var data = new short[blockSize];
 				int len = 0;
 
 				for (_position = 0; _position < sampleCount; _position++)
@@ -130,11 +130,9 @@ namespace Sagen.Internals
 
 					data[len++] = (short)(currentSample * short.MaxValue);
 
-					if (len >= blockSize)
-					{
-						playback.QueueDataBlock(data, len, _sampleRate);
-						len = 0;
-					}
+					if (len < blockSize) continue;
+					playback.QueueDataBlock(data, len, _sampleRate);
+					len = 0;
 				}
 
 				if (len > 0) playback.QueueDataBlock(data, len, _sampleRate);

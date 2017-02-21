@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Sagen.Internals.Filters;
+using Sagen.Phonetics;
 
 namespace Sagen.Internals.Layers
 {

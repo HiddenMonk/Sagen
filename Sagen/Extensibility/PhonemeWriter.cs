@@ -6,7 +6,6 @@ namespace Sagen.Extensibility
 {
 	public sealed class PhonemeWriter
 	{
-		private readonly List<PhoneticEvent> _events;
 		private readonly PhoneticAlphabet _alphabet;
 		private bool _queuedSyllableBreak = false;
 		private Stress _queuedStress = Stress.None;

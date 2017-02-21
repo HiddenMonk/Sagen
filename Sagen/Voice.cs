@@ -17,7 +17,7 @@
 
 		/// <summary>
 		/// Controls the voicing gain. Values below one create a whispering effect.
-		/// <para>Range: [0, Infinity)</para>
+		/// <para>Range: [0, &#8734;)</para>
 		/// <para>Default: 1.0</para>
 		/// </summary>
 		public double VoicingGain { get; set; } = 1.0;
@@ -52,102 +52,141 @@
 		/// Head size represents the vocal tract length of the speaker, which will shift the formants up or down.
 		/// Values greater than 1.0 cause the voice to sound more "throaty". Values less than 1.0 are ideal for more feminine/childlike voices.
 		/// <para>The recommended maximum value for this parameter is 2.0, as higher values may cause speech to become incomprehensible.</para>
-		/// <para>Range = (0, Infinity), Default = 1.0</para>
+		/// <para>Range = (0, &#8734;), Default = 1.0</para>
 		/// </summary>
 		public double HeadSize { get; set; } = 1.0;
 
 		/// <summary>
 		/// Controls how fast F0 ascends when shaking.
-		/// <para>Default: 12.0</para>
+		/// <para>Range: (0, &#8734;) - Default: 12.0</para>
 		/// </summary>
 		public double VoiceShakeAscendRate { get; set; } = 12.0;
 
 		/// <summary>
 		/// Controls how fast F0 descends when shaking.
-		/// <para>Default: 5.0</para>
+		/// <para>Range: (0, &#8734;) - Default: 5.0</para>
 		/// </summary>
 		public double VoiceShakeDescendRate { get; set; } = 5.0;
 
 		/// <summary>
 		/// The maximum offset, in hertz, that F0 can ascend or descend when shaking.
+		/// <para>Range: (0, &#8734;) - Default: 3.0</para>
 		/// </summary>
 		public double VoiceShakeAmountHz { get; set; } = 3.0;
 
 		/// <summary>
 		/// Master multiplier of fundamental frequency.
-		/// <para>Default: 1.0</para>
+		/// <para>Range: (0, &#8734;) - Default: 1.0</para>
 		/// </summary>
 		public double FundamentalFrequencyMultiplier { get; set; } = 1.0;
 
 		/// <summary>
 		/// Vibrato amount in octaves.
-		/// <para>Range: [0, Infinity)</para>
-		/// <para>Default: 0.0</para>
+		/// <para>Range: [0, &#8734;) - Default: 0.0</para>
 		/// </summary>
 		public double VibratoAmount { get; set; } = 0.0;
 
 		/// <summary>
 		/// Vibrato speed in hertz.
-		/// <para>Default: 8.0</para>
+		/// <para>Range: (0, &#8734;) - Default: 8.0</para>
 		/// </summary>
 		public double VibratoSpeed { get; set; } = 8.0;
 
 		/// <summary>
 		/// Master nasalization level.
-		/// <para>Range: [0, 1]</para>
-		/// <para>Default: 0.0</para>
+		/// <para>Range: [0, 1] - Default: 0.0</para>
 		/// </summary>
 		public double Nasalization { get; set; } = 0.0;
 
 		/// <summary>
 		/// Breathiness level.
-		/// <para>Range: [0, 1]</para>
-		/// <para>Default: 0.0</para>
+		/// <para>Range: [0, 1] - Default: 0.0</para>
 		/// </summary>
 		public double Breathiness { get; set; } = 0.0;
 
 		/// <summary>
 		/// Quantization quality. Set to 0 to disable.
-		/// <para>Range: [0, Infinity)</para>
+		/// <para>Range: [0, &#8734;) - Default: 0</para>
 		/// </summary>
 		public int Quantization { get; set; } = 0;
 
 		/// <summary>
 		/// The frequency offset of F4 in Hertz. This value is inversely scaled by head size.
-		/// <para>Default: 0.0</para>
+		/// <para>Range: (-&#8734;, &#8734;) - Default: 0.0</para>
 		/// </summary>
 		public double FrequencyOffsetF4 { get; set; } = 0.0;
 
 		/// <summary>
 		/// The frequency offset of F5 in Hertz. This value is inversely scaled by head size.
-		/// <para>Default: 0.0</para>
+		/// <para>Range: (-&#8734;, &#8734;) - Default: 0.0</para>
 		/// </summary>
 		public double FrequencyOffsetF5 { get; set; } = 0.0;
 
 		/// <summary>
 		/// The bandwidth of the fourth formant in Hertz.
-		/// <para>Default: 280.0</para>
+		/// <para>Range: (0, &#8734;) - Default: 280.0</para>
 		/// </summary>
 		public double BandwidthF4 { get; set; } = 280.0;
 
 		/// <summary>
 		/// The bandwidth of the fifth formant in Hertz.
-		/// <para>Default: 300.0</para>
+		/// <para>Range: (0, &#8734;) - Default: 300.0</para>
 		/// </summary>
 		public double BandwidthF5 { get; set; } = 300.0;
 
 		/// <summary>
 		/// The relative gain of the formants.
-		/// <para>Default: 1.0</para>
+		/// <para>Range: [0, &#8734;) - Default: 1.0</para>
 		/// </summary>
 		public double FormantGain { get; set; } = 1.0;
 
 		/// <summary>
 		/// Controls the amount of laryngealization (creakiness) in the voice.
-		/// <para>Range: [0, 1]</para>
-		/// <para>Default: 0.0</para>
+		/// <para>Range: [0, 1] - Default: 0.0</para>
 		/// </summary>
 		public double Creakiness { get; set; } = 0.0;
+
+		/// <summary>
+		/// Controls the factor by which the pitch is multiplied at the start of a sentence during the pickup period.
+		/// <para>Range: (0, &#8734;) - Default: 0.55</para>
+		/// </summary>
+		public double PickupSlope { get; set; } = 0.55;
+
+		/// <summary>
+		/// Controls the length of the pickup period in seconds.
+		/// <para>Range: (0, &#8734;) - Default: 0.125</para>
+		/// </summary>
+		public double PickupLength { get; set; } = 0.125;
+
+		/// <summary>
+		/// Controls the length of time in seconds it takes for pitch to rise on stressed syllables.
+		/// <para>Range: [0, &#8734;) - Default: 0.1</para>
+		/// </summary>
+		public double Quickness { get; set; } = 0.1;
+
+		/// <summary>
+		/// Controls the change in pitch, in Hertz, that occurs on stressed syllables.
+		/// <para>Range: (-&#8734;, &#8734;) - Default: 10.0</para>
+		/// </summary>
+		public double StressRise { get; set; } = 10.0;
+
+		/// <summary>
+		/// Controls the change in pitch, in Hertz, that occurs on the first stressed syllable in a sentence.
+		/// <para>Range: (-&#8734;, &#8734;) - Default: 16.0</para>
+		/// </summary>
+		public double HatRise { get; set; } = 16.0;
+
+		/// <summary>
+		/// Time in seconds it takes the glottis to close.
+		/// <para>Range: [0, &#8734;) - Default: 0.05</para>
+		/// </summary>
+		public double GlottisCloseTime { get; set; } = 0.05;
+
+		/// <summary>
+		/// Time in seconds it takes the glottis to open.
+		/// <para>Range: [0, &#8734;) - Default: 0.08</para>
+		/// </summary>
+		public double GlottisOpenTime { get; set; } = 0.08;
 	}
 
 	/// <summary>

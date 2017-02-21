@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sagen.Internals
+namespace Sagen.Phonetics
 {
     /// <summary>
     /// Represents a formant frequency gradient based on articulatory orientation parameters, which may be sampled from.
@@ -14,7 +14,7 @@ namespace Sagen.Internals
 
         static VowelConverter()
         {
-            _points = new VowelQuality[]
+            _points = new[]
             {
                 // Close front unrounded
                 new VowelQuality(1.0, 0.0, 0.0, 250, 2750, 3010),
