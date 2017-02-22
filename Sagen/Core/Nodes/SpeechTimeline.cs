@@ -45,6 +45,6 @@ namespace Sagen.Core.Nodes
 		}
 
 		public void AddSilence(double seconds) => Add(new SilenceNode(seconds));
-		public void AddPhonation(double seconds) => Add(new SyllableNode(seconds));
+		public void AddPhonation(double seconds, double h, double b, double r) => Add(new PhonemeNode(seconds, h, b, r));
 	}
 }

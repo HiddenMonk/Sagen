@@ -127,7 +127,7 @@ namespace Sagen
 			_lang.Parse(text, timeline);
 			var synth = new Synthesizer(this, timeline);
 
-			const float amp = .25f;
+			const float amp = .5f;
 
 			synth.AddSampler(new PitchLayer(synth));
 			synth.AddSampler(new PhonationLayer(synth, 20, amp, 0.003));

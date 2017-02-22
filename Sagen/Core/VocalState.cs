@@ -21,5 +21,9 @@
 		/// The glottis level on the previous node's exit.
 		/// </summary>
 		public double LastGlottisLevel { get; set; } = 0.0;
+
+		public double Height { get; set; } = 0.0;
+		public double Backness { get; set; } = 0.0;
+		public double Roundedness { get; set; } = 0.0;
 	}
 }

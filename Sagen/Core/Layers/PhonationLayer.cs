@@ -8,17 +8,20 @@ namespace Sagen.Core.Layers
 	/// This layer handles the production of the raw vocal harmonics, which are generated in the larynx via vibration of the vocal folds.
 	/// </summary>
 	internal class PhonationLayer : Layer
-	{		
-		private const double AttenuationPerOctave = 0.251;
-		private const double SecondOctaveAttenuation = 0.35;
+	{
+		private const double MALE_OCTAVE_ATTENUATION = 0.251;
+		private const double FEMALE_OCTAVE_ATTENUATION = 0.32;
+		private const double CHILD_OCTAVE_ATTENUATION = 0.75;
 
-		private const double OPEN_GLOTTIS_SUSTAIN = 0.1;
+		private const double SecondOctaveAttenuation = 0.45;
+
+		private const double OPEN_GLOTTIS_SUSTAIN = 0.05;
 
 		private const double CLEAR_GLOTTAL_DESCENT = 6;
 		private const double CLEAR_GLOTTAL_PEAK = 0.4;
 
-		private const double WHISPER_GLOTTAL_DESCENT = 1;
-		private const double WHISPER_GLOTTAL_PEAK = 0.5;
+		private const double WHISPER_GLOTTAL_DESCENT = 2;
+		private const double WHISPER_GLOTTAL_PEAK = 0.45;
 
 		private readonly double[] envelope;
 		private readonly int numHarmonics;
@@ -58,6 +61,23 @@ namespace Sagen.Core.Layers
 				Util.Lerp(CLEAR_GLOTTAL_PEAK, WHISPER_GLOTTAL_PEAK, synth.Voice.Breathiness)
 				);
 
+			double atten;
+			switch (synth.Voice.Gender)
+			{
+				case VoiceGender.Male:
+					atten = MALE_OCTAVE_ATTENUATION;
+					break;
+				case VoiceGender.Female:
+					atten = FEMALE_OCTAVE_ATTENUATION;
+					break;
+				case VoiceGender.Child:
+					atten = CHILD_OCTAVE_ATTENUATION;
+					break;
+				default:
+					atten = MALE_OCTAVE_ATTENUATION;
+					break;
+			}
+
 			for(int i = 1; i < harmonics; i++)
 			{
 				if (i == 1)
@@ -66,7 +86,7 @@ namespace Sagen.Core.Layers
 				}
 				else
 				{
-					envelope[i] = envelope[1] * Math.Pow(AttenuationPerOctave, Math.Log(i - 1, 2));
+					envelope[i] = envelope[1] * Math.Pow(atten, Math.Log(i - 1, 2));
 				}
 			}
 		}
@@ -83,7 +103,7 @@ namespace Sagen.Core.Layers
 				state = (state + synth.TimeStep * synth.Fundamental) % 1.0;
 
                 // As voicing decreases, flatten pulse towards y = 1. This allows more noise through while still allowing phonation.
-                sample += (1.0 - synth.Voice.VoicingGain) * (1.0 - sample);
+                sample += (1.0 - synth.Voice.VoicingGain * 0.9) * (1.0 - sample);
             }
 		}
 	}

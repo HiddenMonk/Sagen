@@ -119,6 +119,9 @@ namespace Sagen.Core
 							sampler.Update(ref currentSample);
 						}
 
+						// Limit signal
+						Util.Sigmoid(ref currentSample);
+
 						// Convert sample to desired format and write to stream
 						switch (format)
 						{
@@ -137,7 +140,7 @@ namespace Sagen.Core
 						}
 					}
 
-					done:
+				done:
 
 					writer.Flush();
 					nodeEnumerator.Dispose();
@@ -168,7 +171,7 @@ namespace Sagen.Core
 						if (!nodeEnumerator.MoveNext()) goto done;
 						nodeEnumerator.Current.OnEnter(this);
 					}
-					
+
 					nodeEnumerator.Current.OnUpdate(this);
 
 					// Run synthesizer on current sample
@@ -178,6 +181,9 @@ namespace Sagen.Core
 						if (!sampler.Enabled) continue;
 						sampler.Update(ref currentSample);
 					}
+
+					// Limit signal
+					Util.Sigmoid(ref currentSample);
 
 					data[len++] = unchecked((short)(currentSample * short.MaxValue));
 
@@ -190,7 +196,7 @@ namespace Sagen.Core
 
 					_position++;
 				}
-				done:
+			done:
 				// Push out any remaining chunk, even if it's not full
 				if (len > 0) playback.QueueDataBlock(data, len, _sampleRate);
 

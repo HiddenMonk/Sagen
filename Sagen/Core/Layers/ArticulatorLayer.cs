@@ -16,29 +16,34 @@ namespace Sagen.Core.Layers
 		private const double F5MinDifference = 300.0;
 
 		// Resonance levels
-		private const double RES_F1 = .09;
+		private const double RES_F1 = .1;
 		private const double RES_F2 = .1;
-		private const double RES_F3 = .09;
+		private const double RES_F3 = .1;
 		private const double RES_F4 = .12;
 		private const double RES_F5 = .1;
-		private const double RES_LPO = .16;
+		private const double RES_LPO = .2;
+		private const double RES_HPO = .15;
 		private const double RES_LPNOISE = .35;
 
 		// Gender-specific bandwidths for formants
 		private const double BW_F1_MALE = 20.0;
-		private const double BW_F2_MALE = 20.0;
-		private const double BW_F3_MALE = 100.0;
+		private const double BW_F2_MALE = 30.0;
+		private const double BW_F3_MALE = 40.0;
 
 		private const double BW_F1_FEMALE = 100.0;
 		private const double BW_F2_FEMALE = 100.0;
-		private const double BW_F3_FEMALE = 150.0;
+		private const double BW_F3_FEMALE = 80.0;
+
+		private const double BW_F1_CHILD = 40.0;
+		private const double BW_F2_CHILD = 60.0;
+		private const double BW_F3_CHILD = 70.0;
 
 		// Frequency constants
 		private const double FREQ_LPNOISE = 280;
-		private const double FREQ_LPO = 180;
+		private const double FREQ_HPO = 5500;
 
 		// Formants 3 and 4 are amplified by lerp(1.0, x, backness) where x is this constant, to simulate the "dark" quality of back vowels
-		private const double BacknessF34AttenuationFactor = 0.3;
+		private const double BacknessF34AttenuationFactor = 0.5;
 
 		// F3 - F2 will be multiplied by lerp(1.0, x, rhotacization) where x is this constant
 		private const double RhotF3LowerFactor = 0.2;
@@ -47,7 +52,7 @@ namespace Sagen.Core.Layers
 		private const double NasalF2LowerFactor = 0.3;
 
 		private readonly BandPassFilter bpf1, bpf2, bpf3, bpf4, bpf5;
-		private readonly ButterworthFilter lpNoise, lpOverlay;
+		private readonly ButterworthFilter lpNoise, lpOverlay, hpOverlay;
 
 		// Half-bandwidths for each formant
 		private double bwhF1, bwhF2, bwhF3;
@@ -61,16 +66,14 @@ namespace Sagen.Core.Layers
 
 		// Attenuation for filters
 		private double LEVEL_F1 = .10000;
-		private readonly double LEVEL_F2 = .13000;
-		private readonly double LEVEL_F3 = .10000;
+		private readonly double LEVEL_F2 = .25000;
+		private readonly double LEVEL_F3 = .12000;
 		private readonly double LEVEL_F4 = .12000;
 		private readonly double LEVEL_F5 = .10000;
-		private readonly double LEVEL_LPO = 0.04;
-
-		private readonly double Height = 0.0;
-		private readonly double Backness = 0.0;
+		private readonly double LEVEL_LPO = 0.08;
+		private readonly double LEVEL_HPO = 0.15;
+		
 		private readonly double Rhotacization = 0.0;
-		private readonly double Roundedness = 0.0;
 		private readonly double Nasalization = 0.0;
 
 		private double nasalMix;
@@ -86,7 +89,8 @@ namespace Sagen.Core.Layers
 			bpf5 = new BandPassFilter(0, 0, synth.SampleRate, RES_F5, RES_F5);
 
 			lpNoise = new ButterworthFilter(FREQ_LPNOISE, synth.SampleRate, PassFilterType.LowPass, RES_LPNOISE);
-			lpOverlay = new ButterworthFilter(FREQ_LPO, synth.SampleRate, PassFilterType.LowPass, RES_LPO);
+			hpOverlay = new ButterworthFilter(FREQ_HPO, synth.SampleRate, PassFilterType.HighPass, RES_HPO);
+			lpOverlay = new ButterworthFilter(1, synth.SampleRate, PassFilterType.LowPass, RES_LPO);
 
 			UpdateLowerBandwidths();
 			UpdateLowerFormants();
@@ -97,7 +101,7 @@ namespace Sagen.Core.Layers
 		private void UpdateLowerFormants()
 		{
 			// Calculate initial formant frequencies
-			VowelConverter.GetFormants(Height, Backness, Roundedness, ref f1, ref f2, ref f3);
+			VowelConverter.GetFormants(synth.Voice.Gender, synth.State.Height, synth.State.Backness, synth.State.Roundedness, ref f1, ref f2, ref f3);
 
 			// Apply head size
 			double factor = 1.0 / synth.Voice.HeadSize;
@@ -125,10 +129,10 @@ namespace Sagen.Core.Layers
 			bpf3.LowerBound = f3 - bwhF3;
 			bpf3.UpperBound = f3 + bwhF3;
 
-			bpf1.Volume = LEVEL_F1;
+			bpf1.Volume = LEVEL_F1 * Util.Lerp(1.0, 0.75, synth.State.Height);
 			bpf2.Volume = LEVEL_F2;
-			bpf3.Volume = LEVEL_F3 * Util.Lerp(1.0, BacknessF34AttenuationFactor, Backness);
-			bpf4.Volume = LEVEL_F4 * Util.Lerp(1.0, BacknessF34AttenuationFactor, Backness);
+			bpf3.Volume = LEVEL_F3 * Util.Lerp(1.0, BacknessF34AttenuationFactor, synth.State.Backness);
+			bpf4.Volume = LEVEL_F4 * Util.Lerp(1.0, BacknessF34AttenuationFactor, synth.State.Backness);
 		}
 
 		private void UpdateHigherFormants()
@@ -168,10 +172,15 @@ namespace Sagen.Core.Layers
 					bwhF2 = BW_F2_MALE * 0.5;
 					bwhF3 = BW_F3_MALE * 0.5;
 					break;
-				default:
+				case VoiceGender.Female:
 					bwhF1 = BW_F1_FEMALE * 0.5;
 					bwhF2 = BW_F2_FEMALE * 0.5;
 					bwhF3 = BW_F3_FEMALE * 0.5;
+					break;
+				case VoiceGender.Child:
+					bwhF1 = BW_F1_CHILD * 0.5;
+					bwhF2 = BW_F2_CHILD * 0.5;
+					bwhF3 = BW_F3_CHILD * 0.5;
 					break;
 			}
 		}
@@ -180,7 +189,6 @@ namespace Sagen.Core.Layers
 		{
 			sampleOut = 0.0;
 			sampleIn = 0.0;
-			synth.Pitch -= 1 * synth.TimeStep;
 			UpdateLowerFormants();
 
 			// Combine aspiration with glottal pulse
@@ -212,8 +220,12 @@ namespace Sagen.Core.Layers
 					break;
 			}
 
+			lpOverlay.Frequency = f1 * 0.5;
 			lpOverlay.Update(sample);
 			sampleOut += lpOverlay.Value * LEVEL_LPO;
+			
+			hpOverlay.Update(sampleIn);
+			sampleOut += hpOverlay.Value * LEVEL_HPO;
 
 			if (synth.Voice.Quantization > 0)
 				sampleOut = Math.Round(synth.Voice.Quantization * sampleOut) / synth.Voice.Quantization;

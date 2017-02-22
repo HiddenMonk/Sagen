@@ -36,7 +36,7 @@
 		public static readonly Voice Susan = new Voice
 		{
 			Gender = VoiceGender.Female,
-			HeadSize = 0.96,
+			HeadSize = 0.83,
 			Breathiness = 0.65
 		};
 
@@ -62,7 +62,7 @@
 		public static readonly Voice Jane = new Voice
 		{
 			Gender = VoiceGender.Female,
-			HeadSize = 0.90
+			HeadSize = 0.85
 		};
 
 		/// <summary>
@@ -95,9 +95,9 @@
 		public static readonly Voice Cade = new Voice
 		{
 			Gender = VoiceGender.Child,
-			HeadSize = 0.73,
-			Nasalization = 0.35,
-			Breathiness = 0.15
+			HeadSize = 0.67,
+			//Nasalization = 0.75,
+			Breathiness = 0.14
 		};
 	}
 }

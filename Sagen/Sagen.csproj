@@ -57,7 +57,7 @@
     <Compile Include="Core\Audio\GlottalPulse.cs" />
     <Compile Include="Core\Layers\PitchLayer.cs" />
     <Compile Include="Core\Nodes\SpeechTimeline.cs" />
-    <Compile Include="Core\Nodes\SyllableNode.cs" />
+    <Compile Include="Core\Nodes\PhonemeNode.cs" />
     <Compile Include="Phonetics\VowelConverter.cs" />
     <Compile Include="Phonetics\VowelQuality.cs" />
     <Compile Include="Phonetics\ArticulationPlace.cs" />

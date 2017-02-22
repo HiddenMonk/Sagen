@@ -1,9 +1,16 @@
 ﻿namespace Sagen.Core.Nodes
 {
-	internal class SyllableNode : SpeechNode
+	internal class PhonemeNode : SpeechNode
 	{
-		public SyllableNode(double duration) : base(duration)
+		private readonly double _h;
+		private readonly double _b;
+		private readonly double _r;
+
+		public PhonemeNode(double duration, double h, double b, double r) : base(duration)
 		{
+			_h = h;
+			_b = b;
+			_r = r;
 		}
 
 		public override void OnEnter(Synthesizer synth)
@@ -27,6 +34,10 @@
 					? 1.0 
 					: Util.CosineInterpolate(synth.State.LastGlottisLevel, 1.0, localTime / synth.Voice.GlottisOpenTime);
 			}
+			synth.State.Height = _h;
+			synth.State.Backness = _b;
+			synth.State.Roundedness = _r;
+			synth.Pitch = Util.Lerp(0, -0.1, GetNormalizedRelativePos(synth));
 		}
 	}
 }

@@ -126,13 +126,13 @@
 		/// The bandwidth of the fourth formant in Hertz.
 		/// <para>Range: (0, &#8734;) - Default: 280.0</para>
 		/// </summary>
-		public double BandwidthF4 { get; set; } = 280.0;
+		public double BandwidthF4 { get; set; } = 180.0;
 
 		/// <summary>
 		/// The bandwidth of the fifth formant in Hertz.
 		/// <para>Range: (0, &#8734;) - Default: 300.0</para>
 		/// </summary>
-		public double BandwidthF5 { get; set; } = 300.0;
+		public double BandwidthF5 { get; set; } = 250.0;
 
 		/// <summary>
 		/// The relative gain of the formants.

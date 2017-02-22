@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace Sagen.Core
 {
@@ -24,5 +25,8 @@ namespace Sagen.Core
         public static double FactorToDecibels(double factor) => Math.Log10(factor) * 10.0;
 
         public static double DecibelsToFactor(double dB) => Math.Pow(10.0, dB / 10.0);
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	    public static void Sigmoid(ref double x) => x = 2.0 / (1.0 + Math.Pow(1.5, -x)) - 1.0;
     }
 }
