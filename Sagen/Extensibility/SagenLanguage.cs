@@ -2,9 +2,11 @@
 using System.IO;
 using System.Reflection;
 
+using Sagen.Phonetics;
+
 namespace Sagen.Extensibility
 {
-    public abstract class SagenLanguage
+	public abstract class SagenLanguage
 	{
 		protected readonly string _languageCode;
 		private readonly SagenLexicon _lexicon;
@@ -31,20 +33,31 @@ namespace Sagen.Extensibility
 
 		public void Parse(string phrase, ISpeechTimeline timeline)
 		{
-			timeline.AddPhonation(0.4, 0, 0, 0);
+			Phoneme p;
+			for (int i = 0; i < phrase.Length; i++)
+			{
+				switch (phrase[i])
+				{
+					case ' ':
+						timeline.AddSilence(0.2);
+					break;
+					default:
+						if (i < phrase.Length - 1 && phrase[i + 1] == '\\')
+						{
+							if ((p = Phoneme.GetPreset($"{phrase[i]}\\")) != null)
+								timeline.AddPhonation(0.4, p.Height, p.Backness, p.Roundedness);
+							i++;
+						}
+						else
+						{
+							if ((p = Phoneme.GetPreset(phrase[i].ToString())) != null)
+								timeline.AddPhonation(0.4, p.Height, p.Backness, p.Roundedness);
+						}
+
+					break;
+				}
+			}
 			timeline.AddSilence(0.2);
-			timeline.AddPhonation(0.4, 1, 0, 0);
-			timeline.AddSilence(0.2);
-			timeline.AddPhonation(0.4, 1, 1, 1);
-			timeline.AddSilence(0.2);
-			timeline.AddPhonation(0.4, .25, 0, 0);
-			timeline.AddSilence(0.2);
-			timeline.AddPhonation(0.4, .75, 0, 0);
-			timeline.AddSilence(0.2);
-			timeline.AddPhonation(0.4, .25, 1, 0);
-			timeline.AddSilence(0.2);
-			timeline.AddPhonation(0.4, .75, 1, 1);
-			timeline.AddSilence(0.2);
-		}  
+		}
 	}
 }

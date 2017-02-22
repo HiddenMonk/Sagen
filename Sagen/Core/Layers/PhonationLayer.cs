@@ -11,9 +11,9 @@ namespace Sagen.Core.Layers
 	{
 		private const double MALE_OCTAVE_ATTENUATION = 0.251;
 		private const double FEMALE_OCTAVE_ATTENUATION = 0.32;
-		private const double CHILD_OCTAVE_ATTENUATION = 0.75;
+		private const double CHILD_OCTAVE_ATTENUATION = 0.85;
 
-		private const double SecondOctaveAttenuation = 0.45;
+		private const double SecondOctaveAttenuation = 0.4;
 
 		private const double OPEN_GLOTTIS_SUSTAIN = 0.05;
 

@@ -118,7 +118,10 @@ namespace Sagen
 		public void SpeakToFile(string path, string text)
 		{
 			var synth = CreateSynth(text);
-			synth.Generate(File.Create(path), SampleFormat.Float32);
+			using (var stream = File.Create(path))
+			{
+				synth.Generate(stream, SampleFormat.Float32);
+			}	
 		}
 
 		internal Synthesizer CreateSynth(string text)
@@ -127,10 +130,10 @@ namespace Sagen
 			_lang.Parse(text, timeline);
 			var synth = new Synthesizer(this, timeline);
 
-			const float amp = .5f;
+			const float amp = .4f;
 
 			synth.AddSampler(new PitchLayer(synth));
-			synth.AddSampler(new PhonationLayer(synth, 20, amp, 0.003));
+			synth.AddSampler(new PhonationLayer(synth, 30, amp, 0.003));
 			synth.AddSampler(new ArticulatorLayer(synth));
 
 			return synth;

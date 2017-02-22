@@ -83,9 +83,10 @@
 		public static readonly Voice Bob = new Voice
 		{
 			Gender = VoiceGender.Male,
-			FundamentalFrequencyMultiplier = 1.2,
-			HeadSize = 1.35,
-			Breathiness = 0.25
+			FundamentalFrequencyMultiplier = 2.0,
+			HeadSize = 1.3,
+			Breathiness = 0.75,
+			FormantGain = 0.75
 		};
 
 		/// <summary>

@@ -34,9 +34,9 @@ namespace Sagen.Core.Layers
 		private const double BW_F2_FEMALE = 100.0;
 		private const double BW_F3_FEMALE = 80.0;
 
-		private const double BW_F1_CHILD = 40.0;
-		private const double BW_F2_CHILD = 60.0;
-		private const double BW_F3_CHILD = 70.0;
+		private const double BW_F1_CHILD = 100.0;
+		private const double BW_F2_CHILD = 100.0;
+		private const double BW_F3_CHILD = 120.0;
 
 		// Frequency constants
 		private const double FREQ_LPNOISE = 280;
@@ -67,11 +67,11 @@ namespace Sagen.Core.Layers
 		// Attenuation for filters
 		private double LEVEL_F1 = .10000;
 		private readonly double LEVEL_F2 = .25000;
-		private readonly double LEVEL_F3 = .12000;
+		private readonly double LEVEL_F3 = .14000;
 		private readonly double LEVEL_F4 = .12000;
 		private readonly double LEVEL_F5 = .10000;
-		private readonly double LEVEL_LPO = 0.08;
-		private readonly double LEVEL_HPO = 0.15;
+		private readonly double LEVEL_LPO = 0.06;
+		private readonly double LEVEL_HPO = 0.275;
 		
 		private readonly double Rhotacization = 0.0;
 		private readonly double Nasalization = 0.0;
@@ -95,7 +95,6 @@ namespace Sagen.Core.Layers
 			UpdateLowerBandwidths();
 			UpdateLowerFormants();
 			UpdateHigherFormants();
-			//Console.WriteLine($"{f1:0.00}Hz, {f2:0.00}Hz, {f3:0.00}Hz, {f4:0.00}Hz, {f5:0.00}Hz");
 		}
 
 		private void UpdateLowerFormants()
@@ -104,10 +103,9 @@ namespace Sagen.Core.Layers
 			VowelConverter.GetFormants(synth.Voice.Gender, synth.State.Height, synth.State.Backness, synth.State.Roundedness, ref f1, ref f2, ref f3);
 
 			// Apply head size
-			double factor = 1.0 / synth.Voice.HeadSize;
-			f1 *= factor;
-			f2 *= factor;
-			f3 *= factor;
+			f1 /= synth.Voice.HeadSize;
+			f2 /= synth.Voice.HeadSize;
+			f3 /= synth.Voice.HeadSize;
 
 			// Nasalize
 			if ((nasalMix = synth.Voice.Nasalization * (1.0 - Nasalization) + synth.Voice.Nasalization) > 0.0)
@@ -137,22 +135,19 @@ namespace Sagen.Core.Layers
 
 		private void UpdateHigherFormants()
 		{
-			double scale = 1.0 / synth.Voice.HeadSize;
-
+			double bwh4 = synth.Voice.BandwidthF4 / 2.0;
+			double bwh5 = synth.Voice.BandwidthF5 / 2.0;
+			
 			switch (synth.Voice.Gender)
 			{
 				case VoiceGender.Male:
-					f4 = (F4BaseMale + synth.Voice.FrequencyOffsetF4) * scale;
-					f5 = (F4BaseMale + F5MinDifference + synth.Voice.FrequencyOffsetF5) * scale;
+					f4 = (F4BaseMale + synth.Voice.FrequencyOffsetF4) / synth.Voice.HeadSize;
+					f5 = (F4BaseMale + F5MinDifference + synth.Voice.FrequencyOffsetF5) / synth.Voice.HeadSize;
 					break;
 				case VoiceGender.Female:
-					f4 = (F4BaseFemale + synth.Voice.FrequencyOffsetF4) * scale;
-					//f5 = (F4BaseFemale + F5MinDifference + synth.Voice.FrequencyOffsetF5) * scale;
+					f4 = (F4BaseFemale + synth.Voice.FrequencyOffsetF4) / synth.Voice.HeadSize;
 					break;
 			}
-
-			double bwh4 = synth.Voice.BandwidthF4 / 2.0;
-			double bwh5 = synth.Voice.BandwidthF5 / 2.0;
 
 			bpf4.LowerBound = f4 - bwh4;
 			bpf4.UpperBound = f4 + bwh4;
@@ -222,7 +217,7 @@ namespace Sagen.Core.Layers
 
 			lpOverlay.Frequency = f1 * 0.5;
 			lpOverlay.Update(sample);
-			sampleOut += lpOverlay.Value * LEVEL_LPO;
+			sampleOut += lpOverlay.Value * LEVEL_LPO / synth.Voice.HeadSize;
 			
 			hpOverlay.Update(sampleIn);
 			sampleOut += hpOverlay.Value * LEVEL_HPO;
