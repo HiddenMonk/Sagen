@@ -56,12 +56,12 @@
     <Compile Include="Core\Filters\NotchFilter.cs" />
     <Compile Include="Core\Audio\GlottalPulse.cs" />
     <Compile Include="Core\Layers\PitchLayer.cs" />
-    <Compile Include="Core\Nodes\SpeechTimeline.cs" />
+    <Compile Include="Core\SpeechTimeline.cs" />
     <Compile Include="Core\Nodes\PhonemeNode.cs" />
     <Compile Include="Phonetics\VowelConverter.cs" />
     <Compile Include="Phonetics\VowelQuality.cs" />
-    <Compile Include="Phonetics\ArticulationPlace.cs" />
-    <Compile Include="Phonetics\ArticulationManner.cs" />
+    <Compile Include="Phonetics\ConsonantPlace.cs" />
+    <Compile Include="Phonetics\ConsonantManner.cs" />
     <Compile Include="Phonetics\Phoneme.cs" />
     <Compile Include="Core\Extensions.cs" />
     <Compile Include="Core\FunctionCurves\CosineCurve.cs" />
@@ -72,11 +72,8 @@
     <Compile Include="Extensibility\SagenLexicon.cs" />
     <Compile Include="Extensibility\LanguageCodeAttribute.cs" />
     <Compile Include="Extensibility\SagenLanguage.cs" />
-    <Compile Include="Phonetics\PhoneticAlphabet.cs" />
     <Compile Include="Phonetics\PhoneticFlags.cs" />
     <Compile Include="Phonetics\Stress.cs" />
-    <Compile Include="Phonetics\Consonant.cs" />
-    <Compile Include="Phonetics\Syllable.cs" />
     <Compile Include="Phonetics\Vowel.cs" />
     <Compile Include="SampleFormat.cs" />
     <Compile Include="Core\Layers\PhonationLayer.cs" />

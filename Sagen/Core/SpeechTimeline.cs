@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
+using Sagen.Core.Nodes;
 using Sagen.Extensibility;
 
-namespace Sagen.Core.Nodes
+namespace Sagen.Core
 {
+    /// <summary>
+    /// Implements a speech timeline, which uses a chain of event nodes to instruct the synthesizer how to generate audio over time.
+    /// </summary>
 	internal sealed class SpeechTimeline : IEnumerable<SpeechNode>, ISpeechTimeline
 	{
 		private SpeechNode _first, _last;
@@ -45,6 +49,6 @@ namespace Sagen.Core.Nodes
 		}
 
 		public void AddSilence(double seconds) => Add(new SilenceNode(seconds));
-		public void AddPhonation(double seconds, double h, double b, double r) => Add(new PhonemeNode(seconds, h, b, r));
+		public void AddPhoneme(double seconds, double h, double b, double r) => Add(new PhonemeNode(seconds, h, b, r));
 	}
 }

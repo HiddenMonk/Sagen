@@ -73,45 +73,45 @@ namespace Sagen.Phonetics
 			Vowel("Q", OPEN, BACK, ROUNDED); // 'o' in 'not' (UK English)
 
 			// Nasals
-			Consonant("m", ArticulationPlace.Bilabial, ArticulationManner.Nasal, true);
-			Consonant("n", ArticulationPlace.Alveolar, ArticulationManner.Nasal, true);
-			Consonant("N", ArticulationPlace.Velar, ArticulationManner.Nasal, true);
+			Consonant("m", ConsonantPlace.Bilabial, ConsonantManner.Nasal, true);
+			Consonant("n", ConsonantPlace.Alveolar, ConsonantManner.Nasal, true);
+			Consonant("N", ConsonantPlace.Velar, ConsonantManner.Nasal, true);
 
 			// Stops
-			Consonant("p", ArticulationPlace.Bilabial, ArticulationManner.Stop, false);
-			Consonant("b", ArticulationPlace.Bilabial, ArticulationManner.Stop, true);
-			Consonant("t", ArticulationPlace.Alveolar, ArticulationManner.Stop, false);
-			Consonant("d", ArticulationPlace.Alveolar, ArticulationManner.Stop, true);
-			Consonant("k", ArticulationPlace.Velar, ArticulationManner.Stop, false);
-			Consonant("g", ArticulationPlace.Velar, ArticulationManner.Stop, true);
+			Consonant("p", ConsonantPlace.Bilabial, ConsonantManner.Stop, false);
+			Consonant("b", ConsonantPlace.Bilabial, ConsonantManner.Stop, true);
+			Consonant("t", ConsonantPlace.Alveolar, ConsonantManner.Stop, false);
+			Consonant("d", ConsonantPlace.Alveolar, ConsonantManner.Stop, true);
+			Consonant("k", ConsonantPlace.Velar, ConsonantManner.Stop, false);
+			Consonant("g", ConsonantPlace.Velar, ConsonantManner.Stop, true);
 
 			// Fricati
-			Consonant("f", ArticulationPlace.Labiodental, ArticulationManner.Fricative, false);
-			Consonant("v", ArticulationPlace.Labiodental, ArticulationManner.Fricative, true);
-			Consonant("T", ArticulationPlace.Dental, ArticulationManner.Fricative, false);
-			Consonant("D", ArticulationPlace.Dental, ArticulationManner.Fricative, true);
-			Consonant("s", ArticulationPlace.Alveolar, ArticulationManner.Fricative, false);
-			Consonant("z", ArticulationPlace.Alveolar, ArticulationManner.Fricative, true);
-			Consonant("S", ArticulationPlace.PalatoAlveolar, ArticulationManner.Fricative, false);
-			Consonant("Z", ArticulationPlace.PalatoAlveolar, ArticulationManner.Fricative, true);
-			Consonant("C", ArticulationPlace.Palatal, ArticulationManner.Fricative, false);
-			Consonant("x", ArticulationPlace.Velar, ArticulationManner.Fricative, false);
-			Consonant("R", ArticulationPlace.Uvular, ArticulationManner.Fricative, true);
-			Consonant("h", ArticulationPlace.Glottal, ArticulationManner.Fricative, false);
+			Consonant("f", ConsonantPlace.Labiodental, ConsonantManner.Fricative, false);
+			Consonant("v", ConsonantPlace.Labiodental, ConsonantManner.Fricative, true);
+			Consonant("T", ConsonantPlace.Dental, ConsonantManner.Fricative, false);
+			Consonant("D", ConsonantPlace.Dental, ConsonantManner.Fricative, true);
+			Consonant("s", ConsonantPlace.Alveolar, ConsonantManner.Fricative, false);
+			Consonant("z", ConsonantPlace.Alveolar, ConsonantManner.Fricative, true);
+			Consonant("S", ConsonantPlace.PalatoAlveolar, ConsonantManner.Fricative, false);
+			Consonant("Z", ConsonantPlace.PalatoAlveolar, ConsonantManner.Fricative, true);
+			Consonant("C", ConsonantPlace.Palatal, ConsonantManner.Fricative, false);
+			Consonant("x", ConsonantPlace.Velar, ConsonantManner.Fricative, false);
+			Consonant("R", ConsonantPlace.Uvular, ConsonantManner.Fricative, true);
+			Consonant("h", ConsonantPlace.Glottal, ConsonantManner.Fricative, false);
 			
 			// Affricates
-			Consonant("tS", ArticulationPlace.PalatoAlveolar, ArticulationManner.Affricate, false); // 'ch' in 'chocolate' (US English)
-			Consonant("dZ", ArticulationPlace.PalatoAlveolar, ArticulationManner.Affricate, true); // 'j' in 'jump' (US English)
+			Consonant("tS", ConsonantPlace.PalatoAlveolar, ConsonantManner.Affricate, false); // 'ch' in 'chocolate' (US English)
+			Consonant("dZ", ConsonantPlace.PalatoAlveolar, ConsonantManner.Affricate, true); // 'j' in 'jump' (US English)
 
 			// Approximants
-			Consonant("r*", ArticulationPlace.Alveolar, ArticulationManner.Approximant, true);
-			Consonant("r-", ArticulationPlace.Postalveolar, ArticulationManner.Approximant, true);
-			Consonant("j", ArticulationPlace.Palatal, ArticulationManner.Approximant, true);
-			Consonant("w", ArticulationPlace.LabializedVelar, ArticulationManner.Approximant, true);
+			Consonant("r*", ConsonantPlace.Alveolar, ConsonantManner.Approximant, true);
+			Consonant("r-", ConsonantPlace.Postalveolar, ConsonantManner.Approximant, true);
+			Consonant("j", ConsonantPlace.Palatal, ConsonantManner.Approximant, true);
+			Consonant("w", ConsonantPlace.LabializedVelar, ConsonantManner.Approximant, true);
 
 			// Lateral approximants
-			Consonant("l", ArticulationPlace.Alveolar, ArticulationManner.LateralApproximant, true);
-			Consonant("5", ArticulationPlace.VelarizedAlveolar, ArticulationManner.LateralApproximant, true); // 'l' in 'feel' (US English)
+			Consonant("l", ConsonantPlace.Alveolar, ConsonantManner.LateralApproximant, true);
+			Consonant("5", ConsonantPlace.VelarizedAlveolar, ConsonantManner.LateralApproximant, true); // 'l' in 'feel' (US English)
 		}
 
 		private static void Vowel(string xsampa, float openness, float backness, float roundedness)
@@ -120,7 +120,7 @@ namespace Sagen.Phonetics
 			_presetsXSAMPA[xsampa] = vowel;
 		}
 
-		private static void Consonant(string xsampa, ArticulationPlace place, ArticulationManner type, bool voiced)
+		private static void Consonant(string xsampa, ConsonantPlace place, ConsonantManner type, bool voiced)
 		{
 			var consonant = new Phoneme(place, type, voiced);
 			_presetsXSAMPA[xsampa] = consonant;

@@ -45,13 +45,13 @@ namespace Sagen.Extensibility
 						if (i < phrase.Length - 1 && phrase[i + 1] == '\\')
 						{
 							if ((p = Phoneme.GetPreset($"{phrase[i]}\\")) != null)
-								timeline.AddPhonation(0.4, p.Height, p.Backness, p.Roundedness);
+								timeline.AddPhoneme(0.4, p.Height, p.Backness, p.Roundedness);
 							i++;
 						}
 						else
 						{
 							if ((p = Phoneme.GetPreset(phrase[i].ToString())) != null)
-								timeline.AddPhonation(0.4, p.Height, p.Backness, p.Roundedness);
+								timeline.AddPhoneme(0.4, p.Height, p.Backness, p.Roundedness);
 						}
 
 					break;

@@ -3,7 +3,7 @@
 	/// <summary>
 	/// The place of articulation determines the passive articulator, as well as the active articulator's orientation within the vocal tract.
 	/// </summary>
-	public enum ArticulationPlace : byte
+	public enum ConsonantPlace : byte
 	{
 		/// <summary>
 		/// No articulation.

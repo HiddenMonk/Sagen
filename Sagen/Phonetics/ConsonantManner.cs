@@ -3,7 +3,7 @@
 	/// <summary>
 	/// The manner of articulation determines how the articulators behave when producing sound.
 	/// </summary>
-	public enum ArticulationManner : byte
+	public enum ConsonantManner : byte
 	{
 		/// <summary>
 		/// Nasals are consonants produced by directing airflow through the nasal passageway.
