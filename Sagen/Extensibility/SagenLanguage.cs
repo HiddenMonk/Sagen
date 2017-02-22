@@ -31,11 +31,15 @@ namespace Sagen.Extensibility
 
 		public void Parse(string phrase, ISpeechTimeline timeline)
 		{
-			timeline.AddPhonation(0.3);
+			timeline.AddPhonation(0.1);
 			timeline.AddSilence(0.2);
-			timeline.AddPhonation(0.3);
+			timeline.AddPhonation(0.1);
 			timeline.AddSilence(0.2);
-			timeline.AddPhonation(0.3);
+			timeline.AddPhonation(0.1);
+			timeline.AddSilence(0.2);
+			timeline.AddPhonation(0.14);
+			timeline.AddSilence(0.2);
+			timeline.AddPhonation(0.4);
 			timeline.AddSilence(0.2);
 		}  
 	}

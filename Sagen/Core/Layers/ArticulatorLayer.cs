@@ -180,6 +180,7 @@ namespace Sagen.Core.Layers
 		{
 			sampleOut = 0.0;
 			sampleIn = 0.0;
+			synth.Pitch -= 1 * synth.TimeStep;
 			UpdateLowerFormants();
 
 			// Combine aspiration with glottal pulse
