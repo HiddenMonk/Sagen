@@ -13,7 +13,7 @@ namespace SagenConsole
 		static void Main(string[] args)
 		{
 			Console.WriteLine("Loading...");
-			var tts = new TTS<XAudio2PlaybackEngine>(Voice.Greg);
+			var tts = new TTS<OpenALPlaybackEngine>(Voice.Bob);
 			
 #if DEBUG
 			Console.WriteLine("Exporting to WAV...");

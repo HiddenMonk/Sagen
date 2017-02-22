@@ -1,4 +1,4 @@
-﻿namespace Sagen.Extensibility
+﻿namespace Sagen.Phonetics
 {
     /// <summary>
     /// Provides types of distinguishing characteristics for resolving heteronyms.

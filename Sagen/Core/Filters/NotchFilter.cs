@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sagen.Internals.Filters
+namespace Sagen.Core.Filters
 {
 	internal sealed class NotchFilter
 	{

@@ -178,15 +178,15 @@
 
 		/// <summary>
 		/// Time in seconds it takes the glottis to close.
-		/// <para>Range: [0, &#8734;) - Default: 0.05</para>
+		/// <para>Range: [0, &#8734;) - Default: 0.04</para>
 		/// </summary>
-		public double GlottisCloseTime { get; set; } = 0.05;
+		public double GlottisCloseTime { get; set; } = 0.04;
 
 		/// <summary>
 		/// Time in seconds it takes the glottis to open.
-		/// <para>Range: [0, &#8734;) - Default: 0.08</para>
+		/// <para>Range: [0, &#8734;) - Default: 0.02</para>
 		/// </summary>
-		public double GlottisOpenTime { get; set; } = 0.08;
+		public double GlottisOpenTime { get; set; } = 0.02;
 	}
 
 	/// <summary>

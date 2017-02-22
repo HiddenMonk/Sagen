@@ -1,9 +1,10 @@
 ﻿using System;
 
-using Sagen.Internals.Filters;
+using Sagen.Core.Audio;
+using Sagen.Core.Filters;
 using Sagen.Phonetics;
 
-namespace Sagen.Internals.Layers
+namespace Sagen.Core.Layers
 {
 	/// <summary>
 	/// Handles filtering, voicing/noise synthesis, and articulation given a pre-generated timeline of phonation events.
@@ -45,13 +46,8 @@ namespace Sagen.Internals.Layers
 		private const double NasalF1DiminishFactor = 0.2;
 		private const double NasalF2LowerFactor = 0.3;
 
-		private readonly BandPassFilter bpf1;
-		private readonly BandPassFilter bpf2;
-		private readonly BandPassFilter bpf3;
-		private readonly BandPassFilter bpf4;
-		private readonly BandPassFilter bpf5;
+		private readonly BandPassFilter bpf1, bpf2, bpf3, bpf4, bpf5;
 		private readonly ButterworthFilter lpNoise, lpOverlay;
-		private readonly double Backness = 0.0;
 
 		// Half-bandwidths for each formant
 		private double bwhF1, bwhF2, bwhF3;
@@ -59,7 +55,7 @@ namespace Sagen.Internals.Layers
 		private double f1, f2, f3, f4, f5;
 
 		// Temporary constants for controlling articulation parameters
-		private readonly double Height = 0.0;
+		
 		private readonly double LEVEL_ASPIRATION = 0.075;
 		private readonly double LEVEL_ASPIRATION_LPO = 9;
 
@@ -69,13 +65,16 @@ namespace Sagen.Internals.Layers
 		private readonly double LEVEL_F3 = .10000;
 		private readonly double LEVEL_F4 = .12000;
 		private readonly double LEVEL_F5 = .10000;
-
 		private readonly double LEVEL_LPO = 0.04;
+
+		private readonly double Height = 0.0;
+		private readonly double Backness = 0.0;
+		private readonly double Rhotacization = 0.0;
+		private readonly double Roundedness = 0.0;
 		private readonly double Nasalization = 0.0;
 
 		private double nasalMix;
-		private readonly double Rhotacization = 0.0;
-		private readonly double Roundedness = 0.0;
+		
 		private double sampleIn, sampleOut, aspirationIn, fricationIn;
 
 		public ArticulatorLayer(Synthesizer synth) : base(synth)
@@ -92,7 +91,7 @@ namespace Sagen.Internals.Layers
 			UpdateLowerBandwidths();
 			UpdateLowerFormants();
 			UpdateHigherFormants();
-			Console.WriteLine($"{f1:0.00}Hz, {f2:0.00}Hz, {f3:0.00}Hz, {f4:0.00}Hz, {f5:0.00}Hz");
+			//Console.WriteLine($"{f1:0.00}Hz, {f2:0.00}Hz, {f3:0.00}Hz, {f4:0.00}Hz, {f5:0.00}Hz");
 		}
 
 		private void UpdateLowerFormants()
@@ -181,13 +180,13 @@ namespace Sagen.Internals.Layers
 		{
 			sampleOut = 0.0;
 			sampleIn = 0.0;
-			synth.Pitch -= 0.10f * synth.TimeStep;
 			UpdateLowerFormants();
 
-			// Combine noise with glottal sample
+			// Combine aspiration with glottal pulse
 			Noise.SampleProcedural(ref aspirationIn);
 			lpNoise.Update(aspirationIn);
-			sampleIn = sample + (aspirationIn + lpNoise.Value * LEVEL_ASPIRATION_LPO) * LEVEL_ASPIRATION * sample * synth.Voice.Breathiness;
+			sampleIn = sample + (aspirationIn + lpNoise.Value * LEVEL_ASPIRATION_LPO) 
+				* LEVEL_ASPIRATION * synth.State.AspirationLevel * sample * synth.Voice.Breathiness;
 
 			// Update filters
 			bpf1.Update(sampleIn);
@@ -218,7 +217,7 @@ namespace Sagen.Internals.Layers
 			if (synth.Voice.Quantization > 0)
 				sampleOut = Math.Round(synth.Voice.Quantization * sampleOut) / synth.Voice.Quantization;
 
-			sample = sampleOut;
+			sample = sampleOut * synth.State.GlottisLevel;
 		}
 	}
 }

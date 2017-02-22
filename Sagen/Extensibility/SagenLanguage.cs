@@ -15,23 +15,28 @@ namespace Sagen.Extensibility
 		{
 			var attr = GetType().GetCustomAttribute<LanguageCodeAttribute>();
 			if (attr == null)
-				throw new InvalidOperationException($"Missing SagenLanguage attribute on extension {GetType()}");
+				throw new InvalidOperationException($"Missing {nameof(LanguageCodeAttribute)} on extension {GetType()}");
 			_languageCode = attr.LanguageCode;
 
 			var dicFileName = $"{_languageCode}.dic";
 			using (var stream = Assembly.GetAssembly(GetType()).GetManifestResourceStream(GetType(), dicFileName))
 			{
 				if (stream == null)
-					throw new FileNotFoundException($"Could not find dictionary ({dicFileName}) in assembly {Assembly.GetAssembly(GetType()).FullName}.");
+					throw new FileNotFoundException($"Could not find lexicon ({dicFileName}) in assembly {Assembly.GetAssembly(GetType()).FullName}.");
 				_lexicon = SagenLexicon.FromStream(stream);
 			}
 		}
 
-		protected abstract void ReadUnknownWord(string word, PhonemeWriter writer);
+		protected abstract void ReadUnknownWord(string word, ISpeechTimeline writer);
 
-		public void Process(string phrase)
+		public void Parse(string phrase, ISpeechTimeline timeline)
 		{
-			throw new NotImplementedException();
+			timeline.AddPhonation(0.3);
+			timeline.AddSilence(0.2);
+			timeline.AddPhonation(0.3);
+			timeline.AddSilence(0.2);
+			timeline.AddPhonation(0.3);
+			timeline.AddSilence(0.2);
 		}  
 	}
 }

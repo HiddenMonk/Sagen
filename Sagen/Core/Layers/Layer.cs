@@ -1,4 +1,4 @@
-﻿namespace Sagen.Internals.Layers
+﻿namespace Sagen.Core.Layers
 {
     internal abstract class Layer
     {

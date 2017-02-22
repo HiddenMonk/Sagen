@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Sagen.Internals.FunctionCurves
+namespace Sagen.Core.FunctionCurves
 {
     internal abstract class Curve
     {

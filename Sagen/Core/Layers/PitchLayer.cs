@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sagen.Internals.Layers
+namespace Sagen.Core.Layers
 {
     class PitchLayer : Layer
     {

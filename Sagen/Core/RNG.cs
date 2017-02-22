@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace Sagen.Internals
+namespace Sagen.Core
 {
     /// <summary>
     /// Represents a non-linear random number generator.

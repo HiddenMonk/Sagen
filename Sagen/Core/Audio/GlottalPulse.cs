@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sagen.Internals
+namespace Sagen.Core.Audio
 {
 	/// <summary>
 	/// Generates glottal pulses using a modified version of Fant's glottal model.

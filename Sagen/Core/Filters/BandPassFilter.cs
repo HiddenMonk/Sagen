@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sagen.Internals.Filters
+namespace Sagen.Core.Filters
 {
 	// This is really just two butterworth filters combined.
 	internal class BandPassFilter

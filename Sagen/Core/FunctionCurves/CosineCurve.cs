@@ -1,4 +1,4 @@
-﻿namespace Sagen.Internals.FunctionCurves
+﻿namespace Sagen.Core.FunctionCurves
 {
     internal class CosineCurve : Curve
     {

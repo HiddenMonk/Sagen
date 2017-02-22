@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace Sagen.Internals
+namespace Sagen.Core.Audio
 {
 	internal static class Wav
 	{

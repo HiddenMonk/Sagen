@@ -42,7 +42,7 @@ namespace Sagen
         public void Speak(string text)
         {
             // Actual speaking isn't supported yet. This is debug code for testing vocal properties.			
-            CreateSynth().Play(5.0, this);
+            CreateSynth(text).Play(this);
         }
 
         public void Sync()

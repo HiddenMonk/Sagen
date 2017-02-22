@@ -1,4 +1,4 @@
-﻿namespace Sagen.Internals
+﻿namespace Sagen.Core
 {
     internal static class Extensions
     {

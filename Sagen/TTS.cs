@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Threading;
 
+using Sagen.Core;
+using Sagen.Core.Layers;
+using Sagen.Core.Nodes;
 using Sagen.Extensibility;
-using Sagen.Internals;
-using Sagen.Internals.Layers;
 
 namespace Sagen
 {
@@ -15,9 +15,13 @@ namespace Sagen
 	/// </summary>
 	public class TTS
 	{
+		private const string DefaultLanguage = "en_US";
+
 		public static VoiceQuality Quality = VoiceQuality.VeryHigh;
 
-		private static readonly Dictionary<string, SagenLanguage> _languages = new Dictionary<string, SagenLanguage>();
+		private static readonly Dictionary<string, SagenLanguage> _languages = new Dictionary<string, SagenLanguage>(StringComparer.InvariantCultureIgnoreCase);
+
+		private SagenLanguage _lang;
 
 		static TTS()
 		{
@@ -61,12 +65,44 @@ namespace Sagen
 
 		public TTS()
 		{
+			if (!_languages.TryGetValue(DefaultLanguage, out _lang))
+			{
+				throw new FileNotFoundException($"Default language '{DefaultLanguage}' could not be loaded.");
+			}
 			_voice = Voice.Jimmy;
 		}
 
 		public TTS(Voice voice)
 		{
+			if (!_languages.TryGetValue(DefaultLanguage, out _lang))
+			{
+				throw new FileNotFoundException($"Default language '{DefaultLanguage}' could not be loaded.");
+			}
 			_voice = voice ?? Voice.Jimmy;
+		}
+
+		public TTS(Voice voice, string language)
+		{
+			if (!_languages.TryGetValue(language, out _lang))
+			{
+				throw new FileNotFoundException($"Language '{language}' could not be loaded.");
+			}
+			_voice = voice ?? Voice.Jimmy;
+		}
+
+		public string GetLanguageCode() => _lang?.LanguageCode;
+
+		public void SetLanguage(string languageCode)
+		{
+			if (!_languages.TryGetValue(languageCode, out _lang))
+			{
+				throw new FileNotFoundException($"Language '{languageCode}' could not be loaded.");
+			}
+		}
+
+		public IEnumerable<string> GetAvailableLanguageCodes()
+		{
+			foreach (var pair in _languages) yield return pair.Key;
 		}
 
 		public Voice Voice
@@ -81,16 +117,15 @@ namespace Sagen
 
 		public void SpeakToFile(string path, string text)
 		{
-			var synth = CreateSynth();
-
-			synth.Generate(5, File.Create(path), SampleFormat.Float32, true);
+			var synth = CreateSynth(text);
+			synth.Generate(File.Create(path), SampleFormat.Float32);
 		}
 
-		internal Synthesizer CreateSynth()
+		internal Synthesizer CreateSynth(string text)
 		{
-			var synth = new Synthesizer(this);
-
-			RNG rng = new RNG();
+			var timeline = new SpeechTimeline();
+			_lang.Parse(text, timeline);
+			var synth = new Synthesizer(this, timeline);
 
 			const float amp = .25f;
 

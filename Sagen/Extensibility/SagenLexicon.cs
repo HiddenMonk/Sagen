@@ -2,6 +2,8 @@
 using System.IO;
 using System.Text;
 
+using Sagen.Phonetics;
+
 namespace Sagen.Extensibility
 {
 	internal sealed class SagenLexicon

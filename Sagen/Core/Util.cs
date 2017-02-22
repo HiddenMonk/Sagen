@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sagen.Internals
+namespace Sagen.Core
 {
     internal static class Util
     {

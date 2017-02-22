@@ -12,7 +12,7 @@ namespace Sagen.Languages
 
 		}
 
-		protected override void ReadUnknownWord(string word, PhonemeWriter writer)
+		protected override void ReadUnknownWord(string word, ISpeechTimeline writer)
 		{
 
 		}

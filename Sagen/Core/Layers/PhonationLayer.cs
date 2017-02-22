@@ -1,6 +1,8 @@
 ﻿using System;
 
-namespace Sagen.Internals.Layers
+using Sagen.Core.Audio;
+
+namespace Sagen.Core.Layers
 {
 	/// <summary>
 	/// This layer handles the production of the raw vocal harmonics, which are generated in the larynx via vibration of the vocal folds.
