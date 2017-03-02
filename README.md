@@ -7,9 +7,13 @@
 
 Some might ask me why I'd bother. After all, there are tons of TTS engines out there already. In short, I don't feel like people have enough options.
 
-Aside from often being prohibitively expensive, commercial TTS technologies are frequently restrictive in their available customization options for voices, voice parameters, and context-sensitive vocal qualities like intonation, stress, and timbre which are necessary to convey emotion and meaning. Concatenative synthesizers and other similar "realistic" TTS technologies based on databases of recorded samples also are relatively slow, leave a large memory footprint, and require each voice to be installed separately. There are also many free options for speech synthesizers, but they often have sparse, confusing, or convoluted documentation, or are locked down to one specific language (e.g. Java). While all TTS libraries have advantages and disadvantages, I feel like the .NET crowd would welcome a TTS solution specifically made for them.
+Aside from being often prohibitively expensive, it is not unusual for commercial TTS systems to be restrictive in their available customizations for voices, voice parameters, and context-sensitive vocal qualities (e.g. intonation, stress, and timbre). Such qualities are necessary to convey meaning in speech.
 
-My goal with this project is not _necessarily_ to produce "something better", but to instead offer a user-friendly TTS engine with a respectable amount of configurability, flexibility, and performance. The best part? **It's free.**
+Concatenative synthesizers, as well as other similar "realistic" TTS technologies tend to be CPU-heavy, leave a large memory footprint, and require each voice to be installed separately. Because they are based on databases of recorded speech samples, they are not very customizable at all.
+
+There are also many free options for speech synthesizers, but they often have sparse, confusing, or convoluted documentation, or are locked down to one specific language (e.g. Java). While all TTS libraries have advantages and disadvantages, I feel like the .NET crowd would welcome a TTS solution specifically made for them.
+
+My goal with Sagen is not _necessarily_ to produce "something better", but to instead offer a user-friendly TTS engine with a respectable amount of configurability, flexibility, and performance. The best part? **It's free.**
 
 ## What's planned
 
