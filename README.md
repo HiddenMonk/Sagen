@@ -1,5 +1,6 @@
-# Sagen
-
+<p align="center">
+  <img src="https://i.imgur.com/34SN7bt.png" alt="Sagen Logo"></img>
+</p>
 **Sagen** _(German for "to say")_ is my attempt at making a text-to-speech engine aimed at .NET developers who don't have thousands of dollars at their disposal to license a commercial speech synthesis solution. In many ways, it is an experiment and continual learning experience for me, as I am in no way well-versed in speech science, phonetics, or vocal acoustics; I simply want to see how far I can go with original research and lots of patience.
 
 ## Rationale
