@@ -1,4 +1,29 @@
-﻿using System;
+﻿#region License
+
+// https://github.com/TheBerkin/Sagen
+// 
+// Copyright (c) 2017 Nicholas Fleck
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of
+// this software and associated documentation files (the "Software"), to deal in the
+// Software without restriction, including without limitation the rights to use, copy,
+// modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+// and to permit persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -9,15 +34,16 @@ namespace Sagen.Core
     /// </summary>
     public class RNG
     {
-        [ThreadStatic]
-        private static RNGHashState _hashState = new RNGHashState();
-
         private const int Mask32 = 0x7FFFFFFF;
         private const long Mask64 = 0x7FFFFFFFFFFFFFFF;
         private const double MaxDouble = Int64.MaxValue;
         private const float MaxFloat = Int32.MaxValue;
 
+        [ThreadStatic]
+        private static RNGHashState _hashState = new RNGHashState();
+
         #region Table
+
         private static readonly ulong[] Table =
         {
             0x78601daa5225473d, 0x21d0a62df46ee118, 0xdcf4f088ea63c826, 0x8b509ad5d20d2223, 0x36d7e1354010ad6a, 0xceb515261afffce4, 0x1546c29edf0dc626, 0xc8b67f24d6cf5a39,
@@ -53,60 +79,41 @@ namespace Sagen.Core
             0x04029e4b58d2d1b5, 0xe2295d61a85fd012, 0x081eafea16c37513, 0x363ada331ed8fcbc, 0x962465ec560b08d3, 0x80c848a65d14ad68, 0xe8da599afcd5006d, 0x61a6d1b75517d513,
             0x22d45ccb8be9e32a, 0x2289686b10b01f78, 0xb851936366ec178c, 0xf03f146455ca74c3, 0x2be7cadd1f62f2a7, 0x01d211fe2b138898, 0xe3ec3a6c9f7f8792, 0xfb68fcf8b8e2f20b
         };
-        #endregion
 
-        #region RNG structures
-        // ReSharper disable once InconsistentNaming
-        private class SG
-        {
-            public long Seed, Generation;
-
-            public SG(long s, long g)
-            {
-                Seed = s;
-                Generation = g;
-            }
-        }
-
-        [StructLayout(LayoutKind.Explicit)]
-        private struct RNGHashState
-        {
-            [FieldOffset(0)]
-            public long HashSigned;
-            [FieldOffset(0)]
-            public ulong HashUnsigned;
-
-            [FieldOffset(8)]
-            public ulong Seed;
-            [FieldOffset(8)]
-            private long _Seed;
-
-            [FieldOffset(16)]
-            public ulong Generation;
-            [FieldOffset(16)]
-            private long _Generation;
-
-            public RNGHashState(long s, long g)
-            {
-                Seed = 0;
-                _Seed = s;
-                Generation = 0;
-                _Generation = g;
-                HashSigned = 0;
-                HashUnsigned = 0;
-            }
-
-            public void Init(long s, long g)
-            {
-                _Seed = s;
-                _Generation = g;
-                HashSigned = 0;
-            }
-        }
         #endregion
 
         private readonly SG _root;
         private readonly List<SG> _tree;
+
+        /// <summary>
+        /// Creates a new RNG instance with the specified seed.
+        /// </summary>
+        /// <param name="seed">The seed for the generator.</param>
+        public RNG(long seed)
+        {
+            _root = new SG(seed, 0);
+            _tree = new List<SG> { _root };
+        }
+
+        /// <summary>
+        /// Creates a new RNG instance with the specified seed and generation.
+        /// </summary>
+        /// <param name="seed">The seed for the generator.</param>
+        /// <param name="generation">The generation to start at.</param>
+        public RNG(long seed, long generation)
+        {
+            _root = new SG(seed, generation);
+            _tree = new List<SG> { _root };
+        }
+
+        /// <summary>
+        /// Creates a new RNG instance seeded with the system tick count.
+        /// </summary>
+        public RNG()
+        {
+            _root = new SG(Environment.TickCount, 0);
+            _tree = new List<SG> { _root };
+        }
 
         /// <summary>
         /// The root seed.
@@ -140,34 +147,16 @@ namespace Sagen.Core
         }
 
         /// <summary>
-        /// Creates a new RNG instance with the specified seed.
+        /// Calculates the raw 64-bit value for a given generation.
         /// </summary>
-        /// <param name="seed">The seed for the generator.</param>
-        public RNG(long seed)
-        {
-            _root = new SG(seed, 0);
-            _tree = new List<SG> { _root };
-        }
+        /// <param name="g">The generation.</param>
+        /// <returns></returns>
+        public long this[int g] => GetRaw(Seed, g);
 
         /// <summary>
-        /// Creates a new RNG instance with the specified seed and generation.
+        /// The current branching depth of the generator.
         /// </summary>
-        /// <param name="seed">The seed for the generator.</param>
-        /// <param name="generation">The generation to start at.</param>
-        public RNG(long seed, long generation)
-        {
-            _root = new SG(seed, generation);
-            _tree = new List<SG> { _root };
-        }
-
-        /// <summary>
-        /// Creates a new RNG instance seeded with the system tick count.
-        /// </summary>
-        public RNG()
-        {
-            _root = new SG(Environment.TickCount, 0);
-            _tree = new List<SG> { _root };
-        }
+        public int Depth => _tree.Count;
 
         /// <summary>
         /// Calculates the raw 64-bit value for a given seed/generation pair.
@@ -175,7 +164,6 @@ namespace Sagen.Core
         /// <param name="s">The seed.</param>
         /// <param name="g">The generation.</param>
         /// <returns></returns>
-
         public static long GetRaw(long s, long g)
         {
             unchecked
@@ -185,8 +173,8 @@ namespace Sagen.Core
                 {
                     _hashState.HashUnsigned =
                         (_hashState.HashUnsigned + 31
-                        * Table[((_hashState.Seed ^ _hashState.HashUnsigned) >> (i * 8)) & 0xff].RotR(i) + 47
-                        * Table[((_hashState.Generation ^ _hashState.HashUnsigned) >> (i * 8)) & 0xff].RotL(i) + 11)
+                         * Table[((_hashState.Seed ^ _hashState.HashUnsigned) >> (i * 8)) & 0xff].RotR(i) + 47
+                         * Table[((_hashState.Generation ^ _hashState.HashUnsigned) >> (i * 8)) & 0xff].RotL(i) + 11)
                         * 6364136223846793005;
                 }
                 return _hashState.HashSigned;
@@ -194,24 +182,15 @@ namespace Sagen.Core
         }
 
         /// <summary>
-        /// Calculates the raw 64-bit value for a given generation.
-        /// </summary>
-        /// <param name="g">The generation.</param>
-        /// <returns></returns>
-        public long this[int g] => GetRaw(Seed, g);
-
-        /// <summary>
         /// Calculates the raw 64-bit value for the next generation, and increases the current generation by 1.
         /// </summary>
         /// <returns></returns>
-
         public long NextRaw() => GetRaw(Seed, Generation++);
 
         /// <summary>
         /// Calculates the raw 64-bit value for the previous generation, and decreases the current generation by 1.
         /// </summary>
         /// <returns></returns>
-
         public long PrevRaw() => GetRaw(Seed, --Generation);
 
         /// <summary>
@@ -241,14 +220,8 @@ namespace Sagen.Core
         }
 
         /// <summary>
-        /// The current branching depth of the generator.
-        /// </summary>
-        public int Depth => _tree.Count;
-
-        /// <summary>
         /// Removes the topmost branch and resumes generation on the next one down.
         /// </summary>
-
         public RNG Merge()
         {
             if (_tree.Count > 1) _tree.RemoveAt(_tree.Count - 1);
@@ -259,7 +232,6 @@ namespace Sagen.Core
         /// Calculates a 32-bit, non-negative integer for the current generation.
         /// </summary>
         /// <returns></returns>
-
         public int Peek() => (int)GetRaw(Seed, Generation) & Mask32;
 
         /// <summary>
@@ -267,7 +239,6 @@ namespace Sagen.Core
         /// </summary>
         /// <param name="generation">The generation to peek at.</param>
         /// <returns></returns>
-
         public int PeekAt(long generation) => (int)GetRaw(Seed, generation) & Mask32;
 
         /// <summary>
@@ -277,13 +248,15 @@ namespace Sagen.Core
         public double NextDouble() => (NextRaw() & Mask64) / MaxDouble;
 
         /// <summary>
-        /// Returns a double-precision floating point number between 0 and the specified maximum value, and advances the generation by 1.
+        /// Returns a double-precision floating point number between 0 and the specified maximum value, and advances the generation
+        /// by 1.
         /// </summary>
         /// <returns></returns>
         public double NextDouble(double max) => ((GetRaw(~Seed + 1, Generation) & Mask64) + NextDouble()) % max;
 
         /// <summary>
-        /// Returns a double-precision floating point number between the specified minimum and maximum values, and advances the generation by 1.
+        /// Returns a double-precision floating point number between the specified minimum and maximum values, and advances the
+        /// generation by 1.
         /// </summary>
         /// <returns></returns>
         public double NextDouble(double min, double max) => max - min != 0 ? ((GetRaw(~Seed + 1, Generation) & Mask64) + NextDouble()) % (max - min) + min : 0;
@@ -295,16 +268,18 @@ namespace Sagen.Core
         public float NextSingle() => (NextRaw() & Mask32) / MaxFloat;
 
         /// <summary>
-        /// Returns a single-precision floating point number between 0 and the specified maximum value, and advances the generation by 1.
+        /// Returns a single-precision floating point number between 0 and the specified maximum value, and advances the generation
+        /// by 1.
         /// </summary>
         /// <returns></returns>
-        public float NextSingle(float max) => ((GetRaw(~Seed + 1, Generation) & Mask32) + ((NextRaw() & Mask32) / MaxFloat)) % max;
+        public float NextSingle(float max) => ((GetRaw(~Seed + 1, Generation) & Mask32) + (NextRaw() & Mask32) / MaxFloat) % max;
 
         /// <summary>
-        /// Returns a single-precision floating point number between the specified minimum and maximum values, and advances the generation by 1.
+        /// Returns a single-precision floating point number between the specified minimum and maximum values, and advances the
+        /// generation by 1.
         /// </summary>
         /// <returns></returns>
-        public float NextSingle(float min, float max) => max != min ? ((GetRaw(~Seed + 1, Generation) & Mask32) + ((NextRaw() & Mask32) / MaxFloat)) % (max - min) + min : 0;
+        public float NextSingle(float min, float max) => max != min ? ((GetRaw(~Seed + 1, Generation) & Mask32) + (NextRaw() & Mask32) / MaxFloat) % (max - min) + min : 0;
 
         /// <summary>
         /// Returns a random boolean value and advances the generation by 1.
@@ -316,30 +291,28 @@ namespace Sagen.Core
         /// Calculates a 32-bit, non-negative integer from the next generation and increases the current generation by 1.
         /// </summary>
         /// <returns></returns>
-
         public int Next() => (int)NextRaw() & Mask32;
 
         /// <summary>
         /// Calculates a 32-bit, non-negative integer from the previous generation and decreases the current generation by 1.
         /// </summary>
         /// <returns></returns>
-
         public int Prev() => (int)PrevRaw() & Mask32;
 
         /// <summary>
-        /// Calculates a 32-bit integer between 0 and a specified upper bound for the current generation and increases the current generation by 1.
+        /// Calculates a 32-bit integer between 0 and a specified upper bound for the current generation and increases the current
+        /// generation by 1.
         /// </summary>
         /// <param name="max">The exclusive maximum value.</param>
         /// <returns></returns>
-
         public int Next(int max) => max != 0 ? (int)(NextRaw() & Mask32) % max : 0;
 
         /// <summary>
-        /// Calculates a 32-bit integer between 0 and a specified upper bound from the previous generation and decreases the current generation by 1.
+        /// Calculates a 32-bit integer between 0 and a specified upper bound from the previous generation and decreases the
+        /// current generation by 1.
         /// </summary>
         /// <param name="max">The exclusive maximum value.</param>
         /// <returns></returns>
-
         public int Prev(int max) => max != 0 ? (int)(PrevRaw() & Mask32) % max : 0;
 
         /// <summary>
@@ -347,7 +320,6 @@ namespace Sagen.Core
         /// </summary>
         /// <param name="max">The exclusive maximum value.</param>
         /// <returns></returns>
-
         public int Peek(int max) => max != 0 ? ((int)GetRaw(Seed, Generation) & Mask32) % max : 0;
 
         /// <summary>
@@ -356,25 +328,24 @@ namespace Sagen.Core
         /// <param name="generation">The generation whose value to calculate.</param>
         /// <param name="max">The exclusive maximum value.</param>
         /// <returns></returns>
-
         public int PeekAt(long generation, int max) => max != 0 ? ((int)GetRaw(Seed, generation) & Mask32) % max : 0;
 
         /// <summary>
-        /// Calculates a 32-bit integer between the specified minimum and maximum values for the current generation, and increases the current generation by 1.
+        /// Calculates a 32-bit integer between the specified minimum and maximum values for the current generation, and increases
+        /// the current generation by 1.
         /// </summary>
         /// <param name="min">The inclusive minimum value.</param>
         /// <param name="max">The exclusive maximum value.</param>
         /// <returns></returns>
-
         public int Next(int min, int max) => max - min > 0 ? (((int)NextRaw() & Mask32) - min) % (max - min) + min : 0;
 
         /// <summary>
-        /// Calculates a 32-bit integer between the specified minimum and maximum values for the previous generation, and decreases the current generation by 1.
+        /// Calculates a 32-bit integer between the specified minimum and maximum values for the previous generation, and decreases
+        /// the current generation by 1.
         /// </summary>
         /// <param name="min">The inclusive minimum value.</param>
         /// <param name="max">The exclusive maximum value.</param>
         /// <returns></returns>
-
         public int Prev(int min, int max) => max - min > 0 ? (((int)PrevRaw() & Mask32) - min) % (max - min) + min : 0;
 
         /// <summary>
@@ -383,7 +354,6 @@ namespace Sagen.Core
         /// <param name="min">The inclusive minimum value.</param>
         /// <param name="max">The exclusive maximum value.</param>
         /// <returns></returns>
-
         public int Peek(int min, int max) => max - min > 0 ? (((int)GetRaw(Seed, Generation) & Mask32) - min) % (max - min) + min : 0;
 
         /// <summary>
@@ -393,7 +363,61 @@ namespace Sagen.Core
         /// <param name="max">The exclusive maximum value.</param>
         /// <param name="generation">The generation whose value to calculate.</param>
         /// <returns></returns>
-
         public int PeekAt(int generation, int min, int max) => max - min > 0 ? (((int)GetRaw(Seed, generation) & Mask32) - min) % (max - min) + min : 0;
+
+        #region RNG structures
+
+        // ReSharper disable once InconsistentNaming
+        private class SG
+        {
+            public long Seed, Generation;
+
+            public SG(long s, long g)
+            {
+                Seed = s;
+                Generation = g;
+            }
+        }
+
+        [StructLayout(LayoutKind.Explicit)]
+        private struct RNGHashState
+        {
+            [FieldOffset(0)]
+            public long HashSigned;
+
+            [FieldOffset(0)]
+            public ulong HashUnsigned;
+
+            [FieldOffset(8)]
+            public ulong Seed;
+
+            [FieldOffset(8)]
+            private long _Seed;
+
+            [FieldOffset(16)]
+            public ulong Generation;
+
+            [FieldOffset(16)]
+            private long _Generation;
+
+            public RNGHashState(long s, long g)
+            {
+                Seed = 0;
+                _Seed = s;
+                Generation = 0;
+                _Generation = g;
+                HashSigned = 0;
+                HashUnsigned = 0;
+            }
+
+            public void Init(long s, long g)
+            {
+                _Seed = s;
+                _Generation = g;
+                HashSigned = 0;
+            }
+        }
+
+        #endregion
     }
 }

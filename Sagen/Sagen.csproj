@@ -50,13 +50,13 @@
     <Compile Include="Extensibility\ISynthesizer.cs" />
     <Compile Include="Extensibility\SagenPluginClassAttribute.cs" />
     <Compile Include="Core\Nodes\SilenceNode.cs" />
-    <Compile Include="Core\Nodes\SpeechNode.cs" />
+    <Compile Include="Core\Nodes\Node.cs" />
     <Compile Include="Core\Filters\BandPassFilter.cs" />
     <Compile Include="Core\Filters\ButterworthFilter.cs" />
     <Compile Include="Core\Filters\NotchFilter.cs" />
     <Compile Include="Core\Audio\GlottalPulse.cs" />
     <Compile Include="Core\Layers\PitchLayer.cs" />
-    <Compile Include="Core\SpeechTimeline.cs" />
+    <Compile Include="Core\Timeline.cs" />
     <Compile Include="Core\Nodes\PhonemeNode.cs" />
     <Compile Include="Phonetics\VowelConverter.cs" />
     <Compile Include="Phonetics\VowelQuality.cs" />

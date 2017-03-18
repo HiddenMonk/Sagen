@@ -1,4 +1,29 @@
-﻿using System;
+﻿#region License
+
+// https://github.com/TheBerkin/Sagen
+// 
+// Copyright (c) 2017 Nicholas Fleck
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of
+// this software and associated documentation files (the "Software"), to deal in the
+// Software without restriction, including without limitation the rights to use, copy,
+// modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+// and to permit persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+#endregion
+
+using System;
 
 namespace Sagen.Phonetics
 {
@@ -73,12 +98,12 @@ namespace Sagen.Phonetics
                 // Near-open front unrounded
                 new VowelQuality(.15, 0.0, 0.0, 800, 1650, 2500),
 
-				// Open-back unrounded
-				new VowelQuality(0.0, 1.0, 0.0, 750, 1000, 3300),
+                // Open-back unrounded
+                new VowelQuality(0.0, 1.0, 0.0, 750, 1000, 3300),
                 // Open-front unrounded
-                new VowelQuality(0.0, 0.0, 0.0, 940, 1400, 3100),
+                new VowelQuality(0.0, 0.0, 0.0, 940, 1400, 3100)
             };
-			_vowelsChild = new[]
+            _vowelsChild = new[]
             {
                 // Close front unrounded
                 new VowelQuality(1.0, 0.0, 0.0, 250, 2600, 2800),
@@ -137,28 +162,28 @@ namespace Sagen.Phonetics
                 // Near-open front unrounded
                 new VowelQuality(.15, 0.0, 0.0, 800, 1650, 2500),
 
-				// Open-back unrounded
-				new VowelQuality(0.0, 1.0, 0.0, 750, 1000, 3300),
+                // Open-back unrounded
+                new VowelQuality(0.0, 1.0, 0.0, 750, 1000, 3300),
                 // Open-front unrounded
-                new VowelQuality(0.0, 0.0, 0.0, 840, 1200, 3100),
+                new VowelQuality(0.0, 0.0, 0.0, 840, 1200, 3100)
             };
             _weightBuffer = new double[_vowelsAdult.Length];
         }
 
         public static void GetFormants(VoiceGender gender, double height, double backness, double roundedness, ref double f1, ref double f2, ref double f3)
         {
-	        VowelQuality[] vowels = gender == VoiceGender.Child ? _vowelsChild : _vowelsAdult;
-			if (_weightBuffer == null) _weightBuffer = new double[_vowelsAdult.Length];
-			f1 = f2 = f3 = 0.0;
+            var vowels = gender == VoiceGender.Child ? _vowelsChild : _vowelsAdult;
+            if (_weightBuffer == null) _weightBuffer = new double[_vowelsAdult.Length];
+            f1 = f2 = f3 = 0.0;
             double distSum = 0.0;
             double minDist = -1.0;
-            double weightSum = 0.0; 
+            double weightSum = 0.0;
             double dist = 0.0;
             double weight;
             double h, b, r;
 
             // Calculate the sum of the distances between the input point and all the prism's reference points
-            for(int i = 0; i < vowels.Length; i++)
+            for (int i = 0; i < vowels.Length; i++)
             {
                 h = height - vowels[i].Height;
                 b = backness - vowels[i].Backness;
@@ -174,7 +199,7 @@ namespace Sagen.Phonetics
                 distSum += dist;
                 if (minDist < 0 || dist < minDist) minDist = dist;
             }
-            
+
             // Calculate secondary weight sum
             // Buffer contains distances
             for (int i = 0; i < vowels.Length; i++)
