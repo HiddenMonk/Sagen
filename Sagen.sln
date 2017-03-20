@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26127.3
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sagen", "Sagen\Sagen.csproj", "{C3770497-DA08-4D9F-B6C0-5DBC0A0DA57C}"
 EndProject
@@ -19,6 +19,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sagen.Playback.OpenAL", "Sagen.Playback.OpenAL\Sagen.Playback.OpenAL.csproj", "{FE4853C0-4FB3-4001-8498-D0751E833481}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sagen.Playback.XAudio2", "Sagen.Playback.XAudio2\Sagen.Playback.XAudio2.csproj", "{1003BEC1-347C-49D0-B7C7-394BA7381587}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sagen.Languages.German", "Sagen.Languages.German\Sagen.Languages.German.csproj", "{C475AF7A-B849-4BE7-B209-DD64A2F13BC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,11 +92,24 @@ Global
 		{1003BEC1-347C-49D0-B7C7-394BA7381587}.Release|x64.Build.0 = Release|Any CPU
 		{1003BEC1-347C-49D0-B7C7-394BA7381587}.Release|x86.ActiveCfg = Release|Any CPU
 		{1003BEC1-347C-49D0-B7C7-394BA7381587}.Release|x86.Build.0 = Release|Any CPU
+		{C475AF7A-B849-4BE7-B209-DD64A2F13BC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C475AF7A-B849-4BE7-B209-DD64A2F13BC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C475AF7A-B849-4BE7-B209-DD64A2F13BC3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C475AF7A-B849-4BE7-B209-DD64A2F13BC3}.Debug|x64.Build.0 = Debug|Any CPU
+		{C475AF7A-B849-4BE7-B209-DD64A2F13BC3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C475AF7A-B849-4BE7-B209-DD64A2F13BC3}.Debug|x86.Build.0 = Debug|Any CPU
+		{C475AF7A-B849-4BE7-B209-DD64A2F13BC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C475AF7A-B849-4BE7-B209-DD64A2F13BC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C475AF7A-B849-4BE7-B209-DD64A2F13BC3}.Release|x64.ActiveCfg = Release|Any CPU
+		{C475AF7A-B849-4BE7-B209-DD64A2F13BC3}.Release|x64.Build.0 = Release|Any CPU
+		{C475AF7A-B849-4BE7-B209-DD64A2F13BC3}.Release|x86.ActiveCfg = Release|Any CPU
+		{C475AF7A-B849-4BE7-B209-DD64A2F13BC3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0B9FAD5A-50E8-49FA-8C9D-78DC9FDD5193} = {331C84AF-2691-4C65-BF77-BB4785430509}
+		{C475AF7A-B849-4BE7-B209-DD64A2F13BC3} = {331C84AF-2691-4C65-BF77-BB4785430509}
 	EndGlobalSection
 EndGlobal

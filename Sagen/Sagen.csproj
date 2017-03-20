@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\VocalState.cs" />
+    <Compile Include="Phonetics\LexiconEntry.cs" />
     <Compile Include="Phonetics\Heteronym.cs" />
     <Compile Include="Extensibility\IPlaybackEngine.cs" />
     <Compile Include="Extensibility\ISpeechTimeline.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="Core\Layers\PitchLayer.cs" />
     <Compile Include="Core\Timeline.cs" />
     <Compile Include="Core\Nodes\PhonemeNode.cs" />
+    <Compile Include="Phonetics\TextUtils.cs" />
     <Compile Include="Phonetics\VowelConverter.cs" />
     <Compile Include="Phonetics\VowelQuality.cs" />
     <Compile Include="Phonetics\ConsonantPlace.cs" />
@@ -69,7 +71,7 @@
     <Compile Include="Core\FunctionCurves\Keyframe.cs" />
     <Compile Include="Core\FunctionCurves\LinearCurve.cs" />
     <Compile Include="Phonetics\Phoneme.Presets.cs" />
-    <Compile Include="Extensibility\SagenLexicon.cs" />
+    <Compile Include="Phonetics\Lexicon.cs" />
     <Compile Include="Extensibility\LanguageCodeAttribute.cs" />
     <Compile Include="Extensibility\SagenLanguage.cs" />
     <Compile Include="Phonetics\PhoneticFlags.cs" />
@@ -93,7 +95,6 @@
     <Compile Include="VoiceQuality.cs" />
     <Compile Include="Core\Audio\Wav.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

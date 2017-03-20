@@ -28,36 +28,46 @@ namespace Sagen.Phonetics
     /// <summary>
     /// The manner of articulation determines how the articulators behave when producing sound.
     /// </summary>
-    public enum ConsonantManner : byte
+    public enum ConsonantManner : short
     {
         /// <summary>
         /// Nasals are consonants produced by directing airflow through the nasal passageway.
         /// </summary>
-        Nasal,
+        Nasal = 0b000_000_0000000000,
 
         /// <summary>
         /// Stops are consonants produced by a sudden obstruction of airflow through the vocal tract.
         /// </summary>
-        Stop,
+        Stop = 0b000_001_0000000000,
 
         /// <summary>
         /// Affricates are consonants produced by transitioning from a stop to a fricative.
         /// </summary>
-        Affricate,
+        Affricate = 0b000_010_0000000000,
 
         /// <summary>
         /// Fricatives are consonants produced by creating turbulent airflow through a narrow opening.
         /// </summary>
-        Fricative,
+        Fricative = 0b000_011_0000000000,
 
         /// <summary>
         /// Approximants are consonants produced by creating airflow through an opening just large enough not to create turbulence.
         /// </summary>
-        Approximant,
+        Approximant = 0b000_100_0000000000,
 
         /// <summary>
         /// Lateral approximants are approximants where the airflow is directed along the sides of the tongue instead of over it.
         /// </summary>
-        LateralApproximant
+        LateralApproximant = 0b000_101_0000000000,
+
+        /// <summary>
+        /// Taps are consonants produced by a brief closure of the articulator and place of articulation, creating one trill cycle.
+        /// </summary>
+        Tap = 0b000_110_0000000000,
+
+        /// <summary>
+        /// Trills are produced by continuous vibration of the articulator.
+        /// </summary>
+        Trill = 0b000_111_0000000000
     }
 }

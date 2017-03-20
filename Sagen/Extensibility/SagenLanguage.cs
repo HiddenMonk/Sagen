@@ -24,8 +24,10 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text;
 
 using Sagen.Phonetics;
 
@@ -34,7 +36,8 @@ namespace Sagen.Extensibility
     public abstract class SagenLanguage
     {
         protected readonly string _languageCode;
-        private readonly SagenLexicon _lexicon;
+        private readonly Lexicon _lexicon;
+        private readonly List<KeyValuePair<string, string>> _ruleSet;
 
         protected SagenLanguage()
         {
@@ -44,11 +47,30 @@ namespace Sagen.Extensibility
             _languageCode = attr.LanguageCode;
 
             string dicFileName = $"{_languageCode}.dic";
+            string rulesFileName = $"{_languageCode}.rules";
             using (var stream = Assembly.GetAssembly(GetType()).GetManifestResourceStream(GetType(), dicFileName))
             {
                 if (stream == null)
                     throw new FileNotFoundException($"Could not find lexicon ({dicFileName}) in assembly {Assembly.GetAssembly(GetType()).FullName}.");
-                _lexicon = SagenLexicon.FromStream(stream);
+                _lexicon = Lexicon.FromStream(stream);
+            }
+
+            _ruleSet = new List<KeyValuePair<string, string>>();
+            using (var stream = Assembly.GetAssembly(GetType()).GetManifestResourceStream(GetType(), rulesFileName))
+            {
+                if (stream == null)
+                    throw new FileNotFoundException($"Could not find ruleset ({rulesFileName}) in assembly {Assembly.GetAssembly(GetType()).FullName}.");
+                using (var reader = new StreamReader(stream, Encoding.UTF8, true, 128, true))
+                {
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        if (String.IsNullOrWhiteSpace(line)) continue;
+                        var entry = line.Split(new[] { ' ' }, 2, StringSplitOptions.RemoveEmptyEntries);
+                        _ruleSet.Add(new KeyValuePair<string, string>(entry[0], entry[1].Trim('/')));
+                    }
+                    _ruleSet.Sort((x, y) => y.Key.Length.CompareTo(x.Key.Length));
+                }
             }
         }
 
@@ -69,13 +91,13 @@ namespace Sagen.Extensibility
                     default:
                         if (i < phrase.Length - 1 && phrase[i + 1] == '\\')
                         {
-                            if ((p = Phoneme.GetPreset($"{phrase[i]}\\")) != null)
+                            if ((p = Phoneme.GetPreset($"{phrase[i]}\\")) != null && p.ArticulationPlace == ConsonantPlace.None)
                                 timeline.AddPhoneme(0.4, p.Height, p.Backness, p.Roundedness);
                             i++;
                         }
                         else
                         {
-                            if ((p = Phoneme.GetPreset(phrase[i].ToString())) != null)
+                            if ((p = Phoneme.GetPreset(phrase[i].ToString())) != null && p.ArticulationPlace == ConsonantPlace.None)
                                 timeline.AddPhoneme(0.4, p.Height, p.Backness, p.Roundedness);
                         }
 
@@ -83,6 +105,36 @@ namespace Sagen.Extensibility
                 }
             }
             timeline.AddSilence(0.2);
+        }
+
+        public string ToPhonemes(string text)
+        {
+            var sb = new StringBuilder();
+            var words = text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var word in words)
+            {
+                if (sb.Length > 0) sb.Append(' ');
+
+                int i = 0;
+                while (i < word.Length)
+                {
+                    bool used = false;
+                    foreach (var rule in _ruleSet)
+                    {
+                        if (word.IndexOf(rule.Key, i, StringComparison.InvariantCultureIgnoreCase) == i)
+                        {
+                            sb.Append(rule.Value);
+                            i += rule.Key.Length;
+                            used = true;
+                            break;
+                        }
+                    }
+                    if (!used) i++;
+                }
+            }
+
+            return sb.ToString();
         }
     }
 }

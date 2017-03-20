@@ -32,12 +32,10 @@ namespace SagenConsole
 {
     internal class Program
     {
-        private const string TestString = "playground";
-
         private static void Main(string[] args)
         {
             Console.WriteLine("Loading...");
-            var tts = new TTS<OpenALPlaybackEngine>(Voice.Jimmy);
+            var tts = new TTS<OpenALPlaybackEngine>(Voice.Greg);
             string input;
 
             while (true)
@@ -48,7 +46,8 @@ namespace SagenConsole
 				Console.WriteLine("Exporting to WAV...");
 				tts.SpeakToFile("speech.wav", input);
 #endif
-                Console.WriteLine("Playing...");
+                var phonemes = tts.GetPhoneticString(input);
+                Console.WriteLine(phonemes);
                 tts.Speak(input);
                 tts.Sync();
             }

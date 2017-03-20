@@ -23,79 +23,72 @@
 
 #endregion
 
+using System;
+
 namespace Sagen.Phonetics
 {
     /// <summary>
     /// The place of articulation determines the passive articulator, as well as the active articulator's orientation within
     /// the vocal tract.
     /// </summary>
-    public enum ConsonantPlace : byte
+    [Flags]
+    public enum ConsonantPlace
     {
         /// <summary>
-        /// No articulation.
+        /// No consonant.
         /// </summary>
-        None,
+        None = 0b000_000_00_0000_0000,
 
         /// <summary>
         /// Bilabial articulation is created by the lips.
         /// </summary>
-        Bilabial,
+        Bilabial = 0b000_000_00_0000_0001,
 
         /// <summary>
         /// Labiodental articulation is created by interaction between the teeth and lips.
         /// </summary>
-        Labiodental,
+        Labiodental = 0b000_000_00_0000_0010,
 
         /// <summary>
         /// Dental articulation is created by the teeth.
         /// </summary>
-        Dental,
+        Dental = 0b000_000_00_0000_0100,
 
         /// <summary>
         /// Alveolar articulation is created by interaction between the tip of the tongue and the alveolar ridge.
         /// </summary>
-        Alveolar,
+        Alveolar = 0b000_000_00_0000_1000,
 
         /// <summary>
         /// Postalveolar articulation is created by interaction between the tip of the tongue and the back of the alveolar ridge.
         /// </summary>
-        Postalveolar,
+        Postalveolar = 0b000_000_00_0001_0000,
 
         /// <summary>
         /// Palato-alveolar articulation is created by interaction between the tongue and the space between the alveolar ridge and
         /// the hard palate.
         /// This type of articulation is typically formed with a domed (slightly contracted) tongue.
         /// </summary>
-        PalatoAlveolar,
+        PalatoAlveolar = 0b000_000_00_0010_0000,
 
         /// <summary>
         /// Palatal articulation is created by interaction between the tongue and hard palate.
         /// </summary>
-        Palatal,
-
-        /// <summary>
-        /// Velarized alveolar articulation is created by a combination of velar and alveolar articulation.
-        /// </summary>
-        VelarizedAlveolar,
+        Palatal = 0b000_000_00_0100_0000,
 
         /// <summary>
         /// Velar articulation is created by interaction between the back of the tongue and the soft palate (velum).
         /// </summary>
-        Velar,
-
-        /// <summary>
-        /// Labialized velar articulation is created by two articulations, at the velum and the lips.
-        /// </summary>
-        LabializedVelar,
+        Velar = 0b000_000_00_1000_0000,
 
         /// <summary>
         /// Uvular articulation is created by interaction between the back of the tongue and the uvula.
         /// </summary>
-        Uvular,
+        Uvular = 0b000_000_01_0000_0000,
 
         /// <summary>
         /// Glottal articulation is created by the glottis.
         /// </summary>
-        Glottal
+        Glottal = 0b000_000_10_0000_0000
     }
 }

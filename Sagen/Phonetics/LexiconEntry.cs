@@ -23,28 +23,32 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
-using Sagen.Phonetics;
-
-namespace Sagen.Extensibility
+namespace Sagen.Phonetics
 {
-    internal sealed class SagenLexicon
+    public sealed class LexiconEntry
     {
-        private readonly Dictionary<string, Dictionary<Heteronym, string>> _entries = new Dictionary<string, Dictionary<Heteronym, string>>();
+        public string Word { get; }
+        public string Pronunciation { get; }
+        private readonly Dictionary<Heteronym, string> _heteronyms = null;
 
-
-        public static SagenLexicon FromStream(Stream stream)
+        public LexiconEntry(string word, string pronunciation)
         {
-            return null;
-            using (var reader = new StreamReader(stream, Encoding.Unicode, true, 256, true))
-            {
-                while (!reader.EndOfStream)
-                {
-                }
-            }
+            Word = word;
+            Pronunciation = pronunciation;
+        }
+
+        public bool TryGetHeteronymPronunciation(Heteronym h, out string pronunciation)
+        {
+            pronunciation = null;
+            return _heteronyms?.TryGetValue(h, out pronunciation) ?? false;
+        }
+
+        public void AddHeteronymPronunciation(Heteronym type, string pronunciation)
+        {
+            _heteronyms[type] = pronunciation;
         }
     }
 }

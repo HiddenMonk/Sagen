@@ -142,10 +142,15 @@ namespace Sagen
             }
         }
 
+        public string GetPhoneticString(string text)
+        {
+            return _lang.ToPhonemes(text);
+        }
+
         internal Synthesizer CreateSynth(string text)
         {
             var timeline = new Timeline();
-            _lang.Parse(text, timeline);
+            _lang.Parse(_lang.ToPhonemes(text), timeline);
             var synth = new Synthesizer(this, timeline);
 
             const float amp = .4f;

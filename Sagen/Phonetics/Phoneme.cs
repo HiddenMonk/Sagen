@@ -61,7 +61,7 @@ namespace Sagen.Phonetics
         public readonly float Roundedness;
 
         public Phoneme(float height, float backness, float roundedness, bool voiced = true,
-            ConsonantPlace artPlace = ConsonantPlace.None, ConsonantManner artType = ConsonantManner.Fricative)
+            ConsonantPlace artPlace = ConsonantPlace.None, ConsonantManner artType = Phonetics.ConsonantManner.Fricative)
         {
             IsVoiced = voiced;
             Height = height;
@@ -75,7 +75,7 @@ namespace Sagen.Phonetics
         {
             IsVoiced = true;
             ArticulationPlace = ConsonantPlace.None;
-            ArticulationType = ConsonantManner.Fricative;
+            ArticulationType = Phonetics.ConsonantManner.Fricative;
             Height = height;
             Backness = backness;
             Roundedness = roundedness;
