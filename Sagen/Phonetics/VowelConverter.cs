@@ -54,7 +54,7 @@ namespace Sagen.Phonetics
                 // Close back rounded
                 new VowelQuality(1.0, 1.0, 1.0, 220, 300, 670),
                 // Near-close near-front unrounded
-                new VowelQuality(.85, .25, 0.0, 395, 1830, 2800),
+                new VowelQuality(.85, .25, 0.0, 390, 2150, 2850),
                 // Near-close near-front rounded
                 new VowelQuality(.85, .25, 1.0, 325, 1500, 1890),
                 // Near-close central unrounded
@@ -64,7 +64,7 @@ namespace Sagen.Phonetics
                 // Near-close near-back unrounded
                 new VowelQuality(.85, .75, 0.0, 400, 1040, 2525),
                 // Close-mid front unrounded
-                new VowelQuality(.75, 0.0, 0.0, 390, 2300, 2650),
+                new VowelQuality(.75, 0.0, 0.0, 330, 2100, 2600),
                 // Close-mid front rounded
                 new VowelQuality(.75, 0.0, 1.0, 390, 1475, 2180),
                 // Close-mid central unrounded

@@ -35,7 +35,7 @@ namespace SagenConsole
         private static void Main(string[] args)
         {
             Console.WriteLine("Loading...");
-            var tts = new TTS<OpenALPlaybackEngine>(Voice.Greg);
+            var tts = new TTS<OpenALPlaybackEngine>(Voice.Jimmy);
             string input;
 
             while (true)
