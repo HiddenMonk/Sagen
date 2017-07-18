@@ -14,8 +14,9 @@ namespace Sagen.Core.Layers
 		public VocLayer(Synthesizer synthesizer) : base(synthesizer)
 		{
 			_voc = new VocSynth(0, synthesizer.SampleRate);
-			_voc.SetTongueShape(20.5, 3.5);
-			_voc.Fundamental = 140;
+			_voc.SetTongueShape(10.0, 0.6);
+			_voc.Fundamental = 100;
+			
 		}
 
 		public override void Update(ref double sample)

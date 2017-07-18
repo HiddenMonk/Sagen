@@ -6,7 +6,7 @@ namespace Sagen.Core.Voc
 	{
 		// TODO: Investigate changing tract size for female/child voices
 		public const int Size = 44;
-		public const int NoseLength = (int)(28 * (Size / 44));
+		public const int NoseLength = (int)(28.0 * (Size / 44.0));
 		public const int NoseStart = Size - NoseLength + 1;
 		public const int TipStart = 32;
 
@@ -43,7 +43,7 @@ namespace Sagen.Core.Voc
 			GlottalReflection = 0.75;
 			LipReflection = -0.85;
 			LastObstruction = -1;
-			MovementSpeed = 15;
+			MovementSpeed = 15.0;
 
 			Diameter = new double[Size];
 			RestDiameter = new double[Size];
@@ -72,11 +72,11 @@ namespace Sagen.Core.Voc
 			{
 				diameter = 0;
 
-				if (i < 7 * Size / 44 - 0.5)
+				if (i < 7.0 * Size / 44.0 - 0.5)
 				{
 					diameter = 0.6;
 				}
-				else if (i < 12 * Size / 44)
+				else if (i < 12.0 * Size / 44.0)
 				{
 					diameter = 1.1;
 				}
@@ -95,7 +95,7 @@ namespace Sagen.Core.Voc
 			// Set diameters for nasal tract
 			for(int i = 0; i < NoseLength; i++)
 			{
-				d = 2 * (i / NoseLength);
+				d = 2.0 * ((double)i / NoseLength);
 
 				if (d < 1)
 				{
@@ -175,7 +175,7 @@ namespace Sagen.Core.Voc
 
 			for (int i = 0; i < Size; i++)
 			{
-				double slowReturn;
+				double slowReturn = 0;
 				double diameter = Diameter[i];
 				double targetDiameter = TargetDiameter[i];
 
@@ -194,11 +194,11 @@ namespace Sagen.Core.Voc
 				}
 				else
 				{
-					slowReturn = .6 + .4 * (i - NoseStart) / (TipStart - NoseStart);
+					slowReturn = .6 + .4 * (double)(i - NoseStart) / (double)(TipStart - NoseStart);
 				}
 
 				Diameter[i] =
-					Util.MoveTowards(diameter, targetDiameter, slowReturn * amount, 2 * amount);
+					Util.MoveTowards(diameter, targetDiameter, slowReturn * amount, 2.0 * amount);
 
 			}
 

@@ -84,18 +84,16 @@ namespace Sagen.Core.Voc
 
 		public void Compute(ref double output)
 		{
-			double vocalOutput, glot, lambda1, lambda2;
-
 			if (Counter == 0)
 			{
 				_tract.Reshape();
 				_tract.CalculateReflections();				
 			}
 
-			vocalOutput = 0;
-			lambda1 = (double)Counter / BufferSize;
-			lambda2 = (double)(Counter + 0.5) / BufferSize;
-			glot = _glottis.Compute(rng, lambda1);
+			double vocalOutput = 0;
+			double lambda1 = (double)Counter / BufferSize;
+			double lambda2 = (double)(Counter + 0.5) / BufferSize;
+			double glot = _glottis.Compute(rng, lambda1);
 
 			_tract.Compute(glot, lambda1);
 			vocalOutput += _tract.LipOutput + _tract.NoseOutput;
