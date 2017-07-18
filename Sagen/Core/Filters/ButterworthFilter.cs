@@ -36,7 +36,7 @@ namespace Sagen.Core.Filters
         private double _resonance;
         private int _sampleRate;
 
-        private double c, cc, a1, a2, b1, b2;
+        private double a1, a2, b1, b2;
 
         private double i0, i1;
         private double o0, o1;
@@ -107,6 +107,7 @@ namespace Sagen.Core.Filters
 
         private void RecalculateConstants()
         {
+            double c, cc;
             switch (_filterType)
             {
                 case PassFilterType.LowPass:
@@ -136,7 +137,11 @@ namespace Sagen.Core.Filters
                 _changed = false;
             }
 
-            double output = a1 * newInput + a2 * i0 + a1 * i1 - b1 * o0 - b2 * o1;
+            double output = 
+                a1 * (newInput + i1)
+                + a2 * i0
+                - b1 * o0 
+                - b2 * o1;
 
             i1 = i0;
             i0 = newInput;

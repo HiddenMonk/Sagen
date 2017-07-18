@@ -30,53 +30,55 @@ using Sagen.Extensibility;
 
 namespace Sagen
 {
-    public sealed class TTS<TPlaybackEngine> : TTS where TPlaybackEngine : IPlaybackEngine, new()
-    {
-        private readonly HashSet<IPlaybackEngine> _activeStreams = new HashSet<IPlaybackEngine>();
-        private readonly Dictionary<IPlaybackEngine, ManualResetEventSlim> _resetEvents = new Dictionary<IPlaybackEngine, ManualResetEventSlim>();
+	public sealed class TTS<TPlaybackEngine> : TTS where TPlaybackEngine : IPlaybackEngine, new()
+	{
+		private readonly HashSet<IPlaybackEngine> _activeStreams = new HashSet<IPlaybackEngine>();
+		private readonly Dictionary<IPlaybackEngine, ManualResetEventSlim> _resetEvents = new Dictionary<IPlaybackEngine, ManualResetEventSlim>();
 
-        public TTS()
-        {
-        }
+		public TTS()
+		{
+		}
 
-        public TTS(Voice voice) : base(voice)
-        {
-        }
+		public TTS(Voice voice) : base(voice)
+		{
+		}
 
-        internal void AddActiveAudio(IPlaybackEngine audio)
-        {
-            lock (_activeStreams)
-            {
-                _activeStreams.Add(audio);
-                _resetEvents[audio] = new ManualResetEventSlim();
-            }
-        }
+		internal void AddActiveAudio(IPlaybackEngine audio)
+		{
+			lock (_activeStreams)
+			{
+				_activeStreams.Add(audio);
+				_resetEvents[audio] = new ManualResetEventSlim();
+			}
+		}
 
-        internal void RemoveActiveAudio(IPlaybackEngine audio)
-        {
-            var resetEvent = _resetEvents[audio];
-            resetEvent.Set();
-            lock (_activeStreams)
-            {
-                _activeStreams.Remove(audio);
-                _resetEvents.Remove(audio);
-                resetEvent.Dispose();
-            }
-        }
+		internal void RemoveActiveAudio(IPlaybackEngine audio)
+		{
+			lock (_resetEvents)
+			lock (_activeStreams)
+			{
+				var resetEvent = _resetEvents[audio];
+				resetEvent.Set();
+				_activeStreams.Remove(audio);
+				_resetEvents.Remove(audio);
+				resetEvent.Dispose();
+			}
+		}
 
-        public void Speak(string text)
-        {
-            // Actual speaking isn't supported yet. This is debug code for testing vocal properties.			
-            CreateSynth(text).Play(this);
-        }
+		public void Speak(string text)
+		{
+			// Actual speaking isn't supported yet. This is debug code for testing vocal properties.
+			// Synthesizer type is passed to Play() for instantiation.
+			CreateSynth(text).Play<TPlaybackEngine>(this);
+		}
 
-        public void Sync()
-        {
-            lock (_activeStreams)
-            {
-                foreach (var audio in _activeStreams)
-                    _resetEvents[audio].Wait();
-            }
-        }
-    }
+		public void Sync()
+		{
+			lock (_activeStreams)
+			{
+				foreach (var audio in _activeStreams)
+					_resetEvents[audio].Wait();
+			}
+		}
+	}
 }

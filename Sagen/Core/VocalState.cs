@@ -25,20 +25,26 @@
 
 namespace Sagen.Core
 {
+	/// <summary>
+	/// The vocal state maintains dynamic state information about the synthesizer's signal generators and corresponding filters.
+	/// </summary>
     internal sealed class VocalState
     {
         /// <summary>
         /// The current glottis level.
+        /// This defines how "open" the glottis is. When completely closed (= 0.0), no sound is produced.
         /// </summary>
         public double GlottisLevel { get; set; } = 0.0;
 
         /// <summary>
         /// The current aspiration level.
+        /// Aspiration is the amount of turbulence produced by the glottis.
         /// </summary>
         public double AspirationLevel { get; set; } = 1.0;
 
         /// <summary>
         /// The current frication level.
+        /// Frication is turbulence produced by air passing through a narrow gap between an active and passive articulator.
         /// </summary>
         public double FricationLevel { get; set; } = 0.0;
 
@@ -47,8 +53,19 @@ namespace Sagen.Core
         /// </summary>
         public double LastGlottisLevel { get; set; } = 0.0;
 
+		/// <summary>
+		/// Vowel height.
+		/// </summary>
         public double Height { get; set; } = 0.0;
+
+		/// <summary>
+		/// Vowel backness.
+		/// </summary>
         public double Backness { get; set; } = 0.0;
+
+		/// <summary>
+		/// Vowel roundedness.
+		/// </summary>
         public double Roundedness { get; set; } = 0.0;
     }
 }

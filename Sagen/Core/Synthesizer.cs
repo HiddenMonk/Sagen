@@ -66,10 +66,19 @@ namespace Sagen.Core
 
         internal TTS TTS { get; }
 
+		/// <summary>
+		/// The quality level of the synthesis.
+		/// </summary>
         public VoiceQuality Quality { get; } = TTS.Quality;
 
+		/// <summary>
+		/// The node timeline used to control synthesizer parameters.
+		/// </summary>
         public Timeline Timeline { get; }
 
+		/// <summary>
+		/// The current sample position.
+		/// </summary>
         public int Position { get; set; } = 0;
 
         /// <summary>
@@ -194,7 +203,7 @@ namespace Sagen.Core
                         sampler.Update(ref currentSample);
                     }
 
-                    // Limit signal
+                    // Limit signal to mitigate SCReeEEEEEEEEEEEEEE
                     Util.Sigmoid(ref currentSample);
 
                     data[len++] = unchecked((short)(currentSample * short.MaxValue));

@@ -23,6 +23,8 @@
 
 #endregion
 
+using System;
+
 namespace Sagen.Core.Nodes
 {
     internal class PhonemeNode : Node
@@ -61,7 +63,7 @@ namespace Sagen.Core.Nodes
             synth.State.Height = _h;
             synth.State.Backness = _b;
             synth.State.Roundedness = _r;
-            synth.Pitch = Util.Lerp(0, -0.1, GetNormalizedRelativePos(synth));
+            synth.Pitch = Math.Sin(GetNormalizedRelativePos(synth) * Math.PI) * 0.1;
         }
     }
 }
