@@ -27,6 +27,7 @@ using System;
 
 using Sagen;
 using Sagen.Playback.OpenAL;
+using Sagen.Playback.XAudio2;
 
 namespace SagenConsole
 {
@@ -35,7 +36,7 @@ namespace SagenConsole
         private static void Main(string[] args)
         {
             Console.WriteLine("Loading...");
-            var tts = new TTS<OpenALPlaybackEngine>(Voice.Jimmy);
+            var tts = new TTS<XAudio2PlaybackEngine>(Voice.Jimmy);
             string input;
 
             while (true)

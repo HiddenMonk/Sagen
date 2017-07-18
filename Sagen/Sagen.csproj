@@ -43,7 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Layers\VocLayer.cs" />
     <Compile Include="Core\VocalState.cs" />
+    <Compile Include="Core\Voc\Glottis.cs" />
+    <Compile Include="Core\Voc\Tract.cs" />
+    <Compile Include="Core\Voc\Transient.cs" />
+    <Compile Include="Core\Voc\TransientPool.cs" />
+    <Compile Include="Core\Voc\Util.cs" />
+    <Compile Include="Core\Voc\VocSynth.cs" />
     <Compile Include="Phonetics\LexiconEntry.cs" />
     <Compile Include="Phonetics\Heteronym.cs" />
     <Compile Include="Extensibility\IPlaybackEngine.cs" />

@@ -155,9 +155,10 @@ namespace Sagen
 
             const float amp = .4f;
 
-            synth.AddSampler(new PitchLayer(synth));
-            synth.AddSampler(new PhonationLayer(synth, 30, amp, 0.003));
-            synth.AddSampler(new ArticulatorLayer(synth));
+			//synth.AddSampler(new PitchLayer(synth));
+			//synth.AddSampler(new PhonationLayer(synth, 30, amp, 0.003));
+			//synth.AddSampler(new ArticulatorLayer(synth));
+			synth.AddSampler(new VocLayer(synth));
 
             return synth;
         }
