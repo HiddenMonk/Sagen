@@ -2,11 +2,11 @@
   <img src="https://i.imgur.com/34SN7bt.png" alt="Sagen Logo" />
 </p>
 
-**Sagen** _(German for "to say")_ is my attempt at making a text-to-speech engine aimed at .NET developers who don't have thousands of dollars at their disposal to license a commercial speech synthesis solution. In many ways, it is an experiment and continual learning experience for me, as I am in no way well-versed in speech science, phonetics, or vocal acoustics; I simply want to see how far I can go with original research and lots of patience.
+**Sagen** _(German for "to say")_ is my attempt at making a text-to-speech engine aimed at .NET developers who don't have thousands of dollars at their disposal to license a commercial speech synthesis solution. In many ways, it is an experiment and continual learning experience for me, as I am not an expert in speech science, phonetics, or vocal acoustics; I simply want to see how far I can go with original research, freely available resources, and lots of patience.
 
-## Rationale
+## Why?
 
-Some might ask me why I'd bother. After all, there are tons of TTS engines out there already. In short, I don't feel like people have enough options.
+There are tons of TTS engines out there already, but I feel like they're all missing something.
 
 Aside from being often prohibitively expensive, it is not unusual for commercial TTS systems to be restrictive in their available customizations for voices, voice parameters, and context-sensitive vocal qualities (e.g. intonation, stress, and timbre). Such qualities are necessary to convey meaning in speech.
 
@@ -19,7 +19,7 @@ My goal with Sagen is not _necessarily_ to produce "something better", but to in
 ## What's planned
 
 Here is a short list of major features that will be supported:
-* Text-to-speech based on [formant synthesis](https://en.wikipedia.org/wiki/Speech_synthesis#Formant_synthesis) and physically-based vocal filtering
+* Text-to-speech based on an articulatory model adapted from [Voc](https://github.com/PaulBatchelor/Voc)
 * Plentiful parameters for tuning how voices sound (age, sex, vocal force, hoarseness, etc...)
 * Support for direct playback, WAV exporting, and sending audio data via `System.Stream`
 * Multiple options for sample format and rate (export only)
