@@ -24,9 +24,6 @@ SOFTWARE.
 
 ## Voc
 
-This project contains code adapted from Paul Batchelor's [Voc](https://github.com/PaulBatchelor/voc) library,
-which is in turn based on Neil Thapen's bizarre but fascinating project, *[Pink Trombone](https://dood.al/pinktrombone/)*.
-
 The generated C source and header files for Voc, from which Sagen derives, are released under the public domain.
 
 
