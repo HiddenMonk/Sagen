@@ -33,3 +33,8 @@ It is currently a heavy work-in-progress, and I welcome your input and/or contri
 ## Licensing
 
 This project is made available under the MIT License and is completely free for anyone to use, for any purpose, without the burdens of licensing costs or royalties.
+
+This project contains code adapted from Paul Batchelor's [Voc](https://github.com/PaulBatchelor/voc) library,
+which is in turn based on Neil Thapen's bizarre but fascinating project, *[Pink Trombone](https://dood.al/pinktrombone/)*.
+
+See LICENSE.md for all licenses and copyright notices.
